@@ -102,7 +102,7 @@ export default class BackgroundTask {
             const menuId = chrome.contextMenus.create({
                 id: MCL_CONFIG.contextMenu.scanId,
                 title: chrome.i18n.getMessage(title),
-                contexts: ['link', 'image', 'video', 'audio']
+                contexts: ['link', 'image', 'video', 'audio', 'page']
             });
             contextMenus[menuId] = menuId;
         });
