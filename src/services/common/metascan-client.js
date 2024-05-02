@@ -1,6 +1,6 @@
 'use strict';
 
-import { SANITIZATION, UNARCHIVE } from '../constants/workflow';
+import { SANDBOX, SANDBOX_TIMEOU, SANDBOX_TIMEOUT, SANITIZATION, UNARCHIVE } from '../constants/workflow';
 import MCL from '../../config/config';
 
 /**
@@ -145,7 +145,9 @@ function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitize
         'samplesharing': sampleSharing,
         'filename': fileName,
         'rule': UNARCHIVE,
-        'x-source': 'chrome_extension'
+        'x-source': 'chrome_extension',
+        // "sandbox": "windows10",  // astea 2
+        // "sandbox_timeout": "long"
     };
 
     if (password) {
@@ -155,13 +157,18 @@ function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitize
     if (canBeSanitized) {
         additionalHeaders.rule += ',' + SANITIZATION;
     }
+    const sandbox = true; // trebuie pus ca parametru
+    if(sandbox) {
+        additionalHeaders['sandbox'] = SANDBOX;
+        additionalHeaders['sandbox_timeout'] = SANDBOX_TIMEOUT;
+    }
 
     const options = {
         method: 'POST',
         headers: { ...authHeader, ...additionalHeaders },
         body: fileData
     };
-
+    console.log('fileUpload metascan-client', sampleSharing, options);
     return fetch(restEndpoint, options).then(response => response.json()).catch(error => {
         console.warn(error);
         return { error };
