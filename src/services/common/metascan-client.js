@@ -1,6 +1,6 @@
 'use strict';
 
-import { SANDBOX, SANDBOX_TIMEOU, SANDBOX_TIMEOUT, SANITIZATION, UNARCHIVE } from '../constants/workflow';
+import { SANDBOX, SANDBOX_TIMEOUT, SANITIZATION, UNARCHIVE } from '../constants/workflow';
 import MCL from '../../config/config';
 
 /**
@@ -20,6 +20,7 @@ const MetascanClient = {
     file: {
         upload: fileUpload,
         lookup: fileLookup,
+        poolForSandboxResults: poolForSandboxResults,
         poolForResults: poolForResults
     },
     apikey: {
@@ -134,9 +135,10 @@ function hashLookup(hash) {
  * @param {boolean} sampleSharing
  * @param {string} password
  * @param {boolean} canBeSanitized
+ * @param {boolean} sandbox
  * @returns {Promise}
  */
-function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitized }) {
+function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitized, sandbox }) {
     sampleSharing = (sampleSharing === true) ? 1 : 0;
 
     const restEndpoint = `${MCL.config.metadefenderDomain}/${MCL.config.metadefenderVersion}/file`;
@@ -145,9 +147,7 @@ function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitize
         'samplesharing': sampleSharing,
         'filename': fileName,
         'rule': UNARCHIVE,
-        'x-source': 'chrome_extension',
-        // "sandbox": "windows10",  // astea 2
-        // "sandbox_timeout": "long"
+        'x-source': 'chrome_extension'
     };
 
     if (password) {
@@ -157,7 +157,7 @@ function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitize
     if (canBeSanitized) {
         additionalHeaders.rule += ',' + SANITIZATION;
     }
-    const sandbox = true; // trebuie pus ca parametru
+    
     if(sandbox) {
         additionalHeaders['sandbox'] = SANDBOX;
         additionalHeaders['sandbox_timeout'] = SANDBOX_TIMEOUT;
@@ -169,8 +169,11 @@ function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitize
         body: fileData
     };
     console.log('fileUpload metascan-client', sampleSharing, options);
-    return fetch(restEndpoint, options).then(response => response.json()).catch(error => {
+    return fetch(restEndpoint, options).then(response => {
+        console.log("response", response);
+        return response.json()}).catch(error => {
         console.warn(error);
+        console.log(error);
         return { error };
     });
 }
@@ -220,6 +223,60 @@ async function recursiveLookup(dataId, pollingInterval, resolve) {
 
     if (response?.scan_results?.progress_percentage < 100) {
         setTimeout(() => { recursiveLookup(dataId, pollingInterval, resolve); }, pollingInterval);
+    }
+    else {
+        resolve(response);
+    }
+}
+
+
+/**
+ * https://api.metadefender.com/v4/hash/02637A8DA752611218FCEA1854052B9FF160AFD2/sandbox
+ * 
+ * @param {string} sha1
+ * @returns {Promise}
+ */
+function fileSandboxLookup(sha1) {
+    const restEndpoint = `${MCL.config.metadefenderDomain}/${MCL.config.metadefenderVersion}/hash/${sha1}/sandbox`;
+    // console.log(restEndpoint);
+    const options = {
+        headers: { ...authHeader }
+    };
+
+    return fetch(restEndpoint, options).then(data => data.json());
+}
+
+/**
+ *
+ * @param {string} sha1
+ * @param {number} pollingInterval
+ * @returns {Promise}
+ */
+async function poolForSandboxResults(sha1, pollingInterval) {
+    return new Promise((resolve) => {
+        recursiveSandboxLookup(sha1, pollingInterval, resolve);
+    });
+}
+
+/** 
+ *
+ * @param sha1
+ * @param pollingInterval
+ * @param resolve
+ * @returns {Promise.<void>}
+ */
+async function recursiveSandboxLookup(sha1, pollingInterval, resolve) {
+    const response = await fileSandboxLookup(sha1);
+
+    if (response.error) {
+        return;
+    }
+
+    pollingInterval = Math.min(pollingInterval * config.pollingIncrementor, config.pollingMaxInterval);
+
+    if (response?.final_verdict?.verdict == null) {
+        console.log("face pooling");
+        setTimeout(() => { recursiveSandboxLookup(sha1, pollingInterval, resolve); }, pollingInterval);
     }
     else {
         resolve(response);

@@ -16,6 +16,7 @@ function ScanFile() {
         scanResults: null,
         size: null,
         dataId: null,
+        sandboxVerdict: null,
 
         // methods
         getScanStatus: getScanStatus,

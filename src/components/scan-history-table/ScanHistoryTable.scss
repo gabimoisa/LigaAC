@@ -50,6 +50,32 @@
                     }
                 }
             }
+
+            & .sandboxOK {
+                color: $green;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $green;
+                    }
+                }
+            }
+
+            & .sandboxNotOK {
+                color: $red;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $red;
+                    }
+                }
+            }
         }
 
         .icon-spin {

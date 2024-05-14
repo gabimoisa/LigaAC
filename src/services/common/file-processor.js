@@ -20,7 +20,7 @@ class FileProcessor {
      * @param {string} linkUrl file url 
      * @param {*} downloadItem https://developer.chrome.com/extensions/downloads#type-DownloadItem
      */
-    async processTarget(linkUrl, downloadItem) {
+    async processTarget(linkUrl, downloadItem, useSandbox) {
         await apikeyInfo.load();
         if (!apikeyInfo.data.apikey) {
             BrowserNotification.create(chrome.i18n.getMessage('undefinedApiKey'));
@@ -98,7 +98,7 @@ class FileProcessor {
 
         await scanHistory.addFile(file);
 
-        await this.scanFile(file, linkUrl, fileData, downloadItem, settings.data.useCore);
+        await this.scanFile(file, linkUrl, fileData, downloadItem, settings.data.useCore, useSandbox);
     }
 
     /**
@@ -188,8 +188,20 @@ class FileProcessor {
             if (info?.sanitized?.file_path && !Object.prototype.hasOwnProperty.call(file, 'sanitizedFileURL')) {
                 file.sanitizedFileURL = info.sanitized.file_path;
             }
+
+            if(info.additional_info == 'sandbox') {
+                const sha1 = info.file_info.sha1;
+                // let getSandboxInfo = `${MCL.config.mclDomain}/${MCL.config.metadefenderVersion}/hash/${sha1}/sandbox`;
+                const response = await MetascanClient.setAuth(apikeyInfo.data.apikey).file.poolForSandboxResults(sha1, 3000);
+                console.log('sandboxLookup', response);
+                const lowercasedVerdict = response.final_verdict.verdict.charAt(0) + response.final_verdict.verdict.substring(1).toLowerCase();
+                file.sandboxVerdict = lowercasedVerdict;
+            }
+            else{
+                file.sandboxVerdict = "No dynamic analysis was performed";
+            }
         }
-        
+        console.log("FILE VERDICT FINAL", file);
         await scanHistory.updateFileById(file.id, file);
         await scanHistory.save();
 
@@ -245,14 +257,15 @@ class FileProcessor {
      * @param {*} fileData file content
      * @param {*} downloadItem https://developer.chrome.com/extensions/downloads#type-DownloadItem
      * @param {boolean} useCore use core API instead of cloud
+     * @param {boolean} useSandbox
      */
-    async scanFile(file, linkUrl, fileData, downloadItem, useCore) {
+    async scanFile(file, linkUrl, fileData, downloadItem, useCore, useSandbox) {
         try {
             file.useCore = useCore;
 
             const response = useCore
                 ? await this.scanWithCore(file, fileData)
-                : await this.scanWithCloud(file, fileData);
+                : await this.scanWithCloud(file, fileData, useSandbox);
 
             if (!response.data_id) {
                 throw response;
@@ -299,8 +312,9 @@ class FileProcessor {
      * 
      * @param {*} file file information 
      * @param {*} fileData file content
+     * @param {boolean} useSandbox
      */
-    async scanWithCloud(file, fileData) {
+    async scanWithCloud(file, fileData, useSandbox) {
         let response;
         try {
             response = await MetascanClient.setAuth(apikeyInfo.data.apikey).hash.lookup(file.md5);
@@ -310,7 +324,8 @@ class FileProcessor {
                     fileName: file.fileName,
                     fileData,
                     sampleSharing: settings.data.shareResults,
-                    canBeSanitized: file.canBeSanitized
+                    canBeSanitized: file.canBeSanitized,
+                    sandbox: useSandbox
                 });
             }
         } catch (error) {
