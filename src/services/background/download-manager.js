@@ -98,8 +98,8 @@ class DownloadManager {
     // @param downloadItem
      * @returns {Promise.<void>}
      */
-    async processTarget(linkUrl, downloadItem) {
-        await this.fileProcessor.processTarget(linkUrl, downloadItem);
+    async processTarget(linkUrl, downloadItem, useSandbox) {
+        await this.fileProcessor.processTarget(linkUrl, downloadItem, useSandbox);
     }
 }
 

@@ -166,21 +166,27 @@ export default class BackgroundTask {
         if (info.menuItemId !== MCL_CONFIG.contextMenu.scanId) {
             return;
         }
-        
+        let sandbox = false;
+        if(!info.srcUrl && !info.linkUrl){
+            console.log("Click din pagina", info.pageUrl);
+            sandbox = true;
+        }
+
         const target = info.srcUrl || info.linkUrl || info.pageUrl;
         
-        await this.processTarget(target);        
+        await this.processTarget(target, sandbox);        
     }
 
     /**
      * Process context menu event targets.
      * 
      * @param linkUrl
+     * @param {boolean} useSandbox
      * @param downloadItem
      * @returns {Promise.<void>}
      */
-    async processTarget(linkUrl, downloadItem) {
-        await this.downloadsManager.processTarget(linkUrl, downloadItem);
+    async processTarget(linkUrl, useSandbox, downloadItem) {
+        await this.downloadsManager.processTarget(linkUrl, downloadItem, useSandbox);
     }
 
     /**

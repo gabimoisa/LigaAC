@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, removeFile, status, getStatusIcon, useCore }) => {
+const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, removeFile, status, getStatusIcon, useCore, sandboxVerdict }) => {
     const [isTrashDisplayed, setIsTrashDisplayed] = useState(false);
     const trashClassName = classNames({
         'invisible': !isTrashDisplayed
@@ -35,6 +35,9 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
                 <span className={trashClassName} />
             </a>
         </td>
+        <td className="p-0" style={{ textAlign: 'center'}}>
+            {sandboxVerdict}<span className={`${cleanClassName}`} />
+        </td>
     </tr>;
 };
 
@@ -47,7 +50,8 @@ ScanHistoryTableRow.propTypes = {
     removeFile: PropTypes.func,
     status: PropTypes.number,
     getStatusIcon: PropTypes.func,
-    useCore: PropTypes.bool
+    useCore: PropTypes.bool,
+    sandboxVerdict: PropTypes.string
 };
 
 export default ScanHistoryTableRow;

@@ -79,7 +79,8 @@ const ScanHistory = () => {
             results: item.statusLabel,
             status: item.status,
             id: item.id, 
-            useCore: item?.useCore
+            useCore: item?.useCore,
+            sandboxVerdict: item.sandboxVerdict
         }));
     }, [files]);
 
