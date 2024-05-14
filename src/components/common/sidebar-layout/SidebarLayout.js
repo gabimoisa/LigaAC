@@ -19,6 +19,11 @@ const MENU_ITEMS = [
         page: 'settings'
     },
     {
+        label: chrome.i18n.getMessage('menuBlock'),
+        path: 'index.html#/block',
+        page: 'block'
+    },
+    {
         label: chrome.i18n.getMessage('menuAbout'),
         path: 'index.html#/about',
         page: 'about'

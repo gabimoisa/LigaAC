@@ -43,6 +43,10 @@
       "message": "About",
       "description": ""
     },
+    "menuBlock": {
+      "message": "Block",
+      "description": ""
+    },
     "aboutTitle": {
       "message": "About OPSWAT File Security for Chrome",
       "description": ""

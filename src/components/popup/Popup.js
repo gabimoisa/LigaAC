@@ -1,4 +1,3 @@
-
 import classNames from 'classnames';
 import React, { useEffect, useMemo, useContext } from 'react';
 import GAContext from '../../providers/GAProvider';
@@ -6,6 +5,7 @@ import ConfigContext from '../../providers/ConfigProvider';
 import { goToTab } from '../../services/background/navigation';
 import ScanFile from '../../services/common/scan-file';
 import ScanHistoryContext from '../../providers/ScanHistoryProvider';
+import { Link } from 'react-router-dom';
 
 import './Popup.scss';
 
@@ -104,8 +104,13 @@ const Popup = () => {
     return <div className="popup--wrapper">
         <div className="popup--header">
             <div className="popup--header__logo"></div>
+            <a>
             <a href='#' className="popup--header__btn" onClick={goToSettings}>
                 <span className="icon-cog text-14"></span>
+            </a>
+            <Link to="/block-websites" className="popup--header__btn">
+                <span className="icon-cog text-14" style={{ color: 'grey' }}></span>
+            </Link>
             </a>
         </div>
 
