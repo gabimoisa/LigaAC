@@ -47,6 +47,73 @@ const BlockWebsites = () => {
         });
     };
 
+    const generateSTYLES = () => {
+        return `<style>@import url(https://fonts.googleapis.com/css?family=Roboto:500);
+        body {
+          background:#ffffff;
+          color: #000a12;
+          font-family: "Roboto", sans-serif;
+          max-height: 700px;
+          overflow: hidden;
+        }
+        .c {
+          text-align: center;
+          display: block;
+          position: relative;
+          width: 80%;
+          margin: 100px auto;
+        }
+        ._1 {
+          font-size: 100px;
+          position: relative;
+          display: inline-block;
+          z-index: 2;
+          height: 100px;
+          letter-spacing: 15px;
+        }
+        ._2 {
+          text-align: center;
+          display: block;
+          position: relative;
+          letter-spacing: 12px;
+          font-size: 4em;
+          line-height: 80%;
+        }
+        ._3 {
+          text-align: center;
+          display: block;
+          position: relative;
+          font-size: 20px;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+      }
+         </style>`;
+      };
+      
+    const generateHTML = (pageName) => {
+        return `
+        <div class='c'>
+            <div class='_1'>Acces denied!</div>
+            <br>
+            <div class='_2'>For > ${pageName}</div>
+            <br>
+            <button class='_3' onclick="window.location.href='https://www.google.com'">GO BACK</button>    
+            </div>
+         `;
+      };
+  
+        switch(window.location.hostname)
+        {
+            case website:
+                document.head.innerHTML = generateSTYLES();
+                document.body.innerHTML = generateHTML(website); 
+                break;
+            default:
+                document.body.innerHTML = "<p style='text-align:center; font-size:20px; color:#333;'>This website is not blocked.</p>";
+                break;
+        }
+            
     return (
         <div style={{ width: '380px', maxHeight: '300px', overflow: 'auto', padding: '20px', border: '1px solid #ddd', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', backgroundColor: '#fff' }}>
             <h2 style={{ textAlign: 'center', color: '#313C4E', marginBottom: '20px', fontFamily: 'Arial, sans-serif' }}>Block Websites</h2>
