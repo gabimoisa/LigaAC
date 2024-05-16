@@ -59,11 +59,11 @@ const BlockedWebsitesPage = () => {
                     <p style={{ textAlign: 'center', color: '#888' }}>No websites blocked</p>
                 ) : (
                     blockedWebsites.map((site, index) => (
-                        <div key={index} style={{ alignItems: 'center', display: 'flex', justifyContent: 'space-between', marginBottom: '8px', padding: '10px 10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+                        <div key={index} style={{ alignItems: 'center', display: 'flex', justifyContent: 'space-between', marginBottom: '8px', padding: '10px 10px' }}>
                             <span style={{ alignItems: 'center', color: '#333', maxWidth: '80%', overflow: 'hidden', textOverflow: 'ellipsis' }}>{site}</span>
                             <button
                                 onClick={() => handleRemoveWebsite(site)}
-                                style={{ alignItems: 'center', border: 'none', backgroundColor: '#db4b3d', color: 'white', padding: '5px 10px', cursor: 'pointer' }}
+                                style={{ alignItems: 'center', border: 'none', backgroundColor: '#D00300', color: 'white', padding: '5px 10px', cursor: 'pointer' }}
                             >
                                 Remove
                             </button>

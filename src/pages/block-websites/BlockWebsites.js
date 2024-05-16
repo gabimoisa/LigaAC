@@ -110,7 +110,6 @@ const BlockWebsites = () => {
                 document.body.innerHTML = generateHTML(website); 
                 break;
             default:
-                document.body.innerHTML = "<p style='text-align:center; font-size:20px; color:#333;'>This website is not blocked.</p>";
                 break;
         }
             
@@ -150,7 +149,7 @@ const BlockWebsites = () => {
                             <span style={{ color: '#333', maxWidth: '80%', overflow: 'hidden', textOverflow: 'ellipsis' }}>{site}</span>
                             <button
                                 onClick={() => handleRemoveWebsite(site)}
-                                style={{ border: 'none', backgroundColor: '#db4b3d', color: 'white', padding: '5px 10px', cursor: 'pointer' }}
+                                style={{ border: 'none', backgroundColor: '#D00300', color: 'white', padding: '5px 10px', cursor: 'pointer' }}
                             >
                                 Remove
                             </button>
