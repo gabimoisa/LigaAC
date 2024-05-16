@@ -13,14 +13,21 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
     });
 
     const SandBox = classNames({
-        'sandboxOK': sandboxVerdict === 'Informational',
-        'sandboxNotOK': sandboxVerdict === 'Suspicios'
+        'sandboxInformational': sandboxVerdict === 'Informational',
+        'sandboxSuspicious': sandboxVerdict === 'Suspicious',
+        'sandboxMalicious': sandboxVerdict === 'Malicious',
+        'sandboxLikelyMalicious': sandboxVerdict === 'Likely Malicious',
+        'sandboxBenign': sandboxVerdict === 'Benign',
+        'sandboxUnknown': sandboxVerdict === 'Unknown'
 
     });
 
     if (results !== 'No threats found' && results !== 'Threats detected') {
         sandboxVerdict = results;
     }
+
+    if(sandboxVerdict === 'Informational')
+        sandboxVerdict = 'No Threat';
     
     
 

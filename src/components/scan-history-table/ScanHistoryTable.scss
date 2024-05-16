@@ -51,7 +51,7 @@
                 }
             }
 
-            & .sandboxOK {
+            & .sandboxInformational {
                 color: $green;
 
                 a:link,
@@ -64,8 +64,60 @@
                 }
             }
 
-            & .sandboxNotOK {
-                color: $red;
+            & .sandboxSuspicious {
+                color: #fdbd0d;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $red;
+                    }
+                }
+            }
+
+            & .sandboxLikelyMalicious {
+                color: #ed6706;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $red;
+                    }
+                }
+            }
+
+            & .sandboxMalicious {
+                color: #d00300;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $red;
+                    }
+                }
+            }
+
+            & .sandboxBenign {
+                color: #1d6bfc;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $red;
+                    }
+                }
+            }
+
+            & .sandboxUnknown {
+                color: #313c4e;
 
                 a:link,
                 a:visited,
