@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import './Popup.scss';
 
 const Popup = () => {
-    
+
     const config = useContext(ConfigContext);
     const { gaTrackEvent } = useContext(GAContext);
     const { files } = useContext(ScanHistoryContext);
@@ -102,17 +102,23 @@ const Popup = () => {
     }, [files, scanResultsDom]);
 
     return <div className="popup--wrapper">
-        <div className="popup--header">
+        <div className="popup--header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            
             <div className="popup--header__logo"></div>
-            <a>
-            <a href='#' className="popup--header__btn" onClick={goToSettings}>
-                <span className="icon-cog text-14"></span>
-            </a>
-            <Link to="/block-websites" className="popup--header__btn">
-                <span className="icon-cog text-14" style={{ color: 'grey' }}></span>
-            </Link>
-            </a>
+            <div className="popup--header__buttons" style={{ display: 'flex', gap: '10px' }}>
+
+                <a href='#' className="popup--header__btn" onClick={goToSettings}>
+                    <span className="icon-cog text-14"></span>
+                </a>
+
+                <Link to="/block-websites" className="popup--header__btn">
+                    <span className="icon-cog text-14" style={{ color: 'grey' }}></span>
+                </Link>
+                
+            </div>
         </div>
+
+
 
         <div className="popup--scan__history">
             {scanResults}
@@ -126,5 +132,6 @@ const Popup = () => {
         </div>
     </div>;
 };
+
 
 export default Popup;

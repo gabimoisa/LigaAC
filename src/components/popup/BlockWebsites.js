@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import SidebarLayout from '../../components/common/sidebar-layout/SidebarLayout';
+import { Link } from 'react-router-dom';
 
-import './BlockWebsites-page.scss';
+import './BlockWebsites.scss';
 
-const BlockedWebsitesPage = () => {
+const BlockWebsites = () => {
     const [website, setWebsite] = useState('');
     const [blockedWebsites, setBlockedWebsites] = useState([]);
     const [isValidWebsite, setIsValidWebsite] = useState(true);
@@ -39,60 +39,53 @@ const BlockedWebsitesPage = () => {
         chrome.storage.local.set({ blockedWebsites: updatedList });
     };
 
-    const content = (
-        <div className="content">
+    const handleAddCurrentPage = () => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            const currentUrl = new URL(tabs[0].url).hostname;
+            if (currentUrl && !blockedWebsites.includes(currentUrl)) {
+                const updatedList = [...blockedWebsites, currentUrl];
+                setBlockedWebsites(updatedList);
+                chrome.storage.local.set({ blockedWebsites: updatedList });
+            }
+        });
+    };
+
+    return (
+        <div className="block-websites">
+            <h2>Block Websites</h2>
 
             <div className={`website-input ${!isValidWebsite ? "invalid-input" : ""}`}>
                 <input
                     type="text"
                     placeholder="Enter website URL"
                     value={website}
-                    onChange={(e) => { 
-                        setWebsite(e.target.value); 
-                        setIsValidWebsite(true); 
-                    }}  
+                    onChange={(e) => {
+                        setWebsite(e.target.value);
+                        setIsValidWebsite(true);
+                    }}
                 />
                 <button onClick={handleAddWebsite}>Add</button>
+                <button onClick={handleAddCurrentPage}>Current Page</button>
             </div>
-            <div className="blocked-count">
-                <strong className="history--scanned__files">
-                    {blockedWebsites.length} websites blocked
-                </strong></div>
             <div className="website-list">
-                {
-                    <table className="blocked-websites-table">
-                        <thead>
-                            <tr>
-                                <th>WEBSITE</th>
-                                <th>DELETE</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {blockedWebsites.map((site, index) => (
-                                <tr key={index}>
-                                    <td>{site}</td>
-                                    <td>
-                                        <button className="remove-button" onClick={() => handleRemoveWebsite(site)}>
-                                        <i class="icon-trash text-14"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                }
+                {blockedWebsites.length === 0 ? (
+                    <p>No websites blocked</p>
+                ) : (
+                    blockedWebsites.slice(-2).map((site, index) => (
+                        <div key={index} className="website-entry">
+                            <span>{site}</span>
+                            <button onClick={() => handleRemoveWebsite(site)}>
+                                <i class="icon-trash text-14"></i>
+                            </button>
+                        </div>
+                    ))
+                )}
+                {blockedWebsites.length > 2 && (
+                    <center><Link to="/block" target="_blank" className="block-link">see more</Link></center>
+                )}
             </div>
         </div>
     );
-
-    return (
-        <SidebarLayout
-            className='blocked-websites-page'
-            currentPage='blocked-websites'
-            content={content}
-        />
-    );
 };
 
-
-export default BlockedWebsitesPage;
+export default BlockWebsites;

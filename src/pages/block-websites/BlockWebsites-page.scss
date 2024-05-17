@@ -1,0 +1,120 @@
+@import "../../assets/style/colors.scss";
+
+.blocked-websites-page {
+    
+    .content {
+        background-color: #fff;
+        
+
+
+        .icon-trash.text-14 {
+            color: #7a879a; 
+            background-color: white;
+            font-size: 18px; 
+          }
+        
+        .website-list {
+            max-height: 100%;
+            overflow-y: auto;
+
+            p {
+                text-align: center;
+                color: #888;
+            }
+
+            .website-entry {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 8px;
+                padding: 10px;
+
+                span {
+                    color: #333;
+                    max-width: 80%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                button {
+                    border: none;
+                    background-color: transparent;
+                    color: white;
+                    padding: 5px 10px;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    
+    .blocked-websites-table {
+        width: 100%;
+        margin-top: 20px;
+        border: 1px solid #ddd; 
+        
+    
+        th, td {
+            padding: 18px 20px 17px;
+            text-align: left;
+        }
+    
+        th {
+            background-color: #FBFBFB;
+        }
+    
+        tbody tr, thead tr {
+            border-bottom: 1px solid #ddd; 
+        }
+    
+        .remove-button {
+            background-color: transparent;   
+            border: none;
+        }
+    
+        th:nth-child(2), td:nth-child(2) {
+            text-align: center;
+        }
+    }
+    .search-block {
+        border: 1px solid $colorGrey;
+        border-radius: 0;
+        height: 38px;
+        font-size: 14px;
+        width: 10px; 
+    }
+    
+    .website-input {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 10px;
+    
+        input {
+            border: 1px solid #ccc;
+            padding: 7px;
+            width: calc(30% - 2px);
+        }
+    
+        button {
+            border: none;
+            background-color: #141E2F;
+            color: white;
+            padding: 8px 15px;
+            cursor: pointer;
+    
+            &:nth-child(3) { 
+                background-color: #154FBA;
+                width: 40%;
+            }
+        }
+    
+        &.invalid-input input {
+            border-color: #d40400;
+            border-width: 2px;  
+            border-radius: 3px;
+            padding: 6px;
+            width: calc(30% - 2px);
+        }
+    }
+    
+}

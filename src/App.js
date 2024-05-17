@@ -9,7 +9,7 @@ import Popup from './components/popup/Popup';
 import About from './pages/about/About';
 import ScanHistory from './pages/scan-history/ScanHistory';
 import Settings from './pages/settings/Settings';
-import BlockWebsites from './pages/block-websites/BlockWebsites';
+import BlockWebsites from './components/popup/BlockWebsites';
 import BlockedWebsitesPage from './pages/block-websites/BlockWebsites-page';
 
 import './App.scss';
