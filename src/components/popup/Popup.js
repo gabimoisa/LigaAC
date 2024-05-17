@@ -55,6 +55,7 @@ const Popup = () => {
         const intervals = [
             { label: 'year', seconds: 31536000 },
             { label: 'month', seconds: 2592000 },
+            { label: 'week', seconds: 604800 },
             { label: 'day', seconds: 86400 },
             { label: 'hour', seconds: 3600 },
             { label: 'minute', seconds: 60 },
@@ -84,11 +85,12 @@ const Popup = () => {
         window.close();
     };
 
-    const dropOverlay = useMemo(() => {
-        return (
-            <div className="drop-overlay"></div>
-        );
-    }, [dropOverlayActive]);
+    const goToStats = () => {
+        handleGaTrack();
+        goToTab('stats');
+        window.close();
+    };
+
 
     const handleDragAndDrop = (event) => {
         event.preventDefault();
@@ -103,13 +105,13 @@ const Popup = () => {
         }
     };
 
-
-
     useEffect(() => {
         gaTrackEvent(['_trackPageview', '/extension/popup']);
     }, []);
 
     const viewScanHistoryClassName = classNames({ 'd-none': files.length === 0 }, 'popup--scan__footer');
+
+    const [isTableVisible, setIsTableVisible] = useState(false);
 
     const getScanUrl = (file) => {
         if (file.dataId) {
@@ -133,17 +135,14 @@ const Popup = () => {
                         <a href={scannedFile.scanResults || getScanUrl(scannedFile)} target="_blank" rel="noreferrer noopener">
                             {scannedFile.fileName}
                         </a>
-                        <span>
-                            {scannedFile.dataId}
-                        </span>
-                        </td>
-                        <td>
-                            {getRelativeScanTime(scannedFile.scanTime)}
-                        </td>
-                        <td>
-                            <span className={`mcl-icon ${getStatusIcon(scannedFile.status)}`}></span>
-                        </td>
-                    </tr>
+                    </td>
+                    <td>
+                        {getRelativeScanTime(scannedFile.scanTime)}
+                    </td>
+                    <td>
+                        <span className={`mcl-icon ${getStatusIcon(scannedFile.status)}`}></span>
+                    </td>
+                </tr>
             );
         });
 
@@ -163,26 +162,25 @@ const Popup = () => {
             </ul>;
         }
 
-        return <table className="list-group row">
-            <thead>
-                <tr>
-                    <td>FILE NAME</td>
-                    <td>SCAN TIME</td>
-                    <td>RESULT</td>
-                </tr>
-            </thead>
+        return (
+            <table className="list-group row">
+                <thead>
+                    <tr>
+                        <td>File name</td>
+                        <td>Scan time</td>
+                        <td>Result</td>
+                    </tr>
+                </thead>
+                {isTableVisible && scanResultsDom}
+            </table>
+        );
+    }, [files, scanResultsDom, isTableVisible]);
 
-            {scanResultsDom}
 
-        </table>;
-    }, [files, scanResultsDom]);
+    const toggleTableVisibility = () => {
+        setIsTableVisible(!isTableVisible);
+    };
 
-    const dropFile = useMemo(() => {
-        return <div className="dnd-bar" >
-            <i className="icon-drop"></i>
-            <span className="text" dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('dropFile') }} />
-        </div>;
-    })
 
     return (
         <div className="popup--wrapper" onDrop={handleDragAndDrop} onDragOver={handleDragAndDrop}>
@@ -196,18 +194,49 @@ const Popup = () => {
                     <a href='#' className="popup--header__btn" onClick={goToSettings}>
                         <span className="icon-cog text-14"></span>
                     </a>
+                    <a href='#' className="popup--header__btn" onClick={goToStats}>
+                        <span className="icon-server text-14"></span>
+                    </a>
                 </div>
             </div>
             <div className="popup--scan__history">
-                {scanResults}
-                <div className="todays-stats-container">
-                    <div className="today-scans">
-                        Files scanned today: {filesScannedToday}
-                    </div>
-                    <div className='today-blocks'>
-                        Files blocked today: {filesBlockedToday}
+                <div className='days-without-container'>
+                    <div className="days-without">
+                        <span className='icon-spin text-14'></span> Days without threats: X
                     </div>
                 </div>
+
+                <div className='centered-box'>
+                    <div className="todays-stats-container">
+                        <div className="today-scans">
+                            Files scanned today: {filesScannedToday}
+                        </div>
+                        <div className='today-blocks'>
+                            Files blocked today: {filesBlockedToday}
+                        </div>
+                    </div>
+                </div>
+
+
+                {scanResults}
+                <div className='expand-container'>
+                    <button className="expand-table" onClick={toggleTableVisibility}>
+                        {isTableVisible ? '⇧' : '⇩'}
+                    </button>
+                </div>
+
+                {scanResults}
+                <div className='expand-container'>
+                    <button className="expand-table" onClick={toggleTableVisibility}>
+                        {isTableVisible ? '⇧' : '!!!altceva!!!'}
+                    </button>
+                </div>
+
+            </div>
+            <div className="upgrade-box">
+                <a href="https://metadefender.opswat.com/store" className="popup--footer__btn" target="_blank">
+                    <span className="icon-cloud text-14"></span> Upgrade
+                </a>
             </div>
         </div>
     );
