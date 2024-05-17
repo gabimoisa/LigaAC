@@ -5,9 +5,12 @@ import { domainHistory } from "../../../services/common/persistent/domain-histor
 export const sendDomainToApi = async () => {
     function getTrustworthySources(apiResponse) {
         if (apiResponse && apiResponse.lookup_results && apiResponse.lookup_results.sources) {
-          return apiResponse.lookup_results.sources.filter(source => source.assessment !== '');
-        } else {
-          return [];
+          const knownStatus = apiResponse.lookup_results.sources.filter(source => source.assessment !== '');
+          if(knownStatus.length !== 0) {
+            return knownStatus;
+          } else {
+                return 'Unknown';
+            }
         }
     };
 
@@ -27,9 +30,7 @@ export const sendDomainToApi = async () => {
                 const response = await MetascanClient.setAuth(apikeyInfo.data.apikey)?.domain?.lookup(domain);
                 console.log(response.lookup_results.sources);
                 await domainHistory.addDomain(domain);
-                console.log(domainHistory.domains);
                 const trustworthySources = getTrustworthySources(response);
-                console.log(trustworthySources)
                 resolve(trustworthySources);
             } catch (error) {
                 console.log('err', error);
@@ -37,6 +38,25 @@ export const sendDomainToApi = async () => {
             }
         });
     });
+};
+
+export const getColorByRiskLevel = (riskLevel) => {
+    switch (riskLevel.toLowerCase()) {
+        case 'high risk' || 'malicious':
+            return '#d00400';
+        case 'suspicious':
+            return '#fdbd0e';
+        case 'moderate risk' || 'likely malicious':
+            return '#ed6707';
+        case 'low risk' || 'no threat':
+            return '#008a00';
+        case 'trustworthy' || 'benign':
+            return '#1c6bfc';
+        case 'unknown':
+            return '#313c4d';
+        default:
+            return '#000000'; // Default color
+    }
 };
 
 

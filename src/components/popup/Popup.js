@@ -8,7 +8,7 @@ import ScanFile from '../../services/common/scan-file';
 import ScanHistoryContext from '../../providers/ScanHistoryProvider';
 
 import './Popup.scss';
-import { sendDomainToApi } from './utils/popup_domain';
+import { getColorByRiskLevel, sendDomainToApi } from './utils/popup_domain';
 
 const Popup = () => {
     
@@ -108,7 +108,10 @@ const Popup = () => {
         const fetchData = async () => {
             try {
                 const response = await sendDomainToApi();
-                setApiResponse(response);
+                console.log(response);
+                if(response !== "Unknown")
+                    setApiResponse(response[0].assessment.charAt(0).toUpperCase() + response[0].assessment.slice(1));
+                else setApiResponse(response);
             } catch (error) {
                 console.error("Error fetching data from API:", error);
             }
@@ -139,9 +142,10 @@ const Popup = () => {
             </a>
         </div>
 
-        <div className='popup--scan__history'>
-            Website Reputation: {apiResponse ? apiResponse[0].assessment.charAt(0).toUpperCase() + apiResponse[0].assessment.slice(1) : "Loading..."}
 
+        <div className='popup--scan__history'>
+            Website Reputation:
+            {apiResponse ? <span style={{color: getColorByRiskLevel(apiResponse), fontWeight: 'bold'}}> {apiResponse} </span> : " Loading..." }
         </div>
 
         {/* TODO:::: SAVE THE DOMAINS IN LOCALSTORAGE */}
