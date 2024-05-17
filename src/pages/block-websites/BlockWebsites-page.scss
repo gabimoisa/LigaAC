@@ -52,7 +52,10 @@
         margin-top: 20px;
         border: 1px solid #ddd; 
         
-    
+        th:first-child, td:first-child {
+            width: 75%;
+        }
+
         th, td {
             padding: 18px 20px 17px;
             text-align: left;
