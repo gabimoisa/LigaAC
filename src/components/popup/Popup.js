@@ -9,29 +9,17 @@ import ScanHistoryContext from '../../providers/ScanHistoryProvider';
 import { SCAN_STATUS } from '../../services/constants/file';
 
 import './Popup.scss';
+import useTodayFileStats from '../../hooks/useTodayFileStats';
+
 
 const Popup = () => {
 
+    const { filesScannedToday, filesBlockedToday, filesUnknownToday } = useTodayFileStats();
     const config = useContext(ConfigContext);
     const { gaTrackEvent } = useContext(GAContext);
     const { files } = useContext(ScanHistoryContext);
     const scanUrl = config.mclDomain;
     const [dropOverlayActive, setDropOverlayActive] = useState(false);
-
-    const countFilesScannedToday = () => {
-        const startOfToday = new Date();
-        startOfToday.setHours(0, 0, 0, 0);
-        return files.filter(file => new Date(file.scanTime * 1000) >= startOfToday).length;
-    }
-
-    const countFilesBlockedToday = () => {
-        const startOfToday = new Date();
-        startOfToday.setHours(0, 0, 0, 0);
-        return files.filter(file => new Date(file.scanTime * 1000) >= startOfToday && file.status === SCAN_STATUS.VALUES.INFECTED).length;
-    }
-
-    const filesScannedToday = useMemo(countFilesScannedToday, [files]);
-    const filesBlockedToday = useMemo(countFilesBlockedToday, [files]);
 
     /**
      * Send google analytics data on click event
@@ -148,14 +136,14 @@ const Popup = () => {
                         <span>
                             {scannedFile.dataId}
                         </span>
-                    </td>
-                    <td>
-                        {getRelativeScanTime(scannedFile.scanTime)}
-                    </td>
-                    <td>
-                        <span className={`mcl-icon ${getStatusIcon(scannedFile.status)}`}></span>
-                    </td>
-                </tr>
+                        </td>
+                        <td>
+                            {getRelativeScanTime(scannedFile.scanTime)}
+                        </td>
+                        <td>
+                            <span className={`mcl-icon ${getStatusIcon(scannedFile.status)}`}></span>
+                        </td>
+                    </tr>
             );
         });
 
