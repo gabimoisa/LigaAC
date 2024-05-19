@@ -28,8 +28,8 @@ const Stats = () => {
     const datasetsTemplate = [
         { 
             label: 'Clean Files', 
-            backgroundColor: 'rgba(29,107,252,0.5)', // transparency
-            borderColor: '#1d6bfc', 
+            backgroundColor: 'rgba(21, 79, 186, 0.5)', // transparency
+            borderColor: '#154FBA', 
             borderWidth: 1,
             barPercentage: 0.5,
             barThickness: 27,
@@ -39,7 +39,7 @@ const Stats = () => {
         { 
             label: 'Infected Files', 
             backgroundColor: 'rgba(208,3,0,0.5)', // transparency
-            borderColor: '#d00300', 
+            borderColor: '#a94442', 
             borderWidth: 1,
             barPercentage: 0.5,
             barThickness: 27,
@@ -48,8 +48,8 @@ const Stats = () => {
         },
         { 
             label: 'Unknown Files', 
-            backgroundColor: 'rgba(237,103,6,0.5)', // transparency
-            borderColor: '#ed6706', 
+            backgroundColor: 'rgba(27, 39, 60,0.5)', // transparency
+            borderColor: '#1B273C', 
             borderWidth: 1,
             barPercentage: 0.5,
             barThickness: 27,

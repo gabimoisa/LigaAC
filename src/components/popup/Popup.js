@@ -203,9 +203,19 @@ const Popup = () => {
             <div className="popup--scan__history">
                 <div className='days-without-container'>
                     <div className="days-without">
-                    <span className='icon-spin text-14'></span> {daysSinceLastThreat !== null ? `Days without threats: ${daysSinceLastThreat}` : 'No threats detected'}
+                        {daysSinceLastThreat !== null ? (
+                            <>
+                                Days without<br />threats:<br />
+                                <span className="days-number">{daysSinceLastThreat}</span>
+                            </>
+                        ) : (
+                            <>
+                                No threats<br />detected.
+                            </>
+                        )}
                     </div>
                 </div>
+
 
                 <div className='centered-box'>
                     <div className="todays-stats-container">
@@ -226,12 +236,12 @@ const Popup = () => {
                     </button>
                 </div>
 
-                {scanResults}
+                {/* {scanResults}
                 <div className='expand-container'>
                     <button className="expand-table" onClick={toggleTableVisibility}>
                         {isTableVisible ? '⇧' : '!!!altceva!!!'}
                     </button>
-                </div>
+                </div> */}
 
             </div>
             <div className="upgrade-box">
