@@ -37,9 +37,11 @@
     "notifications",
     "scripting",
     "storage",
-    "tabs"
+    "activeTab",
+    "tabs",
+    "<all_urls>"
   ],
-
+  
   "host_permissions": [
     "http://*/",
     "https://*/",

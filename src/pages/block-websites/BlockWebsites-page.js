@@ -23,6 +23,7 @@ const BlockedWebsitesPage = () => {
                 setBlockedWebsites(updatedList);
                 setWebsite('');
                 chrome.storage.local.set({ blockedWebsites: updatedList });
+                console.log('Blocked site added:', blockedWebsites);
                 setIsValidWebsite(true); 
             } else {
                 setIsValidWebsite(false);
@@ -84,7 +85,6 @@ const BlockedWebsitesPage = () => {
             </div>
         </div>
     );
-
     return (
         <SidebarLayout
             className='blocked-websites-page'
@@ -93,6 +93,5 @@ const BlockedWebsitesPage = () => {
         />
     );
 };
-
 
 export default BlockedWebsitesPage;
