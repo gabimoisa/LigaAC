@@ -114,7 +114,7 @@
       "description": ""
     },
     "scanUploads": {
-      "message": "Scan uploading files<div class='text-secondary text-14'>Automatically scan uploading files to the internet with DLP (Data loss prevention). Files are scanned only after the file is put inside an \"input\" tag. A notification* will inform you when the scan is complete.</div>",
+      "message": "Scan uploading files<div class='text-secondary text-14'>Automatically scan uploading files to the internet with DLP (Data loss prevention). Files are scanned only after the file is put inside an \"input\" tag. A notification* will inform you when the scan is complete. Reload tabs to take effect.</div>",
       "description": ""
     },
     "scanSub": {

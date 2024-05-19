@@ -112,7 +112,7 @@ export const SettingsProvider = ({ children }) => {
                 break;
             }
             case 'scanUploads': {
-                newSettings.scanUploads = !newSettings.scanUploads && isAllowedFileSchemeAccess;
+                newSettings.scanUploads = !newSettings.scanUploads;
                 break;
             }
             default:

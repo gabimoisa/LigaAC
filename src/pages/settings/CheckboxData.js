@@ -29,27 +29,7 @@ const CheckboxData = (isPaidUser, isAllowedFileSchemeAccess) => {
         },
         {
             label: <p className='label' dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('scanUploads') }} />,
-            otherContent: <>
-                <p>
-                    {chrome.i18n.getMessage('fileAccessDisabled')}
-                    {' '}
-                    <a href="" onClick={() => {
-                        chrome.tabs.query({url: `chrome://extensions/?id=${chrome.runtime.id.toString()}`}, (tabs) => {
-                            if (tabs.length === 0) {
-                                chrome.tabs.update({ url: `chrome://extensions/?id=${chrome.runtime.id.toString()}` });
-                            }
-                            else {
-                                chrome.tabs.update(tabs[0].id, { active: true });
-                            }
-                        });
-                    }}>
-                        {chrome.i18n.getMessage('goToExtension')}
-                    </a>
-
-                </p>
-                <sub className='warning'>{chrome.i18n.getMessage('scanSub')}</sub>
-            </>,
-            isDisabled: !isAllowedFileSchemeAccess,
+            otherContent: <sub className='warning'>{chrome.i18n.getMessage('scanSub')}</sub>,
             labelFor: 'scanUploads'
         },
         {
