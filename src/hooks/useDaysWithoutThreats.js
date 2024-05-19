@@ -24,7 +24,7 @@ const useDaysSinceLastThreat = () => {
             return 0; // if threat was found today
         }
 
-        const timeDifference = today - lastThreatDate;
+        const timeDifference = startOfToday - lastThreatDate;
         const daysSinceLastThreat = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
         return daysSinceLastThreat;
