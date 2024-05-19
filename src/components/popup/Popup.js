@@ -9,12 +9,13 @@ import ScanHistoryContext from '../../providers/ScanHistoryProvider';
 import { SCAN_STATUS } from '../../services/constants/file';
 
 import './Popup.scss';
-import useTodayFileStats from '../../hooks/useTodayFileStats';
-
+import useTimeFrameStats from '../../hooks/hooks-for-chart/useTodayFileStats';
+import useDaysSinceLastThreat from '../../hooks/useDaysWithoutThreats';
 
 const Popup = () => {
 
-    const { filesScannedToday, filesBlockedToday, filesUnknownToday } = useTodayFileStats();
+    const { filesScannedToday, filesBlockedToday, filesUnknownToday } = useTimeFrameStats();
+    const { daysSinceLastThreat } = useDaysSinceLastThreat();
     const config = useContext(ConfigContext);
     const { gaTrackEvent } = useContext(GAContext);
     const { files } = useContext(ScanHistoryContext);
@@ -202,7 +203,7 @@ const Popup = () => {
             <div className="popup--scan__history">
                 <div className='days-without-container'>
                     <div className="days-without">
-                        <span className='icon-spin text-14'></span> Days without threats: X
+                    <span className='icon-spin text-14'></span> {daysSinceLastThreat !== null ? `Days without threats: ${daysSinceLastThreat}` : 'No threats detected'}
                     </div>
                 </div>
 

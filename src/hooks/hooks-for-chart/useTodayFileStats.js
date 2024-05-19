@@ -1,7 +1,7 @@
 // computing the no of unknown, clean and infected files for today
 import { useContext, useMemo } from 'react';
-import { ScanHistoryContext } from '../providers/ScanHistoryProvider';
-import { SCAN_STATUS } from '../services/constants/file';
+import { ScanHistoryContext } from '../../providers/ScanHistoryProvider';
+import { SCAN_STATUS } from '../../services/constants/file';
 
 const useTodayFileStats = () => {
     const { files } = useContext(ScanHistoryContext);
@@ -24,11 +24,18 @@ const useTodayFileStats = () => {
         return files.filter(file => new Date(file.scanTime * 1000) >= startOfToday && file.status === SCAN_STATUS.VALUES.UNKNOWN).length;
     }
 
+    const countFilesCleanToday = () => {
+        const startOfToday = new Date();
+        startOfToday.setHours(0, 0, 0, 0);
+        return files.filter(file => new Date(file.scanTime * 1000) >= startOfToday && file.status === SCAN_STATUS.VALUES.CLEAN).length;
+    }
+
     const filesScannedToday = useMemo(countFilesScannedToday, [files]);
     const filesBlockedToday = useMemo(countFilesBlockedToday, [files]);
     const filesUnknownToday = useMemo(countFilesUnknownToday, [files]);
+    const filesCleanToday = useMemo(countFilesCleanToday, [files]);
 
-    return { filesScannedToday, filesBlockedToday, filesUnknownToday };
+    return { filesScannedToday, filesBlockedToday, filesUnknownToday, filesCleanToday };
 };
 
 export default useTodayFileStats;

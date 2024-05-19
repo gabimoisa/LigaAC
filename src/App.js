@@ -45,20 +45,21 @@ function App () {
                 }
             />
             <Route 
-                path='/'
-                element={
-                    <ScanHistoryProvider>
-                        <Popup />
-                    </ScanHistoryProvider>
-                }
-            />
-            <Route 
             path='/stats' 
             element={
                 <ScanHistoryProvider>
                      <Stats/>
                 </ScanHistoryProvider>
             } 
+            />
+
+            <Route 
+                path='/'
+                element={
+                    <ScanHistoryProvider>
+                        <Popup />
+                    </ScanHistoryProvider>
+                }
             />
         </Routes>
     );
