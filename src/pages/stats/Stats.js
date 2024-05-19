@@ -9,8 +9,8 @@ import useLastWeekFileStats from '../../hooks/hooks-for-chart/useLastWeekFileSta
 import useLastMonthFileStats from '../../hooks/hooks-for-chart/useLastMonthFileStats';
 import useAllTimeFileStats from '../../hooks/hooks-for-chart/useAllTimeFileStats';
 
-import "./Stats.scss"
-import "../../assets/style/colors.scss"
+import "./Stats.scss";
+import "../../assets/style/colors.scss";
 
 // register chart.js components
 Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -22,34 +22,31 @@ const Stats = () => {
     const lastMonthStats = useLastMonthFileStats();
     const { allTimeCleanFiles, allTimeInfectedFiles, allTimeUnknownFiles } = useAllTimeFileStats();
 
-    const [timeFrame, setTimeFrame] = useState('today');
-    const [chartData, setChartData] = useState({});
-
     const datasetsTemplate = [
-        { 
-            label: 'Clean Files', 
+        {
+            label: 'Clean Files',
             backgroundColor: 'rgba(21, 79, 186, 0.5)', // transparency
-            borderColor: '#154FBA', 
+            borderColor: '#154FBA',
             borderWidth: 1,
             barPercentage: 0.5,
             barThickness: 27,
             maxBarThickness: 35,
             minBarLength: 4,
         },
-        { 
-            label: 'Infected Files', 
+        {
+            label: 'Infected Files',
             backgroundColor: 'rgba(208,3,0,0.5)', // transparency
-            borderColor: '#a94442', 
+            borderColor: '#a94442',
             borderWidth: 1,
             barPercentage: 0.5,
             barThickness: 27,
             maxBarThickness: 35,
             minBarLength: 4,
         },
-        { 
-            label: 'Unknown Files', 
+        {
+            label: 'Unknown Files',
             backgroundColor: 'rgba(27, 39, 60,0.5)', // transparency
-            borderColor: '#1B273C', 
+            borderColor: '#1B273C',
             borderWidth: 1,
             barPercentage: 0.5,
             barThickness: 27,
@@ -58,7 +55,12 @@ const Stats = () => {
         }
     ];
 
-    // update chart data based on timeframe
+    const [timeFrame, setTimeFrame] = useState('today');
+    const [chartData, setChartData] = useState({
+        labels: [],
+        datasets: datasetsTemplate
+    });
+
     useEffect(() => {
         let labels = [];
         let cleanData = [];
@@ -70,20 +72,17 @@ const Stats = () => {
             cleanData.push(filesCleanToday);
             infectedData.push(filesBlockedToday);
             unknownData.push(filesUnknownToday);
-
         } else if (timeFrame === 'lastWeek') {
             labels = lastWeekStats.map(day => day.date);
             cleanData = lastWeekStats.map(day => day.clean);
             infectedData = lastWeekStats.map(day => day.blocked);
             unknownData = lastWeekStats.map(day => day.unknown);
-
         } else if (timeFrame === 'lastMonth') {
             labels = lastMonthStats.map(week => week.week);
             cleanData = lastMonthStats.map(week => week.clean);
             infectedData = lastMonthStats.map(week => week.blocked);
             unknownData = lastMonthStats.map(week => week.unknown);
-        }
-        else if (timeFrame === 'allTime') {
+        } else if (timeFrame === 'allTime') {
             labels.push("All Time Data");
             cleanData.push(allTimeCleanFiles);
             infectedData.push(allTimeInfectedFiles);
@@ -98,7 +97,7 @@ const Stats = () => {
                 { ...datasetsTemplate[2], data: unknownData }
             ]
         });
-    }, [timeFrame, filesScannedToday, filesBlockedToday, filesUnknownToday, filesCleanToday, lastWeekStats, lastMonthStats, allTimeCleanFiles, allTimeInfectedFiles, allTimeUnknownFiles]);
+    }, [timeFrame, filesCleanToday, filesBlockedToday, filesUnknownToday, lastWeekStats, lastMonthStats, allTimeCleanFiles, allTimeInfectedFiles, allTimeUnknownFiles]);
 
     const noDataAvailable = files.length === 0;
 
@@ -135,9 +134,9 @@ const Stats = () => {
                     <>
                         <h3>
                             {timeFrame === 'today' ? "Today's Data" :
-                            timeFrame === 'lastWeek' ? "Last Week's Data" :
-                            timeFrame === 'lastMonth' ? "Last Month's Data" :
-                            "All Time Data"}
+                                timeFrame === 'lastWeek' ? "Last Week's Data" :
+                                    timeFrame === 'lastMonth' ? "Last Month's Data" :
+                                        "All Time Data"}
                         </h3>
                         <Bar data={chartData} options={getChartOptions(true)} />
                     </>
