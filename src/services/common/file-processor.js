@@ -41,20 +41,31 @@ class FileProcessor {
         }
 
         else {
-            if(linkUrl.includes('blob')) {
+            if (linkUrl.includes('blob')) {
+                console.log('file-processor.js linkurl is blob');
+
+                file.fileName = linkUrl.split('/').pop();
                 
+                // restore linkUrl to original
+                linkUrl = linkUrl.replace(file.fileName, '');
+                linkUrl = linkUrl.slice(0, -1);
+
+                console.log('file-processor file.fileName ', file.fileName);
+                console.log('file-processor linkUrl', linkUrl);
+
             } else {
                 file.fileName = linkUrl.split('/').pop();
                 file.fileName = file.fileName.split('?')[0];
-                try {
-                    file.size = file.getFileSize(linkUrl, file.fileName);
+            }
+
+            try {
+                file.size = file.getFileSize(linkUrl, file.fileName);
+            }
+            catch (errMsg) {
+                if (errMsg) {
+                    BrowserNotification.create(errMsg);
                 }
-                catch (errMsg) {
-                    if (errMsg) {
-                        BrowserNotification.create(errMsg);
-                    }
-                    return;
-                }
+                return;
             }
         }
 

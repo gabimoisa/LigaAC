@@ -71,14 +71,16 @@ const Popup = () => {
         const file = event.dataTransfer.files[0];
         if (file) {
             setDropOverlayActive(false);
-            console.log(file);
+            console.log('handleDragAndDrop file ', file);
 
             const reader = new FileReader();
             reader.onload = (e) => {
                 const fileContent = e.target.result;
                 let fileUrl;
                 try {
-                    fileUrl = new Blob([fileContent], { type: fileContent.type });
+                  fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
+
+                  fileUrl = (fileUrl + '/').concat(file.name);
                 }
                 catch (e) {
                     console.log(e);
@@ -87,8 +89,7 @@ const Popup = () => {
                 if (navigator.serviceWorker.controller) {
                     navigator.serviceWorker.controller.postMessage({
                         type: 'fileUploaded',
-                        fileUrl: fileUrl,
-                        fileName: file.name
+                        fileUrl: fileUrl
                     });
                 }
             };
