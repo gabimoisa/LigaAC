@@ -108,6 +108,7 @@ function getFileSize(url, filename) {
         url = 'http://' + url;
     }
 
+
     return fetch(url, { method: 'HEAD' })
         .then(resp => {
             if ([0, 403, 404, 500, 503].indexOf(resp.status) >= 0) {

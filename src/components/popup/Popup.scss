@@ -3,7 +3,7 @@
 /** rules **/
 .popup {
   &--wrapper {
-    width: 500px;
+    width: 600px;
     padding: $padding;
     background: $colorBlack;
   }
@@ -95,12 +95,18 @@
             width: 300px;
             padding: 0px 10px;
           }
+
         }
       }
 
       tbody {
         tr:first-child {
           border-top: 1px solid $colorGrayFDark;
+        }
+
+        td:last-child {
+          text-align: center;
+          width: 120px;
         }
       }
     }

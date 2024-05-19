@@ -27,7 +27,7 @@ class FileProcessor {
             BrowserNotification.create(chrome.i18n.getMessage('undefinedApiKey'));
             return;
         }
-        
+
         const file = new ScanFile();
 
         if (file.isSanitizedFile(linkUrl)) {
@@ -35,28 +35,32 @@ class FileProcessor {
         }
          
         if (downloadItem) {
+            console.log(downloadItem);
             file.fileName = downloadItem.filename.split('/').pop();
             file.size = downloadItem.fileSize;
         }
 
         else {
-            file.fileName = linkUrl.split('/').pop();
-            file.fileName = file.fileName.split('?')[0];
-
-            try {
-                file.size = file.getFileSize(linkUrl, file.fileName);
-            }
-            catch (errMsg) {
-                if (errMsg) {
-                    BrowserNotification.create(errMsg);
+            if(linkUrl.includes('blob')) {
+                
+            } else {
+                file.fileName = linkUrl.split('/').pop();
+                file.fileName = file.fileName.split('?')[0];
+                try {
+                    file.size = file.getFileSize(linkUrl, file.fileName);
                 }
-                return;
+                catch (errMsg) {
+                    if (errMsg) {
+                        BrowserNotification.create(errMsg);
+                    }
+                    return;
+                }
             }
         }
 
-        file.extension = file.fileName.split('.').pop();
-        file.useDLP = useDLP ? useDLP : false;
-        file.canBeSanitized = useDLP || file.extension && SANITIZATION_FILE_TYPES.indexOf(file.extension.toLowerCase()) > -1;
+            file.extension = file.fileName.split('.').pop();    
+            file.useDLP = useDLP ? useDLP : false;
+            file.canBeSanitized = useDLP || file.extension && SANITIZATION_FILE_TYPES.indexOf(file.extension.toLowerCase()) > -1;
 
         if (file.size === null) {
             BrowserNotification.create(chrome.i18n.getMessage('fileEmpty'));
@@ -185,13 +189,19 @@ class FileProcessor {
                 // verify if the user has access
                 if (await CoreClient.file.checkSanitized(sanitizedFileURL)) {
                     file.sanitizedFileURL = sanitizedFileURL;
+                    file.sanitizationSuccessfull = sanitizationSuccessfull;
                 }
             }
         }
         else {
+            const postProcessing = info.process_info?.post_processing;
             file.scanResults = `${MCL.config.mclDomain}/results/file/${file.dataId}/regular/overview`;
             if (info?.sanitized?.file_path && !Object.prototype.hasOwnProperty.call(file, 'sanitizedFileURL')) {
                 file.sanitizedFileURL = info.sanitized.file_path;
+            }
+            if (info?.process_info?.post_processing?.sanitization_details?.description && !Object.prototype.hasOwnProperty.call(file, 'sanitizationSuccessfull')) {
+                const sanitizationSuccessfull = postProcessing?.sanitization_details?.description === 'Sanitized successfully.';
+                file.sanitizationSuccessfull = sanitizationSuccessfull;
             }
         }
         

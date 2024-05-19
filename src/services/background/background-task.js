@@ -1,4 +1,6 @@
 import MCL from '../../config/config';
+import mime from 'mime-types';
+
 
 import { settings } from '../common/persistent/settings';
 import { apikeyInfo } from '../common/persistent/apikey-info';
@@ -16,6 +18,30 @@ import BrowserNotification from '../common/browser/browser-notification';
 import BrowserStorage from '../common/browser/browser-storage';
 
 import '../common/ga-tracking';
+
+self.addEventListener('message', async (event) => {
+    const message = event.data;
+    if (message.type === 'fileUploaded') {
+        const { fileUrl, fileName } = message;
+        console.log(fileUrl.name);
+        await processUploadedFile(fileName, fileUrl);
+    }
+});
+
+/**
+ * Process uploaded file 
+ * 
+ * @param fileName
+ * @param downloadItem
+ */
+async function processUploadedFile(fileName, fileURL) {
+
+    try {
+        await FileProcessor.processTarget(fileURL, null, true);
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 const MCL_CONFIG = MCL.config;
 
@@ -97,7 +123,10 @@ export default class BackgroundTask {
 
     handleMessage(message, sender, sendResponse) {
         if (message.type === 'fileUploaded') {
-            console.log('File uploaded:', message.fileInfo);
+            console.log(message);
+            const { fileUrl } = message;
+            // this.processUploadedFile(fileUrl);
+
         }
     }
     
@@ -111,9 +140,9 @@ export default class BackgroundTask {
     async runDropTaskScript(tabId) {
         try {
             const tab = await chrome.tabs.get(tabId);
-            // if (tab && (tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://'))) {
-            //     return;
-            // }
+            if (tab && (tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://'))) {
+                return;
+            }
             console.log('Tab name:', tab.title, ', Tab id:', tab.id);
             await chrome.scripting.executeScript({
                 target: { tabId: tabId },
@@ -226,7 +255,7 @@ export default class BackgroundTask {
         }
         
         const target = info.srcUrl || info.linkUrl || info.pageUrl;
-        
+
         await this.processTarget(target);        
     }
 
@@ -240,6 +269,16 @@ export default class BackgroundTask {
     async processTarget(linkUrl, downloadItem) {
         await this.downloadsManager.processTarget(linkUrl, downloadItem);
     }
+
+
+    /**
+     * Process dropped file 
+     * 
+     * @param fileContent
+     * @param fileName
+     */
+
+
 
     /**
      * Extension updates handler.
@@ -321,12 +360,9 @@ function drop_task() {
         try {
         input.addEventListener('change', function(event) {
             const file = event.target.files[0];
-            const fileInfo = {
-                name: file.name,
-                size: file.size,
-                type: file.type
-            };
-            chrome.runtime.sendMessage({ type: 'fileUploaded', fileInfo: fileInfo });
+            const fileBlob = URL.createObjectURL(new Blob([file]));
+
+            chrome.runtime.sendMessage({ type: 'fileUploaded', fileBlob: fileBlob });
         });
         } catch (error) {
             console.error('Error processing file inputs normal:', error);

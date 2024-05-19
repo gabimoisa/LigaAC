@@ -348,6 +348,16 @@
     "_": {
       "message": "",
       "description": ""
+    },
+    "sanitizedVersion": {
+      "message": "Sanitized version",
+      "description": ""
+    },
+    "noDLP": {
+      "message": "No DLP used."
+    },
+    "scanDLP": {
+      "message": "Scan with DLP"
     }
   }
   

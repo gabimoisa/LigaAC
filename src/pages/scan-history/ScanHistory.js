@@ -80,7 +80,9 @@ const ScanHistory = () => {
             status: item.status,
             id: item.id, 
             useCore: item?.useCore,
-            useDLP: item?.useDLP
+            useDLP: item?.useDLP,
+            sanitizedFileURL: item?.sanitizedFileURL,
+            sanitizationSuccessfull: item?.sanitizationSuccessfull
         }));
     }, [files]);
 
@@ -123,7 +125,7 @@ const ScanHistory = () => {
                 </Col>
             </Row>
 
-            <ScanHistoryTable data={scanHistoryTableData} filterBy={searchValue} removeFile={removeFile} getStatusIcon={getStatusIcon} />
+            <ScanHistoryTable data={scanHistoryTableData} filterBy={searchValue} removeFile={removeFile} getStatusIcon={getStatusIcon}/>
         </React.Fragment>;
 
     return <SidebarLayout

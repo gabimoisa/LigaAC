@@ -50,6 +50,13 @@
                     }
                 }
             }
+
+            .downloadSanitizedButton {
+                background-color: $transparent;
+                border: 0;
+                color: $secondaryColor;
+                font-weight: 700;
+            }
         }
 
         .icon-spin {
