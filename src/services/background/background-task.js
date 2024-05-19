@@ -22,19 +22,17 @@ import '../common/ga-tracking';
 self.addEventListener('message', async (event) => {
     const message = event.data;
     if (message.type === 'fileUploaded') {
-        const { fileUrl, fileName } = message;
-        console.log(fileUrl.name);
-        await processUploadedFile(fileName, fileUrl);
+        const { fileUrl } = message;
+        await processUploadedFile(fileUrl);
     }
 });
 
 /**
  * Process uploaded file 
  * 
- * @param fileName
  * @param downloadItem
  */
-async function processUploadedFile(fileName, fileURL) {
+async function processUploadedFile(fileURL) {
 
     try {
         await FileProcessor.processTarget(fileURL, null, true);
@@ -125,9 +123,74 @@ export default class BackgroundTask {
         if (message.type === 'fileUploaded') {
             console.log(message);
             const { fileUrl } = message;
-            // this.processUploadedFile(fileUrl);
 
+            processUploadedFile(fileUrl);
         }
+    }
+
+    drop_task() {
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            try {
+            input.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+    
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const fileContent = e.target.result;
+                    let fileUrl;
+                    try {
+                      fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
+    
+                      fileUrl = (fileUrl + '/').concat(file.name);
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+    
+                    chrome.runtime.sendMessage({ 
+                        type: 'fileUploaded', 
+                        fileUrl: fileUrl 
+                    });
+                };
+                reader.readAsArrayBuffer(file);
+            });
+            } catch (error) {
+                console.error('Error processing file inputs normal:', error);
+            }
+        });
+    
+        document.querySelectorAll('iframe').forEach(frame => {
+            try {
+                const frameDocument = frame.contentDocument || frame.contentWindow.document;
+                frameDocument.querySelectorAll('input[type="file"]').forEach(input => {
+                    input.addEventListener('change', function(event) {
+                        const file = event.target.files[0];
+    
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const fileContent = e.target.result;
+                            let fileUrl;
+                            try {
+                            fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
+    
+                            fileUrl = (fileUrl + '/').concat(file.name);
+                            }
+                            catch (e) {
+                                console.log(e);
+                            }
+    
+                            chrome.runtime.sendMessage({ 
+                                type: 'fileUploaded', 
+                                fileUrl: fileUrl 
+                            });
+                        };
+                        reader.readAsArrayBuffer(file);
+                    });
+                });
+            } catch (error) {
+                console.error('Error processing file inputs in frame:', error);
+            }
+        });
     }
     
 
@@ -143,18 +206,20 @@ export default class BackgroundTask {
             if (tab && (tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://'))) {
                 return;
             }
-            console.log('Tab name:', tab.title, ', Tab id:', tab.id);
-            await chrome.scripting.executeScript({
-                target: { tabId: tabId },
-                func: drop_task
-            });
+            console.log('Tab name:', tab.title, ', Tab id:', tab.id, ', scanUploads:', this.settings.data.scanUploads);
+
+            if (this.settings.data.scanUploads) {
+                chrome.scripting.executeScript({
+                    target: { tabId: tabId },
+                    func: this.drop_task
+                });
+            }
         } catch (error) {
             console.error('Error executing script', error);
         }
     }
+
     
-
-
     
     async findTabAndRunDropTask() {
         const tabs = await chrome.tabs.query({ url: '*://*/*' });
@@ -270,16 +335,6 @@ export default class BackgroundTask {
         await this.downloadsManager.processTarget(linkUrl, downloadItem);
     }
 
-
-    /**
-     * Process dropped file 
-     * 
-     * @param fileContent
-     * @param fileName
-     */
-
-
-
     /**
      * Extension updates handler.
      * 
@@ -353,40 +408,3 @@ export default class BackgroundTask {
 }
 
 export const Task = new BackgroundTask();
-
-function drop_task() {
-    
-    document.querySelectorAll('input[type="file"]').forEach(input => {
-        try {
-        input.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            const fileBlob = URL.createObjectURL(new Blob([file]));
-
-            chrome.runtime.sendMessage({ type: 'fileUploaded', fileBlob: fileBlob });
-        });
-        } catch (error) {
-            console.error('Error processing file inputs normal:', error);
-        }
-    });
-
-    document.querySelectorAll('iframe').forEach(frame => {
-        try {
-            const frameDocument = frame.contentDocument || frame.contentWindow.document;
-            frameDocument.querySelectorAll('input[type="file"]').forEach(input => {
-                input.addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    const fileInfo = {
-                        name: file.name,
-                        size: file.size,
-                        type: file.type
-                    };
-                    chrome.runtime.sendMessage({ type: 'fileUploaded', fileInfo: fileInfo });
-                });
-            });
-        } catch (error) {
-            console.error('Error processing file inputs in frame:', error);
-        }
-    });
-}
-
-
