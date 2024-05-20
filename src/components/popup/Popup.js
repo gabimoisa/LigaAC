@@ -112,8 +112,6 @@ const Popup = () => {
 
     const viewScanHistoryClassName = classNames({ 'd-none': files.length === 0 }, 'popup--scan__footer');
 
-    const [isTableVisible, setIsTableVisible] = useState(false);
-
     const getScanUrl = (file) => {
         if (file.dataId) {
             return `${scanUrl}/results/file/${file.dataId}/regular/peinfo`;
@@ -172,15 +170,11 @@ const Popup = () => {
                         <td>Result</td>
                     </tr>
                 </thead>
-                {isTableVisible && scanResultsDom}
+                {scanResultsDom}
             </table>
         );
-    }, [files, scanResultsDom, isTableVisible]);
+    }, [files, scanResultsDom]);
 
-
-    const toggleTableVisibility = () => {
-        setIsTableVisible(!isTableVisible);
-    };
 
 
     return (
@@ -194,9 +188,9 @@ const Popup = () => {
                     <a href='#' className="popup--header__btn" onClick={goToSettings}>
                         <span className="icon-cog text-14"></span>
                     </a>
-                    <a href='#' className="popup--header__btn" onClick={goToStats}>
+                    {/* <a href='#' className="popup--header__btn" onClick={goToStats}>
                         <span className="icon-server text-14"></span>
-                    </a>
+                    </a> */}
                 </div>
             </div>
             <div className='popup--body'>
@@ -205,12 +199,12 @@ const Popup = () => {
                         <div className="days-without">
                             {daysSinceLastThreat !== null ? (
                                 <>
-                                    Days without<br />threats:<br />
+                                    Days without threats:
                                     <span className="days-number">{daysSinceLastThreat}</span>
                                 </>
                             ) : (
                                 <>
-                                    No threats<br />detected.
+                                    You're safe for now
                                 </>
                             )}
                         </div>
@@ -220,28 +214,28 @@ const Popup = () => {
                     <div className='centered-box'>
                         <div className="todays-stats-container">
                             <div className="today-scans">
-                                Files scanned today: {filesScannedToday}
+                                <>
+                                Files scanned today: <br/> {filesScannedToday}
+                            </>
+                                
                             </div>
                             <div className='today-blocks'>
                                 Files blocked today: {filesBlockedToday}
                             </div>
                         </div>
+
+                        <div className="todays-stats-container">
+                            <div className='today-scans'>
+                                URLs scanned today: **0
+                            </div>
+                            <div className='today-blocks'>
+                                URLs blocked today: **0
+                            </div>
+                        </div>
                     </div>
-
-
                     {scanResults}
-                    <div className='expand-container'>
-                        <button className="expand-table" onClick={toggleTableVisibility}>
-                            {isTableVisible ? '⇧' : '⇩'}
-                        </button>
-                    </div>
+                </div>
 
-                </div>
-                <div className="upgrade-box">
-                    <a href="https://metadefender.opswat.com/store" className="popup--footer__btn" target="_blank">
-                        <span className="icon-cloud text-14"></span> Upgrade
-                    </a>
-                </div>
             </div>
         </div>
     );

@@ -2,54 +2,39 @@
 
 /** rules **/
 .popup {
-  //STYLE #1___________________________________________________________________________________________
   &--wrapper {
-    width: 450px;
+    min-width: 400px;
     padding: $padding;
-    background: $colorGreyLighter;
-    background: linear-gradient(to bottom, $colorWhite 0%, $colorGreyLighter 5%);
+
+
+    @media (prefers-color-scheme: light) {
+      background-image: url('../../../promo/Marquee.png');
+      background-position: right;
+      background-size: 200% 100%;
+      background-repeat: no-repeat;
+      position: relative;
+      z-index: 0;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.2); //light overlay
+        z-index: -1;
+      }
+    }
 
     @media (prefers-color-scheme: dark) {
-      background: $colorBlack;
-      background: linear-gradient(to bottom, $colorBlacker 0%, $colorBlack 5%);
+      background-image: url('../../../promo/Marquee.png');
+      background-position: right;
+      background-size: 200% 100%;
+      background-repeat: no-repeat;
+      position: relative;
     }
   }
-  //STYLE #1___________________________________________________________________________________________
-
-  //STYLE #2___________________________________________________________________________________________
-  // &--wrapper {
-  //   width: 450px;
-  //   padding: $padding;
-
-
-  //   /* Light mode: Overlay with semi-transparent background */
-  //   @media (prefers-color-scheme: light) {
-  //     background-image: url('../../../promo/Marquee.png');
-  //     background-position: right;
-  //     background-size: 200% 100%;
-  //     background-repeat: no-repeat;
-  //     position: relative;
-  //     z-index: 0;
-
-  //     &:before {
-  //       content: '';
-  //       position: absolute;
-  //       top: 0;
-  //       left: 0;
-  //       width: 100%;
-  //       height: 100%;
-  //       background-color: rgba(255, 255, 255, 0.2);
-  //       z-index: -1;
-  //     }
-  //   }
-
-  //   @media (prefers-color-scheme: dark) {
-  //     background: $colorBlack;
-  //     background: linear-gradient(to bottom, $colorBlacker 0%, $colorBlack 5%);
-  //   }
-  // }
-  //STYLE #2___________________________________________________________________________________________
-
 
 
   &--header {
@@ -61,12 +46,7 @@
     margin-bottom: 7%;
 
     &__logo {
-      background-image: url('../../assets/images/metadefender-chrome-black.svg');//STYLE #1
-      //background-image: url('../../assets/images/metadefender-chrome.svg');//STYLE #2
-
-      @media (prefers-color-scheme: dark) {
-        background-image: url('../../assets/images/metadefender-chrome.svg');
-      }
+      background-image: url('../../assets/images/metadefender-chrome.svg');
 
       position: relative;
       margin-top: 0;
@@ -121,6 +101,7 @@
       .icon-server:before {
         color: $secondaryColor;
         background: $colorWhite;
+
         transition: background-color 0.8s;
 
         @media (prefers-color-scheme: dark) {
@@ -130,35 +111,39 @@
       }
     }
   }
-  //STYLE #2___________________________________________________________________________________________
-  // &--body{
-  //   @media (prefers-color-scheme: light) {
-  //     background-color: $colorGreyLight;
-  //     border: 4px solid $chrome;
-  //   }
-  // }
+
+  &--body {
+    background-color: $colorGreyLight;
+    border: 4px solid $chrome;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: $colorBlack;
+      border: 4px solid $colorBlacker;
+    }
+  }
 
   &--scan__history {
     .list-group {
       padding-bottom: 0%;
-      margin: 15px 7px 0px 7px;
+      margin: 15px 7px 10px 7px;
 
       .list-group-item {
-        padding: 5px 0px 5px 0px ;
+        padding: 5px 0px 5px 0px;
+
         background: $colorWhite;
         border-bottom: 1px solid $colorGreyDark;
         color: $colorBlack;
-      
+
         @media (prefers-color-scheme: dark) {
           background: $colorBlack;
           border-bottom: 1px solid $colorGrayFDark;
           color: $colorWhite;
         }
-      
+
         a {
           color: $colorBlueLighter;
         }
-      
+
         td:first-child {
           width: 50%;
           padding: 0px 5% 0px 3%;
@@ -168,26 +153,28 @@
           overflow: hidden;
           text-overflow: ellipsis;
         }
+
         td:nth-child(2) {
           width: 25%;
           display: block;
           text-align-last: center;
         }
+
         td:nth-child(3) {
           width: 25%;
           display: block;
           text-align-last: center;
         }
-      
+
         span {
           text-overflow: ellipsis;
           overflow: hidden;
           display: inline-block;
           white-space: nowrap;
-          max-width: 100%; 
+          max-width: 100%;
         }
       }
-      
+
       thead {
         padding: 0px;
         margin: 0%;
@@ -195,85 +182,44 @@
 
         tr {
           color: $colorGreyDark;
-      
+
           @media (prefers-color-scheme: dark) {
             color: $colorWhite;
           }
-      
+
           display: inline-flex;
           width: 100%;
           font-weight: 700;
-      
+
           td:first-child {
             width: 50%;
             display: block;
             text-align-last: center;
           }
+
           td:nth-child(2) {
             width: 25%;
             display: block;
             text-align-last: center;
           }
+
           td:nth-child(3) {
             width: 25%;
             display: block;
             text-align-last: center;
           }
         }
-      
+
         border-bottom: 2px solid $colorGrayFDark;
       }
-    }      
+    }
   }
 
   &--footer {
-    background-color: $colorBlack;
+    //background-color: $colorBlack;
     border-top: 1px solid $colorGrey;
     padding: $padding;
     height: 60px;
-
-    &__btn {
-      background: $colorWhite;
-      border: 1.5px solid $secondaryColor;
-
-      @media (prefers-color-scheme: dark) {
-        background: $colorBlack;
-        border: 1.5px solid $baclavas;
-      }
-
-      padding: 4px 5px 4px 5px;
-      display: inline;
-      border-radius: 4px;
-      transition: background-color 0.8s;
-
-      &:hover {
-        color: $secondaryColor;
-        background: $blueberry;
-
-        @media (prefers-color-scheme: dark) {
-          background: $baclavas;
-        }
-
-        .icon-cloud:before {
-          background: $blueberry;
-
-          @media (prefers-color-scheme: dark) {
-            background: $baclavas;
-          }
-        }
-      }
-
-      .icon-cloud:before {
-        color: $secondaryColor;
-        background: $colorWhite;
-        transition: background-color 0.8s;
-
-        @media (prefers-color-scheme: dark) {
-          color: $secondaryColor;
-          background: $colorBlack;
-        }
-      }
-    }
   }
 
   .header,
@@ -290,7 +236,6 @@
   align-items: center;
   width: 90%;
   padding: 5px 5px 5px 5px;
-  border: 1px solid $colorGrayFDark;
   margin-bottom: 7%;
   margin-top: 7%;
 }
@@ -305,79 +250,28 @@
 
   font-family: Roboto,
   Sans-serif !important;
-  display: block;
+  // display: flex;
   align-items: center;
 }
 
-//STYLE #1___________________________________________________________________________________________
 .days-without {
-  color: $colorWhite;
-  border: 1px solid $tired-true-blue;
-  background-image: url('../../../promo/Marquee.png');
-  background-position: right;
-  background-size: 200% 100%;
-  background-repeat: no-repeat;
-  position: relative; /* Needed for pseudo-element positioning */
-  padding: 4%;
-  text-align: center;
-  font-family: Roboto, Sans-serif !important;
-  display: inline-block;
-
-  /* Light theme overlay */
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(215, 215, 255, 0.37);
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-  }
+  border: 1px solid $colorBlack;
+  color: $baclavas;
+  background-color: $blueberry;
 
   @media (prefers-color-scheme: dark) {
     color: $colorWhite;
     border: 1px solid $tired-true-blue;
-    background-image: url('../../../promo/Marquee.png');
-    background-position: right;
-    background-size: 200% 100%;
-    background-repeat: no-repeat;
-
-    &:before {
-      background-color: transparent; /* Remove overlay in dark theme */
-    }
+    background-color: $baclavas;
   }
+
+  font-family: Roboto,
+  Sans-serif !important;
+  display: inline-block;
+  padding: 4%;
+  text-align: center;
+
 }
-//STYLE #1___________________________________________________________________________________________
-
-
-//STYLE #2___________________________________________________________________________________________
-// .days-without {
-//   border: 1px solid $colorBlack;
-//   color: $baclavas;
-//   background-color: $blueberry;
-
-//   @media (prefers-color-scheme: dark) {
-//     color: $colorWhite;
-//     border: 1px solid $tired-true-blue;
-//     background-image: url('../../../promo/Marquee.png');
-//     background-position: right;
-//     background-size: 200% 100%;
-//     background-repeat: no-repeat;
-//   }
-
-//   font-family: Roboto,
-//   Sans-serif !important;
-//   display: inline-block;
-//   padding: 4%;
-//   text-align: center;
-
-// }
-//STYLE #2___________________________________________________________________________________________
 
 
 .days-number {
@@ -387,7 +281,6 @@
 }
 
 .days-without-container {
-  background-color: $colorGreyLighter; //STYLE #1
   color: $colorGrayFDark;
 
   @media (prefers-color-scheme: dark) {
@@ -406,40 +299,7 @@
 
 
 .centered-box {
-  display: flex;
+  display: block;
   justify-content: center;
   align-items: center;
-}
-
-
-.expand-table {
-  background-color: $colorGreyLighter;
-  color: $colorGrayFDark;
-  border: 1.25px solid $colorGrayFDark;
-
-  @media (prefers-color-scheme: dark) {
-    border: 1px solid $colorGreyLighter;
-    color: $colorGreyLighter;
-    background-color: $colorBlack;
-  }
-
-  font-weight: 1000;
-  border-radius: 4px;
-  margin: 4px 10px 4px 10px;
-  padding: 0px 10px 0px 10px;
-  display: block;
-}
-
-.expand-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-
-.upgrade-box {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 10px;
 }
