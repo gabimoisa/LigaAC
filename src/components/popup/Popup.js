@@ -185,7 +185,6 @@ const Popup = () => {
 
     return (
         <div className="popup--wrapper" onDrop={handleDragAndDrop} onDragOver={handleDragAndDrop}>
-            <div className={`drop-overlay ${dropOverlayActive ? 'active' : ''}`}></div>
             <div className="popup--header">
                 <div className="popup--header__logo"></div>
                 <div className="popup--header__buttons">
@@ -200,54 +199,49 @@ const Popup = () => {
                     </a>
                 </div>
             </div>
-            <div className="popup--scan__history">
-                <div className='days-without-container'>
-                    <div className="days-without">
-                        {daysSinceLastThreat !== null ? (
-                            <>
-                                Days without<br />threats:<br />
-                                <span className="days-number">{daysSinceLastThreat}</span>
-                            </>
-                        ) : (
-                            <>
-                                No threats<br />detected.
-                            </>
-                        )}
-                    </div>
-                </div>
-
-
-                <div className='centered-box'>
-                    <div className="todays-stats-container">
-                        <div className="today-scans">
-                            Files scanned today: {filesScannedToday}
-                        </div>
-                        <div className='today-blocks'>
-                            Files blocked today: {filesBlockedToday}
+            <div className='popup--body'>
+                <div className="popup--scan__history">
+                    <div className='days-without-container'>
+                        <div className="days-without">
+                            {daysSinceLastThreat !== null ? (
+                                <>
+                                    Days without<br />threats:<br />
+                                    <span className="days-number">{daysSinceLastThreat}</span>
+                                </>
+                            ) : (
+                                <>
+                                    No threats<br />detected.
+                                </>
+                            )}
                         </div>
                     </div>
+
+
+                    <div className='centered-box'>
+                        <div className="todays-stats-container">
+                            <div className="today-scans">
+                                Files scanned today: {filesScannedToday}
+                            </div>
+                            <div className='today-blocks'>
+                                Files blocked today: {filesBlockedToday}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {scanResults}
+                    <div className='expand-container'>
+                        <button className="expand-table" onClick={toggleTableVisibility}>
+                            {isTableVisible ? '⇧' : '⇩'}
+                        </button>
+                    </div>
+
                 </div>
-
-
-                {scanResults}
-                <div className='expand-container'>
-                    <button className="expand-table" onClick={toggleTableVisibility}>
-                        {isTableVisible ? '⇧' : '⇩'}
-                    </button>
+                <div className="upgrade-box">
+                    <a href="https://metadefender.opswat.com/store" className="popup--footer__btn" target="_blank">
+                        <span className="icon-cloud text-14"></span> Upgrade
+                    </a>
                 </div>
-
-                {/* {scanResults}
-                <div className='expand-container'>
-                    <button className="expand-table" onClick={toggleTableVisibility}>
-                        {isTableVisible ? '⇧' : '!!!altceva!!!'}
-                    </button>
-                </div> */}
-
-            </div>
-            <div className="upgrade-box">
-                <a href="https://metadefender.opswat.com/store" className="popup--footer__btn" target="_blank">
-                    <span className="icon-cloud text-14"></span> Upgrade
-                </a>
             </div>
         </div>
     );
