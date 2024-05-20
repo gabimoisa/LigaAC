@@ -214,6 +214,10 @@ class FileProcessor {
                 const sanitizationSuccessfull = postProcessing?.sanitization_details?.description === 'Sanitized successfully.';
                 file.sanitizationSuccessfull = sanitizationSuccessfull;
             }
+
+            const dlpInfo = info?.dlp_info;
+            file.dlp_info = dlpInfo;
+            
         }
         
         await scanHistory.updateFileById(file.id, file);

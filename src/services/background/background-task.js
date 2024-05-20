@@ -2,6 +2,7 @@ import MCL from '../../config/config';
 import mime from 'mime-types';
 
 
+
 import { settings } from '../common/persistent/settings';
 import { apikeyInfo } from '../common/persistent/apikey-info';
 import { scanHistory } from '../common/persistent/scan-history';
@@ -19,6 +20,7 @@ import BrowserStorage from '../common/browser/browser-storage';
 
 import '../common/ga-tracking';
 
+
 self.addEventListener('message', async (event) => {
     const message = event.data;
     if (message.type === 'fileUploaded') {
@@ -35,11 +37,13 @@ self.addEventListener('message', async (event) => {
 async function processUploadedFile(fileURL) {
 
     try {
-        await FileProcessor.processTarget(fileURL, null, true);
+        await FileProcessor.processTarget(fileURL, null, settings.data.scanUploads);
     } catch (e) {
         console.log(e);
     }
 }
+
+
 
 const MCL_CONFIG = MCL.config;
 
@@ -128,31 +132,46 @@ export default class BackgroundTask {
         }
     }
 
+
+
+
     drop_task() {
+        let mouseX, mouseY;
+
+        document.addEventListener('click', (event) => {
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        });
+
+
         document.querySelectorAll('input[type="file"]').forEach(input => {
             try {
             input.addEventListener('change', function(event) {
                 const file = event.target.files[0];
-    
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const fileContent = e.target.result;
-                    let fileUrl;
-                    try {
-                      fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
-    
-                      fileUrl = (fileUrl + '/').concat(file.name);
-                    }
-                    catch (e) {
-                        console.log(e);
-                    }
-    
-                    chrome.runtime.sendMessage({ 
-                        type: 'fileUploaded', 
-                        fileUrl: fileUrl 
-                    });
-                };
-                reader.readAsArrayBuffer(file);
+                if (file) {
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const fileContent = e.target.result;
+                        let fileUrl;
+                        try {
+                        fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
+        
+                        fileUrl = (fileUrl + '/').concat(file.name);
+
+                        }
+                        catch (e) {
+                            console.log(e);
+                        }
+        
+                        // chrome.runtime.sendMessage({ 
+                        //     type: 'fileUploaded', 
+                        //     fileUrl: fileUrl 
+                        // });
+                    };
+                    reader.readAsArrayBuffer(file);
+
+                }
             });
             } catch (error) {
                 console.error('Error processing file inputs normal:', error);
@@ -192,7 +211,7 @@ export default class BackgroundTask {
             }
         });
     }
-    
+
 
     /**
      * Get the tab id and execute script on it 

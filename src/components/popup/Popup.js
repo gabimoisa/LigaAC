@@ -66,38 +66,38 @@ const Popup = () => {
     event.preventDefault();
     event.stopPropagation();
     if (event.type === "dragover") {
-        setDropOverlayActive(true);
-      } else if (event.type === "drop") {
-        const file = event.dataTransfer.files[0];
-        if (file) {
-            setDropOverlayActive(false);
-            console.log('handleDragAndDrop file ', file);
+      setDropOverlayActive(true);
+    } else if (event.type === "drop") {
+      const file = event.dataTransfer.files[0];
+      if (file) {
+        setDropOverlayActive(false);
+        console.log("handleDragAndDrop file ", file);
 
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const fileContent = e.target.result;
-                let fileUrl;
-                try {
-                  fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const fileContent = e.target.result;
+          let fileUrl;
+          try {
+            fileUrl = URL.createObjectURL(
+              new Blob([fileContent], { type: fileContent.type })
+            );
 
-                  fileUrl = (fileUrl + '/').concat(file.name);
-                }
-                catch (e) {
-                    console.log(e);
-                }
-                
-                if (navigator.serviceWorker.controller) {
-                    navigator.serviceWorker.controller.postMessage({
-                        type: 'fileUploaded',
-                        fileUrl: fileUrl
-                    });
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        }
+            fileUrl = (fileUrl + "/").concat(file.name);
+          } catch (e) {
+            console.log(e);
+          }
+
+          if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+              type: "fileUploaded",
+              fileUrl: fileUrl,
+            });
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      }
     }
-};
-
+  };
 
   useEffect(() => {
     gaTrackEvent(["_trackPageview", "/extension/popup"]);
@@ -122,6 +122,14 @@ const Popup = () => {
     }
 
     const tableRows = files.slice(0, 3).map((scannedFile, index) => {
+      let sum_hits = 0;
+
+      if(scannedFile.dlp_info && scannedFile.dlp_info.hits) {
+        Object.keys(scannedFile.dlp_info.hits).forEach((key) => {
+          sum_hits += scannedFile.dlp_info.hits[key].hits.length;
+        })
+      } 
+
       return (
         <tr
           key={index}
@@ -144,35 +152,40 @@ const Popup = () => {
             ></span>
           </td>
           <td>
-            {scannedFile.useDLP && scannedFile.sanitizedFileURL ? (
-              <span className="downloadSanitizedButtonBox">
-                <a
-                  href={scannedFile.sanitizedFileURL}
-                  className="downloadSanitizedButton"
-                >
-                  <span className="icon-down"></span>
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: chrome.i18n.getMessage("sanitizedVersion"),
-                    }}
-                  ></span>
-                </a>
-              </span>
-            ) : getStatusIcon(scannedFile.status).includes("icon-spin") &&
-              scannedFile.useDLP ? (
+
+            {scannedFile.dlp_info ? (
+              scannedFile.dlp_info.verdict ? (
+                scannedFile.dlp_info.hits ? (
+                  <div>
+                    <span dangerouslySetInnerHTML={{
+                      __html: chrome.i18n.getMessage("dlp_detections"),
+                    }}></span> <span>{sum_hits}</span> 
+                    </div>
+                ) : (<span>aaaa</span>)
+              ) : (
+                <span dangerouslySetInnerHTML={{
+                  __html: chrome.i18n.getMessage("dlp_ok"),
+                }}></span>
+              )
+            ) : getStatusIcon(scannedFile.status).includes("icon-spin") && scannedFile.useDLP ? (
               <span
                 dangerouslySetInnerHTML={{
                   __html: chrome.i18n.getMessage("scanDLP"),
                 }}
               ></span>
-            ) : getStatusIcon(scannedFile.status).includes("icon-spin") ||
+              ) :  getStatusIcon(scannedFile.status).includes("icon-spin") ||
               !scannedFile.useDLP ? (
-              <span
+                <span
                 dangerouslySetInnerHTML={{
                   __html: chrome.i18n.getMessage("noDLP"),
                 }}
               ></span>
-            ) : null}
+              ) :                 <span
+              dangerouslySetInnerHTML={{
+                __html: chrome.i18n.getMessage("noDLP"),
+              }}
+            ></span>
+            }
           </td>
         </tr>
       );
@@ -226,7 +239,6 @@ const Popup = () => {
     );
   });
 
-  console.log(files);
   return (
     <div
       className="popup--wrapper"

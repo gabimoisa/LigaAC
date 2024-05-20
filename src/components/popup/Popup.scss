@@ -73,7 +73,7 @@
         }
 
         td:first-child {
-          width: 285px;
+          width: 250px;
           display: flex;
           flex-direction: column;
           span, a {
@@ -85,15 +85,20 @@
       }
 
       thead {
+        padding: 0px 20px;
         tr {
           color: $colorWhite;
           font-weight: 800;
-          display: flex;
-          justify-content: space-around ;
+          display: grid;
+          grid-template-columns: repeat(6, 1fr);
 
-          td:first-child {
-            width: 300px;
-            padding: 0px 10px;
+
+          td:nth-child(1) {
+            grid-column: 1/span 3;
+          }
+          
+          td:nth-child(4) {
+            text-align: center;
           }
 
         }
