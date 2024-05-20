@@ -358,6 +358,12 @@
     },
     "scanDLP": {
       "message": "Scan with DLP"
+    },
+    "dlp_ok": {
+      "message": "No sensitive data found."
+    },
+    "dlp_detections": {
+      "message": "Sensitive data detected: "
     }
   }
   
