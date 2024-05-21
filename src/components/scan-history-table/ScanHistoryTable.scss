@@ -8,6 +8,12 @@
 
     thead {
         background-color: $colorGreyLighter;
+
+        tr {
+            th:last-child {
+                text-align: center;
+            }
+        }
     }
     
     tr {

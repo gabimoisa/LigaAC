@@ -26,7 +26,7 @@ const ScanHistoryTable = ({ data, filterBy, removeFile, getStatusIcon}) => {
                 <tr>
                     <th>Filename</th>
                     <th>Scan Time</th>
-                    <th colSpan={3}>Results</th>
+                    <th>Results</th>
                     <th>DLP</th>
                 </tr>
             </thead>

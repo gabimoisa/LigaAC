@@ -34,14 +34,6 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
             <a href={scanUrl} className={cleanClassName}>{results}</a>
         </td>
         <td className="p-0">
-            <span className={`${getStatusIcon(status)} ${cleanClassName}`} />
-        </td>
-        <td className="p-0">
-            <a href="#" onClick={removeFile} title={chrome.i18n.getMessage('deleteTooltip')} className='trash'>
-                <span className={trashClassName} />
-            </a>
-        </td>
-        <td className="p-0">
             {useDLP && sanitizedFileURL ? (
                     <span className="downloadSanitizedButtonBox">
                         <button onClick={downloadSanitizedFile} className="downloadSanitizedButton">
@@ -54,6 +46,11 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
             ) : (getStatusIcon(status).includes("icon-spin") || !useDLP) ? (
                 <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('noDLP') }}></span>
             ) : null}
+        </td>
+        <td className="p-0">
+            <a href="#" onClick={removeFile} title={chrome.i18n.getMessage('deleteTooltip')} className='trash'>
+                <span className={trashClassName} />
+            </a>
         </td>
     </tr>;
 };

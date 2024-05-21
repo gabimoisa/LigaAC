@@ -89,15 +89,21 @@
         tr {
           color: $colorWhite;
           font-weight: 800;
-          display: grid;
-          grid-template-columns: repeat(6, 1fr);
+          display: flex;
+          justify-content: space-between;
 
 
           td:nth-child(1) {
-            grid-column: 1/span 3;
+            width: 250px;
           }
-          
+
+          td:nth-child(2) {
+            width: 115px;
+            text-align: center;
+          }
+
           td:nth-child(4) {
+            width: 120px;
             text-align: center;
           }
 
@@ -107,6 +113,15 @@
       tbody {
         tr:first-child {
           border-top: 1px solid $colorGrayFDark;
+        }
+
+        td:first-child {
+          text-align: left;
+        }
+
+        td:nth-child(2) {
+          width: 115px;
+          text-align: center;
         }
 
         td:last-child {
