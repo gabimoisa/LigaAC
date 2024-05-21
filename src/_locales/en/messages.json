@@ -241,6 +241,14 @@
       "message": "\n\nThreat detected!",
       "description": ""
     },
+    "sensitiveDataFound": {
+      "message": "\n\nSensitive data found!",
+      "description": ""
+    },
+    "noSensitiveDataFound": {
+      "message": "\n\nNo sensitive data found!",
+      "description": ""
+    },
     "scanStarted": {
       "message": "Scan started for ",
       "description": ""

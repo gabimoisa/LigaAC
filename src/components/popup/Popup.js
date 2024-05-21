@@ -164,7 +164,7 @@ const Popup = () => {
                     </a>
                     </div>
                 ) : ( <span dangerouslySetInnerHTML={{
-                  __html: chrome.i18n.getMessage("dlp_ok"),
+                  __html: chrome.i18n.getMessage("noDLP"),
                 }}></span>)
               ) : (
                 <span dangerouslySetInnerHTML={{

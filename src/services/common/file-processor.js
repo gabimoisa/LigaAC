@@ -223,9 +223,18 @@ class FileProcessor {
         await scanHistory.updateFileById(file.id, file);
         await scanHistory.save();
 
+        let DLPNotoficationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
         let notificationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
         notificationMessage += (file.status === ScanFile.STATUS.INFECTED) ? chrome.i18n.getMessage('threatDetected') : chrome.i18n.getMessage('noThreatDetected');
-        await BrowserNotification.create(notificationMessage, file.id, file.status === ScanFile.STATUS.INFECTED);
+        if(!file.useDLP) {
+            await BrowserNotification.create(notificationMessage, file.id, file.status === ScanFile.STATUS.INFECTED);
+        } else if (file.useDLP && file.dlp_info.verdict == 0) {
+            DLPNotoficationMessage += chrome.i18n.getMessage('noSensitiveDataFound');
+             await BrowserNotification.create(DLPNotoficationMessage);
+        } else if (file.useDLP && file.dlp_info.verdict == 1) {
+            DLPNotoficationMessage += chrome.i18n.getMessage('sensitiveDataFound');
+            await BrowserNotification.create(DLPNotoficationMessage);
+        }
 
         console.log('file-processor handleFileScanResults file', file);
 
