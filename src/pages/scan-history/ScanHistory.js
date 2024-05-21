@@ -82,11 +82,10 @@ const ScanHistory = () => {
             useCore: item?.useCore,
             useDLP: item?.useDLP,
             sanitizedFileURL: item?.sanitizedFileURL,
-            sanitizationSuccessfull: item?.sanitizationSuccessfull
+            sanitizationSuccessfull: item?.sanitizationSuccessfull,
+            dlp_info: item?.dlp_info
         }));
     }, [files]);
-
-    console.log(files);
 
     const handleSearch = (e) => setSearchValue(e.target?.value);
 

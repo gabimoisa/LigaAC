@@ -156,10 +156,12 @@ const Popup = () => {
             {scannedFile.dlp_info ? (
               scannedFile.dlp_info.verdict ? (
                 scannedFile.dlp_info.hits ? (
-                  <div>
-                    <span dangerouslySetInnerHTML={{
-                      __html: chrome.i18n.getMessage("dlp_detections"),
-                    }}></span> <span>{sum_hits}</span> 
+                  <div className="dataFound">
+                    <a onClick={goToHistory}>
+                      <span dangerouslySetInnerHTML={{
+                        __html: chrome.i18n.getMessage("dlp_detections"),
+                      }}></span> <span>{sum_hits}</span> 
+                    </a>
                     </div>
                 ) : (<span>aaaa</span>)
               ) : (

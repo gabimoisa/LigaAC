@@ -133,8 +133,6 @@ export default class BackgroundTask {
     }
 
 
-
-
     drop_task() {
         let mouseX, mouseY;
 

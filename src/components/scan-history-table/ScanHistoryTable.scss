@@ -63,6 +63,17 @@
                 color: $secondaryColor;
                 font-weight: 700;
             }
+
+            .sensitiveData {
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .dataFound {
+                color: $red-epiphyllum;
+                font-weight: 800;
+            }
         }
 
         .icon-spin {

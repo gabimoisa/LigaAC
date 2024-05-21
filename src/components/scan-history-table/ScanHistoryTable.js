@@ -47,6 +47,7 @@ const ScanHistoryTable = ({ data, filterBy, removeFile, getStatusIcon}) => {
                         useDLP={item.useDLP}
                         sanitizedFileURL={item.sanitizedFileURL}
                         sanitizationSuccessfull={item.sanitizationSuccessfull}
+                        dlpInfo={item.dlp_info}
                     />
                 ))}
             </tbody>

@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 
-const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, removeFile, status, getStatusIcon, useCore, useDLP, sanitizedFileURL}) => {
+const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, removeFile, status, getStatusIcon, useCore, useDLP, sanitizedFileURL, dlpInfo}) => {
     const [isTrashDisplayed, setIsTrashDisplayed] = useState(false);
     const [isDownloadDisplayed, setIsDownloadDisplayed] = useState(false);
+    let sum_hits = 0;
 
     const trashClassName = classNames({
         'invisible': !isTrashDisplayed
@@ -16,6 +17,12 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
 
     const downloadSanitizedFile = () => {
         window.location.href = sanitizedFileURL;
+    }
+
+    if(dlpInfo && dlpInfo.hits) {
+        Object.keys(dlpInfo.hits).forEach((key) => {
+            sum_hits += dlpInfo.hits[key].hits.length;
+        })
     }
 
     return <tr
@@ -34,18 +41,43 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
             <a href={scanUrl} className={cleanClassName}>{results}</a>
         </td>
         <td className="p-0">
-            {useDLP && sanitizedFileURL ? (
-                    <span className="downloadSanitizedButtonBox">
-                        <button onClick={downloadSanitizedFile} className="downloadSanitizedButton">
-                            <span className="icon-down"></span>
-                            <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersion') }}></span>
-                        </button>
-                    </span>
-            ) : (getStatusIcon(status).includes("icon-spin") && useDLP) ? (
-                <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('scanDLP') }}></span>
-            ) : (getStatusIcon(status).includes("icon-spin") || !useDLP) ? (
-                <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('noDLP') }}></span>
-            ) : null}
+            {dlpInfo ? (
+                dlpInfo.verdict ? (
+                    dlpInfo.hits ? (
+                        <div className="sensitiveData">
+                            <div>
+                                <span className="dataFound" dangerouslySetInnerHTML={{__html: chrome.i18n.getMessage("dlp_detections"),}}></span>
+                                <span className="dataFound">{sum_hits}</span>
+                                    <button onClick={downloadSanitizedFile} className="downloadSanitizedButton">
+                                        <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersion') }}></span>
+                                        <span className="icon-down"></span>
+                                    </button>
+                            </div>
+                        </div>
+                    ) : (<span>aaaaa</span>)
+                ) : (
+                    <span className="sensitiveData" dangerouslySetInnerHTML={{
+                        __html: chrome.i18n.getMessage("dlp_ok"),
+                      }}></span>
+                )
+                ) : getStatusIcon(status).includes("icon-spin") && useDLP ? (
+                    <span className="sensitiveData"
+                dangerouslySetInnerHTML={{
+                  __html: chrome.i18n.getMessage("scanDLP"),
+                }}
+              ></span>
+                ) : getStatusIcon(status).includes("icon-spin") || !useDLP ? (
+                    <span className="sensitiveData"
+                    dangerouslySetInnerHTML={{
+                      __html: chrome.i18n.getMessage("noDLP"),
+                    }}
+                  ></span>
+                ) :                  <span
+                dangerouslySetInnerHTML={{
+                  __html: chrome.i18n.getMessage("noDLP"),
+                }}
+              ></span>
+            }
         </td>
         <td className="p-0">
             <a href="#" onClick={removeFile} title={chrome.i18n.getMessage('deleteTooltip')} className='trash'>
@@ -66,7 +98,8 @@ ScanHistoryTableRow.propTypes = {
     getStatusIcon: PropTypes.func,
     useCore: PropTypes.bool,
     useDLP: PropTypes.bool,
-    sanitizedFileURL: PropTypes.string
+    sanitizedFileURL: PropTypes.string,
+    dlpInfo: PropTypes.object
 };
 
 export default ScanHistoryTableRow;
