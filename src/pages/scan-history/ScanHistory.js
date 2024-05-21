@@ -87,6 +87,8 @@ const ScanHistory = () => {
         }));
     }, [files]);
 
+    console.log(files);
+
     const handleSearch = (e) => setSearchValue(e.target?.value);
 
     const filesPlacehoder = useMemo(() => totalScannedFiles !== 1 ? 'files' : 'file', [totalScannedFiles]);
