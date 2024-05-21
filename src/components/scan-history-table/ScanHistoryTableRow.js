@@ -60,13 +60,13 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
                         __html: chrome.i18n.getMessage("dlp_ok"),
                       }}></span>
                 )
-                ) : getStatusIcon(status).includes("icon-spin") && useDLP ? (
+                ) : getStatusIcon(status, dlpInfo?.verdict).includes("icon-spin") && useDLP ? (
                     <span className="sensitiveData"
                 dangerouslySetInnerHTML={{
                   __html: chrome.i18n.getMessage("scanDLP"),
                 }}
               ></span>
-                ) : getStatusIcon(status).includes("icon-spin") || !useDLP ? (
+                ) : getStatusIcon(status, dlpInfo?.verdict).includes("icon-spin") || !useDLP ? (
                     <span className="sensitiveData"
                     dangerouslySetInnerHTML={{
                       __html: chrome.i18n.getMessage("noDLP"),

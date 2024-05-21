@@ -42,26 +42,37 @@ const ScanHistory = () => {
         gaTrackEvent(['_trackEvent', config.gaEventCategory.name, config.gaEventCategory.action.buttonClickd, config.gaEventCategory.label.clearHistoryButton, config.gaEventCategory.value.deleteItemButton]);
     };
 
-    /**  
-     * Get the icon for the file's current status (clean / infected / scanning / unknown)
-     * @param {number} fileStatus (0 / 1 / 2 / 3) <-> (scanning / clean / infected / unknown)
-     * @returns {string} The icon class
-    */
-    const getStatusIcon = (fileStatus) => {
-        if (fileStatus == ScanFile.STATUS.CLEAN) {
-            return 'icon-ok';
-        }
+     /**
+   * Get the icon for the file's current status (clean / infected / scanning / unknown)
+   * @param {number} fileStatus (0 / 1 / 2 / 3) <-> (scanning / clean / infected / unknown)
+   * @param {number} verdict DLP (0 / 1) <-> (no sensitive data found / sensitive data found)  
+   * @returns {string} The icon class
+   */
+  const getStatusIcon = (fileStatus, verdict) => {
+    if (verdict !== undefined) {
+      if (verdict == 1) {
+        return "icon-attention";
 
-        if (fileStatus == ScanFile.STATUS.INFECTED) {
-            return 'icon-cancel';
-        }
+      } else {
+        return "icon-ok";
+      }
 
-        if (fileStatus == ScanFile.STATUS.SCANNING) {
-            return 'icon-spin animate-spin';
-        }
+    } else {
+      if (fileStatus == ScanFile.STATUS.CLEAN) {
+        return "icon-ok";
+      }
+  
+      if (fileStatus == ScanFile.STATUS.INFECTED) {
+        return "icon-attention";
+      }
+  
+      if (fileStatus == ScanFile.STATUS.SCANNING) {
+        return "icon-spin animate-spin";
+      }
+    }
 
-        return 'icon-help';
-    };
+    return "icon-help";
+  };
 
     const getScanUrl = (file) => {
         if (file.dataId) {
@@ -86,8 +97,6 @@ const ScanHistory = () => {
             dlp_info: item?.dlp_info
         }));
     }, [files]);
-
-    console.log(files);
 
     const handleSearch = (e) => setSearchValue(e.target?.value);
 

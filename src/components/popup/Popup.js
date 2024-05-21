@@ -32,19 +32,30 @@ const Popup = () => {
   /**
    * Get the icon for the file's current status (clean / infected / scanning / unknown)
    * @param {number} fileStatus (0 / 1 / 2 / 3) <-> (scanning / clean / infected / unknown)
+   * @param {number} verdict DLP (0 / 1) <-> (no sensitive data found / sensitive data found)  
    * @returns {string} The icon class
    */
-  const getStatusIcon = (fileStatus) => {
-    if (fileStatus == ScanFile.STATUS.CLEAN) {
-      return "icon-ok";
-    }
+  const getStatusIcon = (fileStatus, verdict) => {
+    if (verdict !== undefined) {
+      if (verdict == 1) {
+        return "icon-attention";
 
-    if (fileStatus == ScanFile.STATUS.INFECTED) {
-      return "icon-cancel";
-    }
+      } else {
+        return "icon-ok";
+      }
 
-    if (fileStatus == ScanFile.STATUS.SCANNING) {
-      return "icon-spin animate-spin";
+    } else {
+      if (fileStatus == ScanFile.STATUS.CLEAN) {
+        return "icon-ok";
+      }
+  
+      if (fileStatus == ScanFile.STATUS.INFECTED) {
+        return "icon-attention";
+      }
+  
+      if (fileStatus == ScanFile.STATUS.SCANNING) {
+        return "icon-spin animate-spin";
+      }
     }
 
     return "icon-help";
@@ -148,7 +159,7 @@ const Popup = () => {
           <td>{moment.unix(scannedFile.scanTime).fromNow()}</td>
           <td>
             <span
-              className={`mcl-icon ${getStatusIcon(scannedFile.status)}`}
+              className={`mcl-icon ${getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict)}`}
             ></span>
           </td>
           <td>
@@ -171,13 +182,13 @@ const Popup = () => {
                   __html: chrome.i18n.getMessage("dlp_ok"),
                 }}></span>
               )
-            ) : getStatusIcon(scannedFile.status).includes("icon-spin") && scannedFile.useDLP ? (
+            ) : getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict).includes("icon-spin") && scannedFile.useDLP ? (
               <span
                 dangerouslySetInnerHTML={{
                   __html: chrome.i18n.getMessage("scanDLP"),
                 }}
               ></span>
-              ) :  getStatusIcon(scannedFile.status).includes("icon-spin") ||
+              ) :  getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict).includes("icon-spin") ||
               !scannedFile.useDLP ? (
                 <span
                 dangerouslySetInnerHTML={{
