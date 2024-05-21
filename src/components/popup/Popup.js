@@ -163,7 +163,9 @@ const Popup = () => {
                       }}></span> <span>{sum_hits}</span> 
                     </a>
                     </div>
-                ) : (<span>aaaa</span>)
+                ) : ( <span dangerouslySetInnerHTML={{
+                  __html: chrome.i18n.getMessage("dlp_ok"),
+                }}></span>)
               ) : (
                 <span dangerouslySetInnerHTML={{
                   __html: chrome.i18n.getMessage("dlp_ok"),
@@ -182,7 +184,7 @@ const Popup = () => {
                   __html: chrome.i18n.getMessage("noDLP"),
                 }}
               ></span>
-              ) :                 <span
+              ) : <span
               dangerouslySetInnerHTML={{
                 __html: chrome.i18n.getMessage("noDLP"),
               }}
