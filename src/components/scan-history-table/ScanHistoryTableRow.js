@@ -54,7 +54,11 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
                                     </button>
                             </div>
                         </div>
-                    ) : (<span>aaaaa</span>)
+                    ) : (<span
+                        dangerouslySetInnerHTML={{
+                          __html: chrome.i18n.getMessage("dlp_ok"),
+                        }}
+                      ></span>)
                 ) : (
                     <span className="sensitiveData" dangerouslySetInnerHTML={{
                         __html: chrome.i18n.getMessage("dlp_ok"),
