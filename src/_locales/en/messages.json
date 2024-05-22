@@ -367,10 +367,10 @@
     "scanDLP": {
       "message": "Scan with DLP"
     },
-    "dlp_ok": {
+    "dlpOk": {
       "message": "No sensitive data found."
     },
-    "dlp_detections": {
+    "dlpDetections": {
       "message": "Sensitive data detected: "
     }
   }

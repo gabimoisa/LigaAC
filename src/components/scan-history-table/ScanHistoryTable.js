@@ -16,6 +16,7 @@ const ScanHistoryTable = ({ data, filterBy, removeFile, getStatusIcon}) => {
             return item.fileName.includes(filterBy);
         });
     }, [data, filterBy]);
+
     const tableDom = useMemo(() => {
         if (!processedData?.length) {
             return <p className="mt-5 text-center" dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('noFilesFound') }} />;

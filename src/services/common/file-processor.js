@@ -35,23 +35,17 @@ class FileProcessor {
         }
          
         if (downloadItem) {
-            console.log(downloadItem);
             file.fileName = downloadItem.filename.split('/').pop();
             file.size = downloadItem.fileSize;
         }
 
         else {
             if (linkUrl.includes('blob')) {
-                console.log('file-processor.js linkurl is blob');
-
                 file.fileName = linkUrl.split('/').pop();
                 
                 // restore linkUrl to original
                 linkUrl = linkUrl.replace(file.fileName, '');
                 linkUrl = linkUrl.slice(0, -1);
-
-                console.log('file-processor file.fileName ', file.fileName);
-                console.log('file-processor linkUrl', linkUrl);
 
             } else {
                 file.fileName = linkUrl.split('/').pop();
@@ -175,9 +169,6 @@ class FileProcessor {
      * @returns {Promise.<void>}
      */
     async handleFileScanResults(file, info, linkUrl, fileData, downloaded) {
-
-        console.log('file-processor handleFileScanResults info', info);
-
         if (info.scan_results) {
             file.status = new ScanFile().getScanStatus(info.scan_results.scan_all_result_i);
             file.statusLabel = new ScanFile().getScanStatusLabel(info.scan_results.scan_all_result_i);
@@ -206,37 +197,41 @@ class FileProcessor {
         }
         else {
             const postProcessing = info.process_info?.post_processing;
+            
             file.scanResults = `${MCL.config.mclDomain}/results/file/${file.dataId}/regular/overview`;
+            
             if (info?.sanitized?.file_path && !Object.prototype.hasOwnProperty.call(file, 'sanitizedFileURL')) {
                 file.sanitizedFileURL = info.sanitized.file_path;
             }
+
             if (info?.process_info?.post_processing?.sanitization_details?.description && !Object.prototype.hasOwnProperty.call(file, 'sanitizationSuccessfull')) {
                 const sanitizationSuccessfull = postProcessing?.sanitization_details?.description === 'Sanitized successfully.';
                 file.sanitizationSuccessfull = sanitizationSuccessfull;
             }
 
-            const dlpInfo = info?.dlp_info;
-            file.dlp_info = dlpInfo;
-            
+            file.dlp_info = info?.dlp_info;   
         }
         
         await scanHistory.updateFileById(file.id, file);
         await scanHistory.save();
 
         let DLPNotoficationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
+        
         let notificationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
+        
         notificationMessage += (file.status === ScanFile.STATUS.INFECTED) ? chrome.i18n.getMessage('threatDetected') : chrome.i18n.getMessage('noThreatDetected');
-        if(!file.useDLP) {
+        
+        if (!file.useDLP) {
             await BrowserNotification.create(notificationMessage, file.id, file.status === ScanFile.STATUS.INFECTED);
+        
         } else if (file.useDLP && file.dlp_info.verdict == 0) {
             DLPNotoficationMessage += chrome.i18n.getMessage('noSensitiveDataFound');
              await BrowserNotification.create(DLPNotoficationMessage);
+        
         } else if (file.useDLP && file.dlp_info.verdict == 1) {
             DLPNotoficationMessage += chrome.i18n.getMessage('sensitiveDataFound');
             await BrowserNotification.create(DLPNotoficationMessage);
         }
-
-        console.log('file-processor handleFileScanResults file', file);
 
         this.callOnScanCompleteListeners({
             status: file.status,
@@ -294,8 +289,6 @@ class FileProcessor {
             const response = useCore
                 ? await this.scanWithCore(file, fileData)
                 : await this.scanWithCloud(file, fileData);
-
-            console.log('file-processor scanFile response', response);
 
             if (!response.data_id) {
                 throw response;

@@ -48,31 +48,31 @@ const ScanHistory = () => {
    * @param {number} verdict DLP (0 / 1) <-> (no sensitive data found / sensitive data found)  
    * @returns {string} The icon class
    */
-  const getStatusIcon = (fileStatus, verdict) => {
-    if (verdict !== undefined) {
-      if (verdict == 1) {
-        return "icon-attention";
+    const getStatusIcon = (fileStatus, verdict) => {
+        if (verdict !== undefined) {
+        if (verdict == 1) {
+            return "icon-attention";
 
-      } else {
-        return "icon-ok";
-      }
+        } else {
+            return "icon-ok";
+        }
 
-    } else {
-      if (fileStatus == ScanFile.STATUS.CLEAN) {
-        return "icon-ok";
-      }
-  
-      if (fileStatus == ScanFile.STATUS.INFECTED) {
-        return "icon-attention";
-      }
-  
-      if (fileStatus == ScanFile.STATUS.SCANNING) {
-        return "icon-spin animate-spin";
-      }
-    }
+        } else {
+        if (fileStatus == ScanFile.STATUS.CLEAN) {
+            return "icon-ok";
+        }
+    
+        if (fileStatus == ScanFile.STATUS.INFECTED) {
+            return "icon-attention";
+        }
+    
+        if (fileStatus == ScanFile.STATUS.SCANNING) {
+            return "icon-spin animate-spin";
+        }
+        }
 
-    return "icon-help";
-  };
+        return "icon-help";
+    };
 
     const getScanUrl = (file) => {
         if (file.dataId) {

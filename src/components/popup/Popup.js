@@ -76,26 +76,31 @@ const Popup = () => {
   const handleDragAndDrop = (event) => {
     event.preventDefault();
     event.stopPropagation();
+
     if (event.type === "dragover") {
       setDropOverlayActive(true);
+    
     } else if (event.type === "drop") {
       const file = event.dataTransfer.files[0];
+
       if (file) {
         setDropOverlayActive(false);
-        console.log("handleDragAndDrop file ", file);
 
         const reader = new FileReader();
+        
         reader.onload = (e) => {
           const fileContent = e.target.result;
           let fileUrl;
+        
           try {
             fileUrl = URL.createObjectURL(
               new Blob([fileContent], { type: fileContent.type })
             );
 
             fileUrl = (fileUrl + "/").concat(file.name);
+        
           } catch (e) {
-            console.log(e);
+            console.warn(e);
           }
 
           if (navigator.serviceWorker.controller) {
@@ -105,6 +110,7 @@ const Popup = () => {
             });
           }
         };
+
         reader.readAsArrayBuffer(file);
       }
     }
@@ -135,7 +141,7 @@ const Popup = () => {
     const tableRows = files.slice(0, 3).map((scannedFile, index) => {
       let sum_hits = 0;
 
-      if(scannedFile.dlp_info && scannedFile.dlp_info.hits) {
+      if (scannedFile.dlp_info && scannedFile.dlp_info.hits) {
         Object.keys(scannedFile.dlp_info.hits).forEach((key) => {
           sum_hits += scannedFile.dlp_info.hits[key].hits.length;
         })
@@ -170,7 +176,7 @@ const Popup = () => {
                   <div className="dataFound">
                     <a onClick={goToHistory}>
                       <span dangerouslySetInnerHTML={{
-                        __html: chrome.i18n.getMessage("dlp_detections"),
+                        __html: chrome.i18n.getMessage("dlpDetections"),
                       }}></span> <span>{sum_hits}</span> 
                     </a>
                     </div>
@@ -179,24 +185,21 @@ const Popup = () => {
                 }}></span>)
               ) : (
                 <span dangerouslySetInnerHTML={{
-                  __html: chrome.i18n.getMessage("dlp_ok"),
+                  __html: chrome.i18n.getMessage("dlpOk"),
                 }}></span>
               )
             ) : getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict).includes("icon-spin") && scannedFile.useDLP ? (
-              <span
-                dangerouslySetInnerHTML={{
+              <span dangerouslySetInnerHTML={{
                   __html: chrome.i18n.getMessage("scanDLP"),
                 }}
               ></span>
               ) :  getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict).includes("icon-spin") ||
               !scannedFile.useDLP ? (
-                <span
-                dangerouslySetInnerHTML={{
+                <span dangerouslySetInnerHTML={{
                   __html: chrome.i18n.getMessage("noDLP"),
                 }}
               ></span>
-              ) : <span
-              dangerouslySetInnerHTML={{
+              ) : <span dangerouslySetInnerHTML={{
                 __html: chrome.i18n.getMessage("noDLP"),
               }}
             ></span>

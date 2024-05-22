@@ -46,7 +46,7 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
                     dlpInfo.hits ? (
                         <div className="sensitiveData">
                             <div>
-                                <span className="dataFound" dangerouslySetInnerHTML={{__html: chrome.i18n.getMessage("dlp_detections"),}}></span>
+                                <span className="dataFound" dangerouslySetInnerHTML={{__html: chrome.i18n.getMessage("dlpDetections"),}}></span>
                                 <span className="dataFound">{sum_hits}</span>
                                     <button onClick={downloadSanitizedFile} className="downloadSanitizedButton">
                                         <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersion') }}></span>
@@ -56,28 +56,25 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
                         </div>
                     ) : (<span
                         dangerouslySetInnerHTML={{
-                          __html: chrome.i18n.getMessage("dlp_ok"),
+                          __html: chrome.i18n.getMessage("dlpOk"),
                         }}
                       ></span>)
                 ) : (
                     <span className="sensitiveData" dangerouslySetInnerHTML={{
-                        __html: chrome.i18n.getMessage("dlp_ok"),
+                        __html: chrome.i18n.getMessage("dlpOk"),
                       }}></span>
                 )
                 ) : getStatusIcon(status, dlpInfo?.verdict).includes("icon-spin") && useDLP ? (
-                    <span className="sensitiveData"
-                dangerouslySetInnerHTML={{
+                    <span className="sensitiveData" dangerouslySetInnerHTML={{
                   __html: chrome.i18n.getMessage("scanDLP"),
                 }}
               ></span>
                 ) : getStatusIcon(status, dlpInfo?.verdict).includes("icon-spin") || !useDLP ? (
-                    <span className="sensitiveData"
-                    dangerouslySetInnerHTML={{
+                    <span className="sensitiveData" dangerouslySetInnerHTML={{
                       __html: chrome.i18n.getMessage("noDLP"),
                     }}
                   ></span>
-                ) :                  <span
-                dangerouslySetInnerHTML={{
+                ) : <span dangerouslySetInnerHTML={{
                   __html: chrome.i18n.getMessage("noDLP"),
                 }}
               ></span>

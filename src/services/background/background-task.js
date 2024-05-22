@@ -1,7 +1,4 @@
 import MCL from '../../config/config';
-import mime from 'mime-types';
-
-
 
 import { settings } from '../common/persistent/settings';
 import { apikeyInfo } from '../common/persistent/apikey-info';
@@ -35,15 +32,12 @@ self.addEventListener('message', async (event) => {
  * @param downloadItem
  */
 async function processUploadedFile(fileURL) {
-
     try {
         await FileProcessor.processTarget(fileURL, null, settings.data.scanUploads);
     } catch (e) {
-        console.log(e);
+        console.warning(e);
     }
 }
-
-
 
 const MCL_CONFIG = MCL.config;
 
@@ -102,9 +96,7 @@ export default class BackgroundTask {
         chrome.downloads.onChanged.addListener(this.downloadsManager.updateActiveDownloads.bind(this.downloadsManager));
         chrome.downloads.onChanged.addListener(this.downloadsManager.processCompleteDownloads.bind(this.downloadsManager));
         chrome.runtime.onMessage.addListener(this.handleMessage.bind(this));
-        
-
-
+    
         BrowserStorage.addListener(this.browserStorageListener.bind(this));
 
         this.setupContextMenu(this.settings.data.saveCleanFiles);
@@ -125,7 +117,6 @@ export default class BackgroundTask {
 
     handleMessage(message, sender, sendResponse) {
         if (message.type === 'fileUploaded') {
-            console.log(message);
             const { fileUrl } = message;
 
             processUploadedFile(fileUrl);
@@ -141,7 +132,6 @@ export default class BackgroundTask {
             mouseY = event.clientY;
         });
 
-
         document.querySelectorAll('input[type="file"]').forEach(input => {
             try {
             input.addEventListener('change', function(event) {
@@ -149,26 +139,27 @@ export default class BackgroundTask {
                 if (file) {
 
                     const reader = new FileReader();
+                    
                     reader.onload = (e) => {
                         const fileContent = e.target.result;
-                        let fileUrl;
-                        try {
-                        fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
-        
-                        fileUrl = (fileUrl + '/').concat(file.name);
 
+                        let fileUrl;
+
+                        try {
+                            fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
+            
+                            fileUrl = (fileUrl + '/').concat(file.name);
                         }
                         catch (e) {
-                            console.log(e);
+                            console.warn(e);
                         }
         
-                        // chrome.runtime.sendMessage({ 
-                        //     type: 'fileUploaded', 
-                        //     fileUrl: fileUrl 
-                        // });
+                        chrome.runtime.sendMessage({ 
+                            type: 'fileUploaded', 
+                            fileUrl: fileUrl 
+                        });
                     };
                     reader.readAsArrayBuffer(file);
-
                 }
             });
             } catch (error) {
@@ -184,16 +175,19 @@ export default class BackgroundTask {
                         const file = event.target.files[0];
     
                         const reader = new FileReader();
+
                         reader.onload = (e) => {
                             const fileContent = e.target.result;
+                        
                             let fileUrl;
+                        
                             try {
-                            fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
-    
-                            fileUrl = (fileUrl + '/').concat(file.name);
+                                fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
+        
+                                fileUrl = (fileUrl + '/').concat(file.name);
                             }
                             catch (e) {
-                                console.log(e);
+                                console.warn(e);
                             }
     
                             chrome.runtime.sendMessage({ 
@@ -216,14 +210,12 @@ export default class BackgroundTask {
      * 
      * @param tabId
      */
-
     async runDropTaskScript(tabId) {
         try {
             const tab = await chrome.tabs.get(tabId);
             if (tab && (tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://'))) {
                 return;
             }
-            console.log('Tab name:', tab.title, ', Tab id:', tab.id, ', scanUploads:', this.settings.data.scanUploads);
 
             if (this.settings.data.scanUploads) {
                 chrome.scripting.executeScript({
@@ -236,8 +228,6 @@ export default class BackgroundTask {
         }
     }
 
-    
-    
     async findTabAndRunDropTask() {
         const tabs = await chrome.tabs.query({ url: '*://*/*' });
 
@@ -261,6 +251,7 @@ export default class BackgroundTask {
             }
         });
     }
+
     /**
      * contexts: ['all', 'page', 'frame', 'selection', 'link', 'editable', 'image', 'video', 'audio', 'launcher', 'browser_action', 'page_action']
      * @param saveCleanFiles
@@ -421,7 +412,6 @@ export default class BackgroundTask {
             }
         }
     }
-
 }
 
 export const Task = new BackgroundTask();
