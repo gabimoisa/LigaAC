@@ -46,13 +46,21 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
                     dlpInfo.hits ? (
                         <div className="sensitiveData">
                             <div>
-                                <span className="dataFound" dangerouslySetInnerHTML={{__html: chrome.i18n.getMessage("dlpDetections"),}}></span>
+                                <span className="dataFound" dangerouslySetInnerHTML={{__html: chrome.i18n.getMessage("dlpDetections")}}></span>
                                 <span className="dataFound">{sum_hits}</span>
+                            </div>
+                            { sanitizedFileURL ? (
+                                <div>
                                     <button onClick={downloadSanitizedFile} className="downloadSanitizedButton">
-                                        <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersion') }}></span>
+                                        <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersion')}}></span>
                                         <span className="icon-down"></span>
                                     </button>
-                            </div>
+                                </div>
+                            ) : (
+                                <div>
+                                    <span className="downloadExpired" dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersionExpired')}}></span>
+                                </div>
+                            )}
                         </div>
                     ) : (<span
                         dangerouslySetInnerHTML={{

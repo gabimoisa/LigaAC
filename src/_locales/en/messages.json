@@ -358,8 +358,11 @@
       "description": ""
     },
     "sanitizedVersion": {
-      "message": "Sanitized version",
+      "message": "Sanitized file",
       "description": ""
+    },
+    "sanitizedVersionExpired": {
+      "message": "Download link expired."
     },
     "noDLP": {
       "message": "No DLP used."
