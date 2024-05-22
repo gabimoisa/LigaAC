@@ -49,27 +49,18 @@ const ScanHistory = () => {
    * @returns {string} The icon class
    */
     const getStatusIcon = (fileStatus, verdict) => {
-        if (verdict !== undefined) {
-        if (verdict == 1) {
-            return "icon-attention";
-
-        } else {
-            return "icon-ok";
-        }
-
-        } else {
-        if (fileStatus == ScanFile.STATUS.CLEAN) {
+        if (fileStatus == ScanFile.STATUS.CLEAN || verdict == 0) {
             return "icon-ok";
         }
     
-        if (fileStatus == ScanFile.STATUS.INFECTED) {
+        if (fileStatus == ScanFile.STATUS.INFECTED || verdict == 1) {
             return "icon-attention";
         }
     
         if (fileStatus == ScanFile.STATUS.SCANNING) {
             return "icon-spin animate-spin";
         }
-        }
+        
 
         return "icon-help";
     };

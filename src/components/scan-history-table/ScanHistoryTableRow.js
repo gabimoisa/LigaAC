@@ -12,18 +12,78 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
     }, 'mcl-icon icon-trash');
 
     const cleanClassName = classNames({
-        'noThreatsFound': results === 'No threats found'
+        'noThreatsFound': results === 'No threats found',
     });
 
     const downloadSanitizedFile = () => {
         window.location.href = sanitizedFileURL;
     }
 
-    if(dlpInfo && dlpInfo.hits) {
-        Object.keys(dlpInfo.hits).forEach((key) => {
-            sum_hits += dlpInfo.hits[key].hits.length;
-        })
+    const handleSumHits = () => {
+        if(dlpInfo?.hits && Object.keys(dlpInfo?.hits)) {
+            Object.keys(dlpInfo.hits).forEach((key) => {
+                sum_hits += dlpInfo.hits[key].hits.length;
+            })
+        }
+        return sum_hits;
     }
+
+
+    const tableDataDLP = (useDLP, dlpInfo, sanitizedFileURL, downloadSanitizedFile, status) => {
+        if (dlpInfo) {
+            if (dlpInfo.verdict) {
+              if (dlpInfo.hits) {
+                return (
+                  <div className="sensitiveData">
+                    {sanitizedFileURL ? (
+                      <div>
+                        <button onClick={downloadSanitizedFile} className="downloadSanitizedButton">
+                          <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersion') }}></span>
+                          <span className="icon-down"></span>
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <span className="downloadExpired" dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersionExpired') }}></span>
+                      </div>
+                    )}
+                  </div>
+                );
+              } else {
+                return (
+                  <span className="sensitiveData" dangerouslySetInnerHTML={{
+                    __html: chrome.i18n.getMessage("dlpOk"),
+                  }}></span>
+                );
+              }
+            } else {
+              return (
+                <span className="sensitiveData" dangerouslySetInnerHTML={{
+                  __html: chrome.i18n.getMessage("dlpOk"),
+                }}></span>
+              );
+            }
+          } else if (getStatusIcon(status, dlpInfo?.verdict).includes("icon-spin") && useDLP) {
+            return (
+              <span className="sensitiveData" dangerouslySetInnerHTML={{
+                __html: chrome.i18n.getMessage("scanDLP"),
+              }}></span>
+            );
+          } else if (getStatusIcon(status, dlpInfo?.verdict).includes("icon-spin") || !useDLP) {
+            return (
+              <span className="sensitiveData" dangerouslySetInnerHTML={{
+                __html: chrome.i18n.getMessage("noDLP"),
+              }}></span>
+            );
+          } else {
+            return (
+              <span className="sensitiveData" dangerouslySetInnerHTML={{
+                __html: chrome.i18n.getMessage("noDLP"),
+              }}></span>
+            );
+          }
+    }
+
 
     return <tr
         onMouseEnter={() => {setIsTrashDisplayed(true); setIsDownloadDisplayed(true)}}
@@ -38,55 +98,17 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
         </td>
         <td>{scanTime}</td>
         <td>
-            <a href={scanUrl} className={cleanClassName}>{results}</a>
+            {dlpInfo?.hits ? (
+                <div>
+                    <span className="dataFound" dangerouslySetInnerHTML={{__html: chrome.i18n.getMessage("dlpDetections")}}></span>
+                    <span className="dataFound">{handleSumHits()}</span>
+                </div>
+            ): (
+                <a href={scanUrl} className={cleanClassName}>{results}</a>
+            )}
         </td>
         <td className="p-0">
-            {dlpInfo ? (
-                dlpInfo.verdict ? (
-                    dlpInfo.hits ? (
-                        <div className="sensitiveData">
-                            <div>
-                                <span className="dataFound" dangerouslySetInnerHTML={{__html: chrome.i18n.getMessage("dlpDetections")}}></span>
-                                <span className="dataFound">{sum_hits}</span>
-                            </div>
-                            { sanitizedFileURL ? (
-                                <div>
-                                    <button onClick={downloadSanitizedFile} className="downloadSanitizedButton">
-                                        <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersion')}}></span>
-                                        <span className="icon-down"></span>
-                                    </button>
-                                </div>
-                            ) : (
-                                <div>
-                                    <span className="downloadExpired" dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersionExpired')}}></span>
-                                </div>
-                            )}
-                        </div>
-                    ) : (<span
-                        dangerouslySetInnerHTML={{
-                          __html: chrome.i18n.getMessage("dlpOk"),
-                        }}
-                      ></span>)
-                ) : (
-                    <span className="sensitiveData" dangerouslySetInnerHTML={{
-                        __html: chrome.i18n.getMessage("dlpOk"),
-                      }}></span>
-                )
-                ) : getStatusIcon(status, dlpInfo?.verdict).includes("icon-spin") && useDLP ? (
-                    <span className="sensitiveData" dangerouslySetInnerHTML={{
-                  __html: chrome.i18n.getMessage("scanDLP"),
-                }}
-              ></span>
-                ) : getStatusIcon(status, dlpInfo?.verdict).includes("icon-spin") || !useDLP ? (
-                    <span className="sensitiveData" dangerouslySetInnerHTML={{
-                      __html: chrome.i18n.getMessage("noDLP"),
-                    }}
-                  ></span>
-                ) : <span dangerouslySetInnerHTML={{
-                  __html: chrome.i18n.getMessage("noDLP"),
-                }}
-              ></span>
-            }
+            {tableDataDLP(useDLP, dlpInfo, sanitizedFileURL, downloadSanitizedFile, status)}
         </td>
         <td className="p-0">
             <a href="#" onClick={removeFile} title={chrome.i18n.getMessage('deleteTooltip')} className='trash'>

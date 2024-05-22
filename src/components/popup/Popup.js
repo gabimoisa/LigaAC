@@ -138,15 +138,63 @@ const Popup = () => {
       return;
     }
 
-    const tableRows = files.slice(0, 3).map((scannedFile, index) => {
-      let sum_hits = 0;
+    const tableDataDLP = (scannedFile) => {
+      scannedFile.sum_hits = 0;
 
-      if (scannedFile.dlp_info && scannedFile.dlp_info.hits) {
+      if (scannedFile?.dlp_info?.hits && Object.keys(scannedFile.dlp_info.hits)) {
         Object.keys(scannedFile.dlp_info.hits).forEach((key) => {
-          sum_hits += scannedFile.dlp_info.hits[key].hits.length;
+          scannedFile.sum_hits += scannedFile.dlp_info.hits[key].hits.length;
         })
       } 
 
+      if (scannedFile.dlp_info) {
+        if (scannedFile.dlp_info.verdict) {
+          if (scannedFile.dlp_info.hits) {
+            return (
+              <div className="dataFound">
+                <a onClick={goToHistory}>
+                  <span dangerouslySetInnerHTML={{
+                    __html: chrome.i18n.getMessage("dlpDetections"),
+                  }}></span> <span>{scannedFile.sum_hits}</span> 
+                </a>
+              </div>
+            );
+          } else {
+            return (
+              <span dangerouslySetInnerHTML={{
+                __html: chrome.i18n.getMessage("noDLP"),
+              }}></span>
+            );
+          }
+        } else {
+          return (
+            <span dangerouslySetInnerHTML={{
+              __html: chrome.i18n.getMessage("dlpOk"),
+            }}></span>
+          );
+        }
+      } else if (getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict).includes("icon-spin") && scannedFile.useDLP) {
+        return (
+          <span dangerouslySetInnerHTML={{
+            __html: chrome.i18n.getMessage("scanDLP"),
+          }}></span>
+        );
+      } else if (getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict).includes("icon-spin") || !scannedFile.useDLP) {
+        return (
+          <span dangerouslySetInnerHTML={{
+            __html: chrome.i18n.getMessage("noDLP"),
+          }}></span>
+        );
+      } else {
+        return (
+          <span dangerouslySetInnerHTML={{
+            __html: chrome.i18n.getMessage("noDLP"),
+          }}></span>
+        );
+      }
+    };
+  
+    const tableRows = files.slice(0, 3).map((scannedFile, index) => {
       return (
         <tr
           key={index}
@@ -169,41 +217,7 @@ const Popup = () => {
             ></span>
           </td>
           <td>
-
-            {scannedFile.dlp_info ? (
-              scannedFile.dlp_info.verdict ? (
-                scannedFile.dlp_info.hits ? (
-                  <div className="dataFound">
-                    <a onClick={goToHistory}>
-                      <span dangerouslySetInnerHTML={{
-                        __html: chrome.i18n.getMessage("dlpDetections"),
-                      }}></span> <span>{sum_hits}</span> 
-                    </a>
-                    </div>
-                ) : ( <span dangerouslySetInnerHTML={{
-                  __html: chrome.i18n.getMessage("noDLP"),
-                }}></span>)
-              ) : (
-                <span dangerouslySetInnerHTML={{
-                  __html: chrome.i18n.getMessage("dlpOk"),
-                }}></span>
-              )
-            ) : getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict).includes("icon-spin") && scannedFile.useDLP ? (
-              <span dangerouslySetInnerHTML={{
-                  __html: chrome.i18n.getMessage("scanDLP"),
-                }}
-              ></span>
-              ) :  getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict).includes("icon-spin") ||
-              !scannedFile.useDLP ? (
-                <span dangerouslySetInnerHTML={{
-                  __html: chrome.i18n.getMessage("noDLP"),
-                }}
-              ></span>
-              ) : <span dangerouslySetInnerHTML={{
-                __html: chrome.i18n.getMessage("noDLP"),
-              }}
-            ></span>
-            }
+            {tableDataDLP(scannedFile)}
           </td>
         </tr>
       );
@@ -243,7 +257,7 @@ const Popup = () => {
     );
   }, [files, scanResultsDom]);
 
-  const dropFile = useMemo(() => {
+  const dropFile = () => {
     return (
       <div className="dnd-bar">
         <i className="icon-drop"></i>
@@ -255,7 +269,7 @@ const Popup = () => {
         />
       </div>
     );
-  });
+  };
 
   return (
     <div
