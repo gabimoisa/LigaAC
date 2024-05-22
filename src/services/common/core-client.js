@@ -151,7 +151,7 @@ async function recursiveLookup(dataId, pollingInterval, resolve) {
 
     pollingInterval = Math.min(pollingInterval * config.pollingIncrementor, config.pollingMaxInterval);
 
-    if (response?.scan_results?.progress_percentage < 100) {
+    if (response?.scan_results?.progress_percentage < 100 || response?.sanitized?.progress_percentage < 100) {
         setTimeout(() => { recursiveLookup(dataId, pollingInterval, resolve); }, pollingInterval);
     }
     else {
