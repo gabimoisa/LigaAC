@@ -1,6 +1,6 @@
 'use strict';
 
-import { SANDBOX, SANDBOX_TIMEOUT, SANITIZATION, UNARCHIVE } from '../constants/workflow';
+import { SANDBOX, SANITIZATION, UNARCHIVE } from '../constants/workflow';
 import MCL from '../../config/config';
 
 /**
@@ -160,7 +160,6 @@ function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitize
     
     if(sandbox) {
         additionalHeaders['sandbox'] = SANDBOX;
-        additionalHeaders['sandbox_timeout'] = SANDBOX_TIMEOUT;
     }
 
     const options = {
@@ -168,12 +167,9 @@ function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitize
         headers: { ...authHeader, ...additionalHeaders },
         body: fileData
     };
-    console.log('fileUpload metascan-client', sampleSharing, options);
     return fetch(restEndpoint, options).then(response => {
-        console.log("response", response);
         return response.json()}).catch(error => {
         console.warn(error);
-        console.log(error);
         return { error };
     });
 }
@@ -231,14 +227,13 @@ async function recursiveLookup(dataId, pollingInterval, resolve) {
 
 
 /**
- * https://api.metadefender.com/v4/hash/02637A8DA752611218FCEA1854052B9FF160AFD2/sandbox
+ * https://api.metadefender.com/v4/hash/{hash}/sandbox
  * 
  * @param {string} sha1
  * @returns {Promise}
  */
 function fileSandboxLookup(sha1) {
     const restEndpoint = `${MCL.config.metadefenderDomain}/${MCL.config.metadefenderVersion}/hash/${sha1}/sandbox`;
-    // console.log(restEndpoint);
     const options = {
         headers: { ...authHeader }
     };

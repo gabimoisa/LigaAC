@@ -207,7 +207,11 @@
       "description": ""
     },
     "fileScanComplete": {
-      "message": " has been scanned. ",
+      "message": " has been scanned",
+      "description": ""
+    },
+    "fileScanCompleteSandbox": {
+      "message": " has been scanned with Sandbox",
       "description": ""
     },
     "goToExtension": {

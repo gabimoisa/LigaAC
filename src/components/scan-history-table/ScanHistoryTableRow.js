@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, removeFile, status, getStatusIcon, useCore, sandboxVerdict }) => {
     const [isTrashDisplayed, setIsTrashDisplayed] = useState(false);
+    let scanUrlSand = scanUrl;
     const trashClassName = classNames({
         'invisible': !isTrashDisplayed
     }, 'mcl-icon icon-trash');
@@ -12,7 +13,7 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
         'noThreatsFound': results === 'No threats found'
     });
 
-    const SandBox = classNames({
+    const Sandbox = classNames({
         'sandboxInformational': sandboxVerdict === 'Informational',
         'sandboxSuspicious': sandboxVerdict === 'Suspicious',
         'sandboxMalicious': sandboxVerdict === 'Malicious',
@@ -28,7 +29,20 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
 
     if(sandboxVerdict === 'Informational')
         sandboxVerdict = 'No Threat';
-    
+
+    if(sandboxVerdict !== 'No dynamic analysis was performed')
+    {
+
+        let parts = scanUrlSand.split('/');
+
+        if (parts.length > 1) {
+            parts.pop();
+        }
+
+        let newUrl = parts.join('/') + '/sandbox/summary';
+        scanUrlSand = newUrl;
+    }
+
     
 
     return (
@@ -51,7 +65,7 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
                 <span className={`${getStatusIcon(status)} ${cleanClassName}`} />
             </td>
             <td>
-                <a href={scanUrl} className={SandBox}>{sandboxVerdict}</a>
+                <a href={scanUrlSand} className={Sandbox}>{sandboxVerdict}</a>
             </td>
             <td className="p-0">
                 <a href="#" onClick={removeFile} title={chrome.i18n.getMessage('deleteTooltip')} className='trash'>

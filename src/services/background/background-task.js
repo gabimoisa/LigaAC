@@ -168,7 +168,6 @@ export default class BackgroundTask {
         }
         let sandbox = false;
         if(!info.srcUrl && !info.linkUrl){
-            console.log("Click din pagina", info.pageUrl);
             sandbox = true;
         }
 

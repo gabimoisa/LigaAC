@@ -189,24 +189,28 @@ class FileProcessor {
                 file.sanitizedFileURL = info.sanitized.file_path;
             }
 
-            if(info.additional_info == 'sandbox') {
-                const sha1 = info.file_info.sha1;
-                // let getSandboxInfo = `${MCL.config.mclDomain}/${MCL.config.metadefenderVersion}/hash/${sha1}/sandbox`;
+            if(info?.additional_info == 'sandbox') {
+                const sha1 = info?.file_info?.sha1;
                 const response = await MetascanClient.setAuth(apikeyInfo.data.apikey).file.poolForSandboxResults(sha1, 3000);
-                console.log('sandboxLookup', response);
-                const lowercasedVerdict = response.final_verdict.verdict.charAt(0) + response.final_verdict.verdict.substring(1).toLowerCase();
+                const lowercasedVerdict = response.final_verdict?.verdict?.charAt(0) + response.final_verdict?.verdict?.substring(1).toLowerCase();
                 file.sandboxVerdict = lowercasedVerdict;
             }
             else{
                 file.sandboxVerdict = "No dynamic analysis was performed";
             }
         }
-        console.log("FILE VERDICT FINAL", file);
         await scanHistory.updateFileById(file.id, file);
         await scanHistory.save();
 
-        let notificationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
-        notificationMessage += (file.status === ScanFile.STATUS.INFECTED) ? chrome.i18n.getMessage('threatDetected') : chrome.i18n.getMessage('noThreatDetected');
+        let notificationMessage
+        if (file.sandboxVerdict === 'No dynamic analysis was performed') {
+            notificationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
+            notificationMessage += (file.status === ScanFile.STATUS.INFECTED) ? chrome.i18n.getMessage('threatDetected') : chrome.i18n.getMessage('noThreatDetected');
+        } else {
+            notificationMessage = file.fileName + chrome.i18n.getMessage('fileScanCompleteSandbox');
+            notificationMessage += (file.status === ScanFile.STATUS.INFECTED) ? chrome.i18n.getMessage('threatDetected') : chrome.i18n.getMessage('noThreatDetected');
+            notificationMessage += `\n\nSandbox verdict : ${file.sandboxVerdict}`;
+        }
         await BrowserNotification.create(notificationMessage, file.id, file.status === ScanFile.STATUS.INFECTED);
 
         this.callOnScanCompleteListeners({
