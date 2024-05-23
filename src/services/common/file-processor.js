@@ -319,7 +319,7 @@ class FileProcessor {
     async scanWithCore(file, fileData) {
         let response = await CoreClient.hash.lookup(file.md5);
 
-        if (response[file.md5] === 'Not Found') {
+        if (response[file.md5] === 'Not Found' || file.useDLP && !response.dlp_info) {
             response = await CoreClient.file.upload({
                 fileData: fileData,
                 fileName: file.fileName,
@@ -341,7 +341,7 @@ class FileProcessor {
         try {
             response = await MetascanClient.setAuth(apikeyInfo.data.apikey).hash.lookup(file.md5);
 
-            if (!response || !response.data_id || response.error) {
+            if (!response || !response.data_id || response.error || file.useDLP && !response.dlp_info) {
                 response = await MetascanClient.setAuth(apikeyInfo.data.apikey).file.upload({
                     fileName: file.fileName,
                     fileData,
