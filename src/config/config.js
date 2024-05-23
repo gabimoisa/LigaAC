@@ -19,6 +19,7 @@ export default {
             },
             'label': {
                 'scanHistory': '/* @echo gaEventCategory.label.scanHistory */',
+                'domainHistory': '/* @echo gaEventCategory.label.domainHistory */',
                 'metadefender': '/* @echo gaEventCategory.label.metadefender */',
                 'scanDetails': '/* @echo gaEventCategory.label.scanDetails */',
                 'loginButton': '/* @echo gaEventCategory.label.loginButton */',

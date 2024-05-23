@@ -7,18 +7,31 @@ import ScanFile from '../../services/common/scan-file';
 
 import ConfigContext from '../../providers/ConfigProvider';
 import GAContext from '../../providers/GAProvider';
-// import ScanHistoryContext from '../../providers/ScanHistoryProvider';
 
 import './DomainReputation.scss';
+import DomainHistoryContext from '../../providers/DomainHistoryProvider';
 
 
 const DomainReputation = () => {
-    const content = 
-    <Row>
-        <Col className='mt-4 text-center font-weight-bold'>
-            <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('noDomainsNotification') }} />
-        </Col>
-    </Row>
+    const { domains, clearDomainHistory, removeDomainHistoryDomain } = useContext(DomainHistoryContext);
+    const [ totalAccessedDomains, setTotalAccessedDomains ] = useState(domains.length);
+    const { gaTrackEvent } = useContext(GAContext);
+
+    useEffect(() => {
+        (async () => {
+            gaTrackEvent(['_trackPageview', '/extension/domain']);
+            setTotalAccessedDomains(domains.length);
+        })();
+    }, [domains]);
+
+    const content = domains.length === 0 ?
+        <Row>
+            <Col className='mt-4 text-center font-weight-bold'>
+                <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('noDomainsNotification') }} />
+            </Col>
+        </Row>
+    :
+        <div>{domains}, {domains.length}</div>
     
   return <SidebarLayout
         className='domain'

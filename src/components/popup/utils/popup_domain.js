@@ -29,7 +29,10 @@ export const sendDomainToApi = async () => {
             try {
                 const response = await MetascanClient.setAuth(apikeyInfo.data.apikey)?.domain?.lookup(domain);
                 console.log(response.lookup_results.sources);
+
+                await domainHistory.init();
                 await domainHistory.addDomain(domain);
+                
                 const trustworthySources = getTrustworthySources(response);
                 resolve(trustworthySources);
             } catch (error) {

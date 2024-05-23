@@ -5,6 +5,11 @@ import BrowserStorage from './../browser/browser-storage';
 
 const storageKey = MCL.config.storageKey.domainHistory;
 
+/**
+ *
+ * @returns {{domains: Array, init: init, save: save, load: load, merge: merge, addDomain: addDomain, removeDomain: removeDomain, clear: clear}}
+ * @constructor
+ */
 function DomainHistory() {
     return {
         domains: [],
@@ -24,15 +29,27 @@ function DomainHistory() {
 
 export const domainHistory = DomainHistory();
 
+/**
+ *
+ * @returns {Promise.<*>}
+ */
 async function init() {
-    const { [storageKey]: domainData } = await BrowserStorage.get(storageKey);
-    if(!domainData) {
-        return this.save();
+    try {
+        const { [storageKey]: domainData } = await BrowserStorage.get(storageKey);
+        if (!domainData) {
+            await this.save();
+        } else {
+            this.merge(domainData);
+        }
+    } catch (error) {
+        console.error('Error initializing domain history:', error);
     }
-
-    this.merge(domainData);
 }
 
+/**
+ * Load domain history from browser storage
+ * @returns {Promise} { domains: [] }
+ */
 async function load() {
     const { [storageKey]: domainData } = await BrowserStorage.get(storageKey);
     this.merge(domainData);
@@ -40,23 +57,39 @@ async function load() {
     return domainData;
 }
 
+/**
+ *
+ * @param newData
+ */
 function merge(newData) {
-    for(let key in newData) {
-        if(Object.prototype.hasOwnProperty.call(newData, key)) {
-            this[key] = newData[key];
-        }
+    if (newData && Array.isArray(newData.domains)) {
+        this.domains = this.domains.concat(newData.domains);
     }
 }
 
+/**
+ * Add a domain to domain history
+ * @param domain
+ * @returns {Promise<void>}
+ */
 async function save() {
-    await BrowserStorage.set({[storageKey] : {
-        domains: this.domains
-    }});
+    try {
+        await BrowserStorage.set({
+            [storageKey]: {
+                domains: this.domains
+            }
+        });
+    } catch (error) {
+        console.error('Error saving domain history:', error);
+    }
 }
 
 async function addDomain(domain) {
-    this.domains.unshift(domain);
-    this.save();
+    console.log('domain', domain)
+    this.domains.push(domain);
+    await this.save();
+    console.log('Current domains after adding:', this.domains);
+
 }
 
 async function updateDomainById(id, data) {
@@ -77,11 +110,20 @@ async function updateDomainByDataId(dataId, data) {
     this.save();
 }
 
+/**
+ * Remove a domain from domain history
+ * @param domain
+ * @returns {Promise<void>}
+ */
 async function removeDomain(id) {
     this.domains = this.domains.filter((domain) => domain.id !== id);
     await this.save();
 }
 
+/**
+ * Remove all domains from domain history
+ * @returns {Promise<void>}
+ */
 async function clear() {
     this.domains = [];
     this.save();
