@@ -6,6 +6,7 @@ import ConfigContext from "../../providers/ConfigProvider";
 import { goToTab } from "../../services/background/navigation";
 import ScanFile from "../../services/common/scan-file";
 import ScanHistoryContext from "../../providers/ScanHistoryProvider";
+import DLPScanResult from "./DLPScanResult";
 
 import "./Popup.scss";
 
@@ -138,63 +139,15 @@ const Popup = () => {
       return;
     }
 
-    const tableDataDLP = (scannedFile) => {
-      scannedFile.sum_hits = 0;
+    const tableRows = files.slice(0, 3).map((scannedFile, index) => {
+      let sum_hits = 0;
 
-      if (scannedFile?.dlp_info?.hits && Object.keys(scannedFile.dlp_info.hits)) {
+      if (scannedFile.dlp_info && scannedFile.dlp_info.hits) {
         Object.keys(scannedFile.dlp_info.hits).forEach((key) => {
-          scannedFile.sum_hits += scannedFile.dlp_info.hits[key].hits.length;
+          sum_hits += scannedFile.dlp_info.hits[key].hits.length;
         })
       } 
 
-      if (scannedFile.dlp_info) {
-        if (scannedFile.dlp_info.verdict) {
-          if (scannedFile.dlp_info.hits) {
-            return (
-              <div className="dataFound">
-                <a onClick={goToHistory}>
-                  <span dangerouslySetInnerHTML={{
-                    __html: chrome.i18n.getMessage("dlpDetections"),
-                  }}></span> <span>{scannedFile.sum_hits}</span> 
-                </a>
-              </div>
-            );
-          } else {
-            return (
-              <span dangerouslySetInnerHTML={{
-                __html: chrome.i18n.getMessage("noDLP"),
-              }}></span>
-            );
-          }
-        } else {
-          return (
-            <span dangerouslySetInnerHTML={{
-              __html: chrome.i18n.getMessage("dlpOk"),
-            }}></span>
-          );
-        }
-      } else if (getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict).includes("icon-spin") && scannedFile.useDLP) {
-        return (
-          <span dangerouslySetInnerHTML={{
-            __html: chrome.i18n.getMessage("scanDLP"),
-          }}></span>
-        );
-      } else if (getStatusIcon(scannedFile.status, scannedFile?.dlp_info?.verdict).includes("icon-spin") || !scannedFile.useDLP) {
-        return (
-          <span dangerouslySetInnerHTML={{
-            __html: chrome.i18n.getMessage("noDLP"),
-          }}></span>
-        );
-      } else {
-        return (
-          <span dangerouslySetInnerHTML={{
-            __html: chrome.i18n.getMessage("noDLP"),
-          }}></span>
-        );
-      }
-    };
-  
-    const tableRows = files.slice(0, 3).map((scannedFile, index) => {
       return (
         <tr
           key={index}
@@ -217,7 +170,12 @@ const Popup = () => {
             ></span>
           </td>
           <td>
-            {tableDataDLP(scannedFile)}
+          <DLPScanResult
+              scannedFile={scannedFile}
+              sum_hits={sum_hits}
+              goToHistory={goToHistory}
+              getStatusIcon={getStatusIcon}
+            />
           </td>
         </tr>
       );
@@ -301,7 +259,7 @@ const Popup = () => {
 
       <div className="popup--scan__history">{scanResults}</div>
 
-      <div className="popup--drop__file text-right">{dropFile}</div>
+      <div className="popup--drop__file text-right">{dropFile()}</div>
     </div>
   );
 };
