@@ -125,10 +125,10 @@
   &--scan__history {
     .list-group {
       padding-bottom: 0%;
-      margin: 15px 7px 10px 7px;
+      margin: 12% 7% -7% 7%;
 
       .list-group-item {
-        padding: 5px 0px 5px 0px;
+        padding: 0px 0px 0px 0px;
 
         background: $colorWhite;
         border-bottom: 1px solid $colorGreyDark;
@@ -216,48 +216,23 @@
   }
 
   &--footer {
-    //background-color: $colorBlack;
     border-top: 1px solid $colorGrey;
-    padding: $padding;
+    padding: 0%;
     height: 60px;
   }
 
   .header,
   .footer {
-    padding: $padding;
+    padding: 0%;
     background-color: $colorBlack;
   }
 
 }
 
-.todays-stats-container {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 90%;
-  padding: 5px 5px 5px 5px;
-  margin-bottom: 7%;
-  margin-top: 7%;
-}
-
-.today-scans,
-.today-blocks {
-  color: $colorBlacker;
-
-  @media (prefers-color-scheme: dark) {
-    color: $colorWhite;
-  }
-
-  font-family: Roboto,
-  Sans-serif !important;
-  // display: flex;
-  align-items: center;
-}
-
 .days-without {
   border: 1px solid $colorBlack;
   color: $baclavas;
-  background-color: $blueberry;
+  background-color: $colorWhite;
 
   @media (prefers-color-scheme: dark) {
     color: $colorWhite;
@@ -268,14 +243,19 @@
   font-family: Roboto,
   Sans-serif !important;
   display: inline-block;
-  padding: 4%;
+  padding: 3% 10% 0% 10%;
   text-align: center;
 
 }
 
 
 .days-number {
-  color: $colorWhite;
+  color: $colorBlack;
+
+  @media (prefers-color-scheme: dark) {
+    color: $colorWhite;
+  }
+
   font-size: xx-large;
   font-weight: 700;
 }
@@ -292,14 +272,61 @@
   align-items: center;
   justify-content: center;
 
-  padding: 10px 0 35px 0;
+  padding: 15px 0 10px 0;
   font-size: large;
   font-weight: 500;
 }
 
 
 .centered-box {
-  display: block;
+  display: grid;
+  margin: 7%
+}
+
+.todays-stats-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0%;
+  margin-bottom: 3%;
+}
+
+.today-scans,
+.today-blocks {
+  color: $colorBlacker;
+
+  @media (prefers-color-scheme: dark) {
+    color: $colorWhite;
+  }
+
+  font-family: Roboto,
+  Sans-serif !important;
+  display: table-cell;
+}
+
+.scan-button-container{
+  display: flex;
   justify-content: center;
+  width: 100%;
+  padding: 0%;
+  margin-bottom: 3%;
+}
+
+.scan-button {
+  background: $secondaryColor;
+  color: $colorWhite;
+  border: none;
   align-items: center;
+
+
+  padding: 4px 5px 3px 5px;
+  display: block;
+  transition: background-color 0.8s;
+
+  &:hover {
+    background: $colorGreyDark;
+    @media (prefers-color-scheme: dark) {
+      background-color: $colorBlacker;
+    }
+  }
 }

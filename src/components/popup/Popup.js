@@ -59,7 +59,7 @@ const Popup = () => {
             { label: 'week', seconds: 604800 },
             { label: 'day', seconds: 86400 },
             { label: 'hour', seconds: 3600 },
-            { label: 'minute', seconds: 60 },
+            { label: 'min', seconds: 60 },
             { label: 'second', seconds: 1 }
         ]
 
@@ -199,7 +199,7 @@ const Popup = () => {
                         <div className="days-without">
                             {daysSinceLastThreat !== null ? (
                                 <>
-                                    Days without threats:
+                                    Days without threats:<br />
                                     <span className="days-number">{daysSinceLastThreat}</span>
                                 </>
                             ) : (
@@ -215,9 +215,9 @@ const Popup = () => {
                         <div className="todays-stats-container">
                             <div className="today-scans">
                                 <>
-                                Files scanned today: <br/> {filesScannedToday}
-                            </>
-                                
+                                    Files scanned today: {filesScannedToday}
+                                </>
+
                             </div>
                             <div className='today-blocks'>
                                 Files blocked today: {filesBlockedToday}
@@ -226,12 +226,16 @@ const Popup = () => {
 
                         <div className="todays-stats-container">
                             <div className='today-scans'>
-                                URLs scanned today: **0
+                                URLs scanned today: 6
                             </div>
                             <div className='today-blocks'>
-                                URLs blocked today: **0
+                                URLs blocked today: 9
                             </div>
                         </div>
+                        <div className='scan-button-container'>
+                            <button href='#' className="scan-button" onClick={goToStats}>View statistics</button>
+                        </div>
+
                     </div>
                     {scanResults}
                 </div>
