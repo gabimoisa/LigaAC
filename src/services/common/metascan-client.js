@@ -248,11 +248,14 @@ function fileSandboxLookup(sha1) {
  * @returns {Promise}
  */
 async function poolForSandboxResults(sha1, pollingInterval) {
-    return new Promise((resolve) => {
-        recursiveSandboxLookup(sha1, pollingInterval, resolve);
+    return new Promise((resolve, reject) => {
+        try {
+            recursiveSandboxLookup(sha1, pollingInterval, resolve);
+        } catch (error) {
+            reject(error);
+        }
     });
 }
-
 /** 
  *
  * @param sha1
@@ -264,13 +267,12 @@ async function recursiveSandboxLookup(sha1, pollingInterval, resolve) {
     const response = await fileSandboxLookup(sha1);
 
     if (response.error) {
-        return;
+        throw new Error(response.error);
     }
 
     pollingInterval = Math.min(pollingInterval * config.pollingIncrementor, config.pollingMaxInterval);
 
     if (response?.final_verdict?.verdict == null) {
-        console.log("face pooling");
         setTimeout(() => { recursiveSandboxLookup(sha1, pollingInterval, resolve); }, pollingInterval);
     }
     else {

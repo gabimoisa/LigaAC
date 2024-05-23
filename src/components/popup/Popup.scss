@@ -3,7 +3,7 @@
 /** rules **/
 .popup {
   &--wrapper {
-    width: 350px;
+    width: 600px;
     padding: $padding;
   }
 
@@ -13,7 +13,7 @@
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-  
+    margin-bottom: 20px;
     &__logo {
       background-image: url('../../assets/images/metadefender-chrome-black.svg');
       position: relative;
@@ -59,4 +59,8 @@
     padding: $padding;
     background-color: $colorWhite;
   }
+}
+
+.centered-items {
+  text-align: center;
 }

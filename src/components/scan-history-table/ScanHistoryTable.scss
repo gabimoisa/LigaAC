@@ -9,6 +9,12 @@
     thead {
         background-color: $colorGreyLighter;
     }
+
+    tbody {
+        td {
+            border-bottom: none;
+        }
+    }
     
     tr {
         border-bottom: 1px solid $colorGrey;

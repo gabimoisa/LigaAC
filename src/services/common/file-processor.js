@@ -196,14 +196,14 @@ class FileProcessor {
                 file.sandboxVerdict = lowercasedVerdict;
             }
             else{
-                file.sandboxVerdict = "No dynamic analysis was performed";
+                file.sandboxVerdict = "No dynamic analysis performed";
             }
         }
         await scanHistory.updateFileById(file.id, file);
         await scanHistory.save();
 
         let notificationMessage
-        if (file.sandboxVerdict === 'No dynamic analysis was performed') {
+        if (file.sandboxVerdict === 'No dynamic analysis performed') {
             notificationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
             notificationMessage += (file.status === ScanFile.STATUS.INFECTED) ? chrome.i18n.getMessage('threatDetected') : chrome.i18n.getMessage('noThreatDetected');
         } else {

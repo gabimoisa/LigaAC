@@ -77,14 +77,45 @@ const Popup = () => {
             return;
         }
 
-        return files.slice(0, 3).map((scannedFile, index) => (
-            <li key={index} className="list-group-item d-flex align-items-center justify-content-between">
-                <a href={scannedFile.scanResults || getScanUrl(scannedFile)} target="_blank" rel="noreferrer noopener">
-                    {scannedFile.fileName}
-                </a>
-                <span className={`mcl-icon ${getStatusIcon(scannedFile.status)}`}></span>
-            </li>
-        ));
+        return files.slice(0, 3).map((scannedFile, index) => {
+            const Sandbox = classNames({
+                'sandboxInformational': scannedFile.sandboxVerdict === 'No Threat',
+                'sandboxSuspicious': scannedFile.sandboxVerdict === 'Suspicious',
+                'sandboxMalicious': scannedFile.sandboxVerdict === 'Malicious',
+                'sandboxLikelyMalicious': scannedFile.sandboxVerdict === 'Likely Malicious',
+                'sandboxBenign': scannedFile.sandboxVerdict === 'Benign',
+                'sandboxUnknown': scannedFile.sandboxVerdict === 'Unknown'
+            });
+            
+            if(scannedFile.sandboxVerdict === 'Informational')
+                scannedFile.sandboxVerdict = 'No Threat';
+
+            let sandboxUrl = scannedFile.scanResults;
+
+            if(!scannedFile.sandboxVerdict) {
+                scannedFile.sandboxVerdict = "Scan in progress";
+            }
+
+            if(scannedFile.sandboxVerdict !== "No dynamic analysis performed") {
+                const lastSlashIndex = sandboxUrl?.lastIndexOf('/');
+                sandboxUrl = sandboxUrl?.substring(0, lastSlashIndex) + "/sandbox/summary";
+            }
+                
+            return (
+            <tr key={index}>
+                <td className="list-group-item d-flex align-items-center justify-content-between">
+                    <a href={scannedFile.scanResults || getScanUrl(scannedFile)} target="_blank" rel="noreferrer noopener">
+                        {scannedFile.fileName}
+                    </a>
+                </td>
+                <td className='centered-items'>
+                    <span className={`mcl-icon ${getStatusIcon(scannedFile.status)}`}></span>
+                </td>
+                <td className='centered-items'>
+                    <a href={sandboxUrl} target="_blank" rel="noreferrer noopener" className={Sandbox}>{scannedFile.sandboxVerdict}</a>
+                </td>
+            </tr>
+    )});
     }, [files]);
 
     const scanResults = useMemo(() => {
@@ -96,9 +127,20 @@ const Popup = () => {
             </ul>;
         }
 
-        return <ul className="list-group row">
-            {scanResultsDom}
-        </ul>;
+        return (
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th className='centered-items'>Status</th>
+                        <th className='centered-items'>Sandbox Verdict</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {scanResultsDom}
+                </tbody>
+            </table>
+        );
     }, [files, scanResultsDom]);
 
     return <div className="popup--wrapper">

@@ -30,16 +30,16 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
     if(sandboxVerdict === 'Informational')
         sandboxVerdict = 'No Threat';
 
-    if(sandboxVerdict !== 'No dynamic analysis was performed')
+    if(sandboxVerdict !== 'No dynamic analysis performed')
     {
 
-        let parts = scanUrlSand.split('/');
+        let parts = scanUrlSand?.split('/');
 
         if (parts.length > 1) {
             parts.pop();
         }
 
-        let newUrl = parts.join('/') + '/sandbox/summary';
+        let newUrl = parts?.join('/') + '/sandbox/summary';
         scanUrlSand = newUrl;
     }
 
