@@ -10,7 +10,7 @@ export const sendDomainToApi = async () => {
           if(knownStatus.length !== 0) {
             return knownStatus;
           } else {
-                return 'Not Available';
+                return 'Unknown';
             }
         }
     };
@@ -32,7 +32,7 @@ export const sendDomainToApi = async () => {
 
                 
                 const trustworthySources = getTrustworthySources(response);
-                if(trustworthySources !== 'Not Available')
+                if(trustworthySources !== 'Unknown')
                     domain.reputation = trustworthySources[0].assessment.charAt(0).toUpperCase() + trustworthySources[0].assessment.slice(1);
                 else domain.reputation = trustworthySources;
 
@@ -51,17 +51,17 @@ export const sendDomainToApi = async () => {
 export const getAssessmentStyle = (assessment) => {
     switch (assessment.toLowerCase()) {
     case 'high risk' || 'malicious':
-        return { color: '#d00400', fontWeight: 'bold' };
+        return { color: '#d00400', fontWeight: 'bold', alignitems: 'center' };
     case 'suspicious':
-        return { color: '#fdbd0e', fontWeight: 'bold' };
+        return { color: '#fdbd0e', fontWeight: 'bold', alignitems: 'center' };
     case 'moderate risk' || 'likely malicious':
-        return { color: '#ed6707', fontWeight: 'bold' };
+        return { color: '#ed6707', fontWeight: 'bold', alignitems: 'center' };
     case 'low risk' || 'no threat':
-        return { color: '#008a00', fontWeight: 'bold' };
+        return { color: '#008a00', fontWeight: 'bold', alignitems: 'center' };
     case 'trustworthy' || 'benign':
-        return { color: '#1c6bfc', fontWeight: 'bold' };
+        return { color: '#1c6bfc', fontWeight: 'bold', alignitems: 'center' };
     case 'unknown':
-        return { color: '#313c4d', fontWeight: 'bold' };
+        return { color: '#313c4d', fontWeight: 'bold', alignitems: 'center' };
     default:
         return {};
     }

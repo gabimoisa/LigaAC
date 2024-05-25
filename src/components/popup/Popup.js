@@ -103,14 +103,14 @@ const Popup = () => {
 
             <div className="popup-section">
                 <div className="popup-section__header">Website Reputation</div>
-                <div className="popup-box domain-reputation">
-                    {apiResponse ? (
-                        <p style={getAssessmentStyle(apiResponse)}>
+                <div className="popup-box scan-history-list">
+                    <p className='scan-item'>{apiResponse ? (
+                        <span style={getAssessmentStyle(apiResponse)}>
                             {apiResponse}
-                        </p>
+                        </span>
                     ) : (
-                        <p>Loading...</p>
-                    )}
+                        'Loading...'
+                    )}</p>
                 </div>
             </div>
         </div>
