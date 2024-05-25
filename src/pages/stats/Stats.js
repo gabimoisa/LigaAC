@@ -25,8 +25,14 @@ const Stats = () => {
     const { allTimeCleanFiles, allTimeInfectedFiles, allTimeUnknownFiles } = useAllTimeFileStats();
 
     const [timeFrame, setTimeFrame] = useState('today');
-    const [chartData, setChartData] = useState({});
-    const [urlData, setUrlData] = useState({});
+    const [chartData, setChartData] = useState({
+        labels: [],
+        datasets: []
+    });
+    const [urlData, setUrlData] = useState({
+        labels: [],
+        datasets: []
+    });
 
     useEffect(() => {
         let labels = [];
@@ -35,7 +41,6 @@ const Stats = () => {
         let unknownData = [];
         let visitedUrlData = [];
         let blockedUrlData = [];
-        
 
         switch (timeFrame) {
             case 'today':
@@ -127,7 +132,7 @@ const Stats = () => {
             }
         }
     });
-    
+
     const content = (
         <div className="stats">
             <h2>Scan Statistics</h2>
@@ -146,13 +151,13 @@ const Stats = () => {
                     <p>No scan data available. Start scanning files to see stats here.</p>
                 ) : (
                     <>
-                <h3>
-                    {timeFrame === 'today' ? "Today's File Data" :
-                        timeFrame === 'lastWeek' ? "Last Week's File Data" :
-                            timeFrame === 'lastMonth' ? "Last Month's File Data" :
-                                timeFrame === 'lastSixMonths' ? "Last Six Months' File Data" :
-                                "All Time File Data"}
-                </h3>
+                        <h3>
+                            {timeFrame === 'today' ? "Today's File Data" :
+                                timeFrame === 'lastWeek' ? "Last Week's File Data" :
+                                    timeFrame === 'lastMonth' ? "Last Month's File Data" :
+                                        timeFrame === 'lastSixMonths' ? "Last Six Months' File Data" :
+                                            "All Time File Data"}
+                        </h3>
                         <Bar data={chartData} options={getChartOptions(true)} />
                     </>
                 )}
@@ -162,13 +167,13 @@ const Stats = () => {
                     <p>No URL data available. Start visiting URLs to see stats here.</p>
                 ) : (
                     <>
-                    <h3>
-                    {timeFrame === 'today' ? "Today's URL Data" :
-                        timeFrame === 'lastWeek' ? "Last Week's URL Data" :
-                            timeFrame === 'lastMonth' ? "Last Month's URL Data" :
-                                timeFrame === 'lastSixMonths' ? "Last Six Months' URL Data" :
-                                "All Time URL Data"}
-                </h3>
+                        <h3>
+                            {timeFrame === 'today' ? "Today's URL Data" :
+                                timeFrame === 'lastWeek' ? "Last Week's URL Data" :
+                                    timeFrame === 'lastMonth' ? "Last Month's URL Data" :
+                                        timeFrame === 'lastSixMonths' ? "Last Six Months' URL Data" :
+                                            "All Time URL Data"}
+                        </h3>
                         <Bar data={urlData} options={getChartOptions(true)} />
                     </>
                 )}
