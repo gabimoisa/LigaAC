@@ -7,6 +7,7 @@ import { goToTab } from "../../services/background/navigation";
 import ScanFile from "../../services/common/scan-file";
 import ScanHistoryContext from "../../providers/ScanHistoryProvider";
 import DLPScanResult from "./DLPScanResult";
+import dropCloudImg from '../../assets/images/popup/icon-drop-cloud.gif';
 
 import "./Popup.scss";
 
@@ -113,6 +114,11 @@ const Popup = () => {
         };
 
         reader.readAsArrayBuffer(file);
+      }
+    } else if(event.type === "dragleave") {
+      const {currentTarget, relatedTarget} = event;
+      if(!currentTarget.contains(relatedTarget)) {
+        setDropOverlayActive(false);
       }
     }
   };
@@ -234,10 +240,13 @@ const Popup = () => {
       className="popup--wrapper"
       onDrop={handleDragAndDrop}
       onDragOver={handleDragAndDrop}
+      onDragLeave={handleDragAndDrop}
     >
-      <div
-        className={`drop-overlay ${dropOverlayActive ? "active" : ""}`}
-      ></div>
+      {dropOverlayActive && 
+        ( <div className="drop-overlay">
+            <img src={dropCloudImg} className="img-fluid" alt="Drop File Popup" />
+          </div>
+        )}
       <div className="popup--header">
         <div className="popup--header__logo"></div>
         <div className="popup--header__buttons">

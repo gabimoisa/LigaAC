@@ -185,7 +185,7 @@
 
 .drop-overlay {
   background-color: rgba(40, 40, 40, .8);
-  display: none;
+  display: flex;
   height: 100%;
   justify-content: center;
   left: 0;
@@ -194,8 +194,4 @@
   top: 0;
   width: 100%;
   z-index: 1000;
-}
-
-.drop-overlay.active {
-  display: flex;
 }
