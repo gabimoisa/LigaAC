@@ -34,7 +34,7 @@ export const DomainHistoryProvider = ({ children }) => {
         (async () =>{
             try {
                 await domainHistory.init();
-                setDomains(...domainHistory.domains);
+                setDomains(domainHistory.domains);
             } catch (error) {
                 console.warn(error);
             }

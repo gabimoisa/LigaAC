@@ -109,9 +109,7 @@ const Popup = () => {
             try {
                 const response = await sendDomainToApi();
                 console.log(response);
-                if(response !== "Unknown")
-                    setApiResponse(response[0].assessment.charAt(0).toUpperCase() + response[0].assessment.slice(1));
-                else setApiResponse(response);
+                setApiResponse(response);
             } catch (error) {
                 console.error("Error fetching data from API:", error);
             }
@@ -148,7 +146,6 @@ const Popup = () => {
             {apiResponse ? <span style={{color: getColorByRiskLevel(apiResponse), fontWeight: 'bold'}}> {apiResponse} </span> : " Loading..." }
         </div>
 
-        {/* TODO:::: SAVE THE DOMAINS IN LOCALSTORAGE */}
 
     </div>;
 };

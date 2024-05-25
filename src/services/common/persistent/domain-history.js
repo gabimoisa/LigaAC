@@ -62,8 +62,10 @@ async function load() {
  * @param newData
  */
 function merge(newData) {
-    if (newData && Array.isArray(newData.domains)) {
-        this.domains = this.domains.concat(newData.domains);
+    for (let key in newData) {
+        if (Object.prototype.hasOwnProperty.call(newData, key)) {
+            this[key] = newData[key];
+        }
     }
 }
 
@@ -85,7 +87,6 @@ async function save() {
 }
 
 async function addDomain(domain) {
-    console.log('domain', domain)
     this.domains.push(domain);
     await this.save();
     console.log('Current domains after adding:', this.domains);
