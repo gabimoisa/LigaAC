@@ -43,23 +43,24 @@ export const sendDomainToApi = async () => {
     });
 };
 
-export const getColorByRiskLevel = (riskLevel) => {
-    switch (riskLevel.toLowerCase()) {
-        case 'high risk' || 'malicious':
-            return '#d00400';
-        case 'suspicious':
-            return '#fdbd0e';
-        case 'moderate risk' || 'likely malicious':
-            return '#ed6707';
-        case 'low risk' || 'no threat':
-            return '#008a00';
-        case 'trustworthy' || 'benign':
-            return '#1c6bfc';
-        case 'unknown':
-            return '#313c4d';
-        default:
-            return '#000000'; // Default color
+export const getAssessmentStyle = (assessment) => {
+    switch (assessment.toLowerCase()) {
+    case 'high risk' || 'malicious':
+        return { color: '#d00400', fontWeight: 'bold' };
+    case 'suspicious':
+        return { color: '#fdbd0e', fontWeight: 'bold' };
+    case 'moderate risk' || 'likely malicious':
+        return { color: '#ed6707', fontWeight: 'bold' };
+    case 'low risk' || 'no threat':
+        return { color: '#008a00', fontWeight: 'bold' };
+    case 'trustworthy' || 'benign':
+        return { color: '#1c6bfc', fontWeight: 'bold' };
+    case 'unknown':
+        return { color: '#313c4d', fontWeight: 'bold' };
+    default:
+        return {};
     }
-};
+  };
+
 
 
