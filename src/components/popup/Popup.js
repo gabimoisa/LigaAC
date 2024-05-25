@@ -59,10 +59,10 @@ const Popup = () => {
 
     const scanResultsDom = useMemo(() => {
         if (files.length === 0) {
-            return <p className="scan-item">No scans available.</p>;
+            return <p className="history-item">No scans available.</p>;
         }
         return files.slice(0, 3).map((scannedFile, index) => (
-            <p key={index} className="scan-item">
+            <p key={index} className="history-item">
                 <span>{scannedFile.fileName}</span>
                 <span className={`mcl-icon ${getStatusIcon(scannedFile.status)}`}></span>
             </p>
@@ -96,15 +96,15 @@ const Popup = () => {
 
             <div className="popup-section">
                 <div className="popup-section__header">Scan History</div>
-                <div className="popup-box scan-history-list">
+                <div className="popup-box history-list">
                     {scanResultsDom}
                 </div>
             </div>
 
             <div className="popup-section">
                 <div className="popup-section__header">Website Reputation</div>
-                <div className="popup-box scan-history-list">
-                    <p className='scan-item'>{apiResponse ? (
+                <div className="popup-box history-list">
+                    <p className='history-item'>{apiResponse ? (
                         <span style={getAssessmentStyle(apiResponse)}>
                             {apiResponse}
                         </span>

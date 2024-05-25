@@ -4,7 +4,7 @@
 .popup-wrapper {
   width: 350px;
   padding: 20px;
-  background: #ffffff;
+  background: #111f42;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
@@ -19,8 +19,8 @@
   &__logo {
     font-size: 20px;
     font-weight: bold;
-    color: #000;
-    background-image: url('../../assets/images/metadefender-chrome-black.svg');
+    color: #fff;
+    background-image: url('../../assets/images/metadefender-chrome.svg');
     background-size: contain;
     background-repeat: no-repeat;
     width: 117px;
@@ -28,6 +28,7 @@
   }
 
   &__btn {
+    color: #fff;
     background: none;
     border: none;
     cursor: pointer;
@@ -40,47 +41,49 @@
   &__header {
     font-size: 18px;
     margin-bottom: 10px;
+    color: #fff;
   }
 }
 
 .popup-box {
-  border: 1px solid #dcdcdc;
+  border: 1px solid #111f42;  // Match the border color to the background
   border-radius: 5px;
-  background: #f9f9f9;
-  
+  background: #111f42;  // Match the background color
+  color: #fff;  // Set the text color to white
 }
 
-// Scan History List Styles
-.scan-history-list {
-  border-top: 1px solid $colorGreyLight;
-  border-bottom: 1px solid $colorGreyLight;
+// Scan History and Domain Reputation Styles
+.history-list {
+  border: none;
+  background-color: #111f42;
+  padding: 0; // Remove padding from the list
   margin: 0;
 
-  .scan-item {
+  .history-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    margin: 10px;
+    margin: 10px 0; // Adjust the margin to avoid extra spacing
     border: 1px solid #dcdcdc;
     border-radius: 5px;
     background: #ffffff;
+    color: #000;  // Set the text color to black for contrast
     box-sizing: border-box; // Ensures padding and border are included in the width
-
   }
 }
 
 // Domain Reputation Styles
 .domain-reputation {
+  padding: 15px;
+  border: 1px solid #dcdcdc;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #000;  // Set the text color to black for contrast
   display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid #dcdcdc;
-    border-radius: 5px;
-    background: #ffffff;
-    box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  text-align: center; // Center text vertically and horizontally
 }
 
 .mcl-icon {
