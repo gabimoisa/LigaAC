@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 
 import SidebarLayout from '../../components/common/sidebar-layout/SidebarLayout';
-import ScanHistoryTable from '../../components/scan-history-table/ScanHistoryTable';
+import DomainHistoryTable from '../../components/domain-history-table/DomainHistoryTable';
 
 import GAContext from '../../providers/GAProvider';
 
@@ -36,7 +36,7 @@ const DomainReputation = () => {
         gaTrackEvent(['_trackEvent', config.gaEventCategory.name, config.gaEventCategory.action.buttonClickd, config.gaEventCategory.label.clearHistoryButton, config.gaEventCategory.value.deleteItemButton]);
     };
 
-    const scanHistoryTableData = useMemo(() => {
+    const domainHistoryTableData = useMemo(() => {
         return domains?.map((item) => ({
             domainName: item.domainName,
             reputation: item.reputation,
@@ -84,7 +84,7 @@ const DomainReputation = () => {
                 </Col>
             </Row>
 
-            {/* <ScanHistoryTable data={scanHistoryTableData} filterBy={searchValue} removeFile={removeFile} getStatusIcon={getStatusIcon} /> */}
+            <DomainHistoryTable data={domainHistoryTableData} filterBy={searchValue} removeDomain={removeDomain} />
         </React.Fragment>;
     
   return <SidebarLayout

@@ -87,7 +87,7 @@ async function save() {
 }
 
 async function addDomain(domain) {
-    this.domains.push(domain);
+    this.domains.unshift(domain);
     await this.save();
     console.log('Current domains after adding:', this.domains);
 
