@@ -32,9 +32,28 @@
             font-weight: 600;
         }
 
-        select {
-            padding: 5px;
-            border: 1px solid $colorGrey;
+        .button-group {
+            display: flex;
+            gap: 10px;
+
+            .timeframe-button {
+                padding: 5px 10px;
+                border: 1px solid $colorGrey;
+                background-color: $colorWhite;
+                cursor: pointer;
+                transition: background-color 0.3s ease, color 0.3s ease;
+                text-align: center;
+
+                &:hover {
+                    background-color: $colorGreyLighter;
+                }
+
+                &.active {
+                    background-color: rgb(17, 31, 66);
+                    color: $colorWhite;
+                    border-color: rgb(17, 31, 66);
+                }
+            }
         }
     }
 
@@ -43,7 +62,6 @@
         max-width: 700px;
         background-color: $colorGreyLighter;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
         margin: 0 auto;
         margin-bottom: 30px;
         padding: 20px;

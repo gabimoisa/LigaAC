@@ -137,14 +137,39 @@ const Stats = () => {
         <div className="stats">
             <h2>Scan Statistics</h2>
             <div className="timeframe-selector">
-                <label htmlFor="timeframe">Select Time Frame:</label>
-                <select id="timeframe" onChange={(e) => setTimeFrame(e.target.value)} value={timeFrame}>
-                    <option value="today">Today</option>
-                    <option value="lastWeek">Last Week</option>
-                    <option value="lastMonth">Last Month</option>
-                    <option value="lastSixMonths">Last Six Months</option>
-                    <option value="allTime">All Time</option>
-                </select>
+                <label>Select Time Frame:</label>
+                <div className="button-group">
+                    <button
+                        className={`timeframe-button ${timeFrame === 'today' ? 'active' : ''}`}
+                        onClick={() => setTimeFrame('today')}
+                    >
+                        Today
+                    </button>
+                    <button
+                        className={`timeframe-button ${timeFrame === 'lastWeek' ? 'active' : ''}`}
+                        onClick={() => setTimeFrame('lastWeek')}
+                    >
+                        Last Week
+                    </button>
+                    <button
+                        className={`timeframe-button ${timeFrame === 'lastMonth' ? 'active' : ''}`}
+                        onClick={() => setTimeFrame('lastMonth')}
+                    >
+                        Last Month
+                    </button>
+                    <button
+                        className={`timeframe-button ${timeFrame === 'lastSixMonths' ? 'active' : ''}`}
+                        onClick={() => setTimeFrame('lastSixMonths')}
+                    >
+                        Last Six Months
+                    </button>
+                    <button
+                        className={`timeframe-button ${timeFrame === 'allTime' ? 'active' : ''}`}
+                        onClick={() => setTimeFrame('allTime')}
+                    >
+                        All Time
+                    </button>
+                </div>
             </div>
             <div className="chart">
                 {files.length === 0 ? (
