@@ -128,7 +128,7 @@ const Popup = () => {
         }
 
         return (
-            <table className="table">
+            <table className="popup-table">
                 <thead>
                     <tr>
                         <th>File Name</th>
