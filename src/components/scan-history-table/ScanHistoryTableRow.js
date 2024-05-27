@@ -58,11 +58,9 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
                 </div>
             </td>
             <td>{scanTime}</td>
-            <td>
+            <td className='combined-td'>
                 <a href={scanUrl} className={cleanClassName}>{results}</a>
-            </td>
-            <td className="p-0">
-                <span className={`${getStatusIcon(status)} ${cleanClassName}`} />
+                <span className={`${getStatusIcon(status)} ${cleanClassName} p-0`} />
             </td>
             <td>
                 <a href={scanUrlSand} className={Sandbox}>{sandboxVerdict}</a>

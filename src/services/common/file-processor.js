@@ -322,8 +322,10 @@ class FileProcessor {
         let response;
         try {
             response = await MetascanClient.setAuth(apikeyInfo.data.apikey).hash.lookup(file.md5);
-
-            if (!response || !response.data_id || response.error) {
+            console.log(response, useSandbox, response.additional_info == 'sandbox');
+            if (!response || !response.data_id || response.error || (useSandbox == false && response?.additional_info == "sandbox"
+            )) {
+                console.log('am intrat');
                 response = await MetascanClient.setAuth(apikeyInfo.data.apikey).file.upload({
                     fileName: file.fileName,
                     fileData,
@@ -331,6 +333,7 @@ class FileProcessor {
                     canBeSanitized: file.canBeSanitized,
                     sandbox: useSandbox
                 });
+                console.log(response);
             }
         } catch (error) {
             console.warn(error);
