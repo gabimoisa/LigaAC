@@ -86,31 +86,32 @@ const Popup = () => {
     }, []);
 
     return (
-        <div className="popup-wrapper">
+        <div>
             <div className="popup-header">
                 <div className="popup-header__logo"></div>
                 <button className="popup-header__btn" onClick={goToSettings}>
                     <span className="icon-cog text-14"></span>
                 </button>
             </div>
-
-            <div className="popup-section">
-                <div className="popup-section__header">Scan History</div>
-                <div className="popup-box history-list">
-                    {scanResultsDom}
+            <div className="popup-wrapper">
+                <div className="popup-section">
+                    <div className="popup-section__header">Scan History</div>
+                    <div className="popup-box history-list">
+                        {scanResultsDom}
+                    </div>
                 </div>
-            </div>
 
-            <div className="popup-section">
-                <div className="popup-section__header">Website Reputation</div>
-                <div className="popup-box history-list">
-                    <p className='history-item'>{apiResponse ? (
-                        <span style={getAssessmentStyle(apiResponse)}>
-                            {apiResponse}
-                        </span>
-                    ) : (
-                        'Loading...'
-                    )}</p>
+                <div className="popup-section">
+                    <div className="popup-section__header">Website Reputation</div>
+                    <div className="popup-box history-list">
+                        <p className='history-item'>{apiResponse ? (
+                            <span style={getAssessmentStyle(apiResponse)}>
+                                {apiResponse}
+                            </span>
+                        ) : (
+                            'Loading...'
+                        )}</p>
+                    </div>
                 </div>
             </div>
         </div>
