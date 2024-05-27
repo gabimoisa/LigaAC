@@ -41,34 +41,46 @@
                 border: 1px solid $colorGrey;
                 background-color: $colorWhite;
                 cursor: pointer;
-                transition: background-color 0.3s ease, color 0.3s ease;
+                transition: background-color 0.3s ease, box-shadow 0.3s ease;
                 text-align: center;
-
+            
                 &:hover {
-                    background-color: $colorGreyLighter;
+                    background-color: darken($colorGreyLighter, 5%);
                 }
-
+            
                 &.active {
                     background-color: rgb(17, 31, 66);
                     color: $colorWhite;
                     border-color: rgb(17, 31, 66);
                 }
             }
+            
+            
+            
         }
     }
 
     .chart {
+        position: relative;
         width: 100%;
-        max-width: 700px;
+        max-width: 800px;
         background-color: $colorGreyLighter;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin: 0 auto;
-        margin-bottom: 30px;
-        padding: 20px;
-
+        margin: 10px 0 auto;
+        padding: 10px;
+    
         canvas {
             width: 100% !important;
-            height: auto !important;
+            height: 400px !important;
+        }
+    
+        &::after {
+            content: "";
+            display: block;
+            height: 2px;
+            background: linear-gradient(to right, $colorWhite, $colorGreyDark, $colorWhite);
+            width: 80%;
+            margin: 20px auto 0;
         }
     }
 
