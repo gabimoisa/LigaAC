@@ -77,6 +77,15 @@
                     }
                 }
 
+                &:last-of-type {
+                    display: flex;
+                    justify-content: center;
+                    
+                    a {
+                        font-size: 20px;
+                    }
+                }
+
                 &:nth-of-type(4) {
                     padding: 18px 20px 17px !important;
                 }

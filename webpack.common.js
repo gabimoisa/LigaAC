@@ -117,6 +117,7 @@ module.exports = {
                 { from: './src/assets/icons/icon-128.png' },
                 { from: './src/assets/images/', to: 'images' },
                 { from: './src/_locales', to: '_locales' },
+                { from: './src/components/input-popup/InputPopup.js'}
             ],
         }),
         new webpack.ProvidePlugin({
