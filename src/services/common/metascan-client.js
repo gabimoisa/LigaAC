@@ -232,13 +232,14 @@ async function recursiveLookup(dataId, pollingInterval, resolve) {
  * @param {string} sha1
  * @returns {Promise}
  */
-function fileSandboxLookup(sha1) {
+async function fileSandboxLookup(sha1) {
     const restEndpoint = `${MCL.config.metadefenderDomain}/${MCL.config.metadefenderVersion}/hash/${sha1}/sandbox`;
     const options = {
         headers: { ...authHeader }
     };
 
-    return fetch(restEndpoint, options).then(data => data.json());
+    const data = await fetch(restEndpoint, options);
+    return await data.json();
 }
 
 /**

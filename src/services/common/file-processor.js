@@ -19,11 +19,17 @@ class FileProcessor {
      * 
      * @param {string} linkUrl file url 
      * @param {*} downloadItem https://developer.chrome.com/extensions/downloads#type-DownloadItem
+     * @param {boolean} useSandbox 
      */
     async processTarget(linkUrl, downloadItem, useSandbox) {
         await apikeyInfo.load();
         if (!apikeyInfo.data.apikey) {
             BrowserNotification.create(chrome.i18n.getMessage('undefinedApiKey'));
+            return;
+        }
+
+        if (linkUrl.match(/^chrome/) || linkUrl.match(/^chrome:\/\/extensions\//) || linkUrl.match(/^https:\/\/chromewebstore\.google\.com\//)) {
+            chrome.i18n.getMessage('unableToScanChromeExtension');
             return;
         }
         
@@ -322,10 +328,8 @@ class FileProcessor {
         let response;
         try {
             response = await MetascanClient.setAuth(apikeyInfo.data.apikey).hash.lookup(file.md5);
-            console.log(response, useSandbox, response.additional_info == 'sandbox');
-            if (!response || !response.data_id || response.error || (useSandbox == false && response?.additional_info == "sandbox"
-            )) {
-                console.log('am intrat');
+
+            if (!response || !response.data_id || response.error || (useSandbox && response.sandbox == false)) {
                 response = await MetascanClient.setAuth(apikeyInfo.data.apikey).file.upload({
                     fileName: file.fileName,
                     fileData,
@@ -333,7 +337,6 @@ class FileProcessor {
                     canBeSanitized: file.canBeSanitized,
                     sandbox: useSandbox
                 });
-                console.log(response);
             }
         } catch (error) {
             console.warn(error);

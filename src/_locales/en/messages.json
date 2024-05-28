@@ -185,6 +185,9 @@
     "unsupportedUrl": {
       "message": "URL not supported.\nYou may be able to scan the file by downloading it while 'Scan Downloads' is enabled"
     },
+    "unableToScanChromeExtension": {
+      "message": "We are unable to scan chrome extensions"
+    },
     "errorWhileDownloading": {
       "message": "We encountered an error while downloading this file. Please try again",
       "description": ""

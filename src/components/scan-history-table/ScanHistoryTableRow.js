@@ -57,18 +57,28 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
                     <small className="d-block">{hash}</small>
                 </div>
             </td>
-            <td>{scanTime}</td>
-            <td className='combined-td'>
-                <a href={scanUrl} className={cleanClassName}>{results}</a>
-                <span className={`${getStatusIcon(status)} ${cleanClassName} p-0`} />
-            </td>
+            <td><div className='td-data'>{scanTime}</div></td>
             <td>
-                <a href={scanUrlSand} className={Sandbox}>{sandboxVerdict}</a>
+                <div className='td-data'>
+                    <a href={scanUrl} className={cleanClassName}>{results}</a>
+                </div>
             </td>
             <td className="p-0">
-                <a href="#" onClick={removeFile} title={chrome.i18n.getMessage('deleteTooltip')} className='trash'>
-                    <span className={trashClassName} />
-                </a>
+                <div className='td-data'>
+                    <span className={`${getStatusIcon(status)} ${cleanClassName}`} />
+                </div>
+            </td>
+            <td>
+                <div className='td-data'>
+                    <a href={scanUrlSand} className={Sandbox}>{sandboxVerdict}</a>
+                </div>
+            </td>
+            <td className="p-0">
+                <div className='td-data'>
+                    <a href="#" onClick={removeFile} title={chrome.i18n.getMessage('deleteTooltip')} className='trash'>
+                        <span className={trashClassName} />
+                    </a>
+                </div>
             </td>
         </tr>
     );

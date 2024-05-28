@@ -6,6 +6,12 @@
 .table {
     border-color: $colorGrey;
 
+@include media-breakpoint-down(md) {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+}
+
     thead {
         background-color: $colorGreyLighter;
     }
@@ -18,11 +24,6 @@
     
     tr {
         border-bottom: 1px solid $colorGrey;
-
-        @include media-breakpoint-down(md) {
-            display: flex;
-            flex-direction: column;
-        }
 
         th {
             border-bottom-width: 1px !important;
@@ -42,39 +43,43 @@
             @include media-breakpoint-down(md) {
                 display: flex;
                 flex-direction: row;
-                justify-content: space-between;
-                border-bottom: 0.5px solid $colorGreyDarker !important;
+                align-items: flex-start;
+                border-bottom: 1px solid $colorGrey !important;
 
                 &:nth-of-type(1)::before {
                     content: "FILENAME";
                     font-weight: 800;
+                    flex: 0 0 auto;
                 }
 
                 &:nth-of-type(2)::before {
                     content: "SCAN TIME";
                     font-weight: 800;
-                    display: inline-block;
-                    margin-right: 1%;
+                    flex: 0 0 auto;
                 }
 
                 &:nth-of-type(3)::before{
                     content: "SCAN RESULTS";
                     font-weight: 800;
-                    justify-content: flex-start !important;
+                    flex: 0 0 auto;
                 }
 
-                // &:nth-of-type(3) {
-                //     justify-content: flex-end !important;
-                // }
+                &:nth-of-type(4)::before{
+                    content: "SCAN RESULTS";
+                    font-weight: 800;
+                    flex: 0 0 auto;
+                }
 
-                &:nth-of-type(4)::before {
+                &:nth-of-type(5)::before {
                     content: "SANDBOX VERDICT";
                     font-weight: 800;
+                    flex: 0 0 auto;
                 }
 
-                // .combined-td {
-                //     justify-content: flex-end !important;
-                // }
+                .td-data {
+                    flex: 1; 
+                    text-align: right; 
+                }
             }
 
             vertical-align: middle;
