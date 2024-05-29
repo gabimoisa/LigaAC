@@ -96,11 +96,8 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-
-document.querySelectorAll('input[type="file"]').forEach(input => {
-    try {
-
-        
+const processInput = (input) => {
+  try {
     input.addEventListener('change', function(event) {
       const lastDismissedTime = localStorage.getItem('popupDismissedTime');
       const now = new Date().getTime();
@@ -108,7 +105,7 @@ document.querySelectorAll('input[type="file"]').forEach(input => {
 
       if (lastDismissedTime && (now - lastDismissedTime) < seventyTwoHours) {
         return;
-    }
+      }
 
       const wrapperDiv = document.createElement("div");
       wrapperDiv.classList.add("popup-fullpage");
@@ -159,4 +156,20 @@ document.querySelectorAll('input[type="file"]').forEach(input => {
     } catch (error) {
         console.error('Error processing file inputs normal:', error);
     }
-  });
+}
+
+// error if iframe does not meet same origin policy
+document.querySelectorAll('iframe').forEach(frame => {
+  try {
+      const frameDocument = frame.contentDocument || frame.contentWindow.document;
+      frameDocument.querySelectorAll('input[type="file"]').forEach(input => {
+          processInput(input);
+      });
+  } catch (error) {
+      console.error('Error processing file inputs in frame:', error);
+  }
+});
+
+document.querySelectorAll('input[type="file"]').forEach(input => {
+  processInput(input);
+});

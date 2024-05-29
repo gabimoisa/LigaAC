@@ -35,7 +35,7 @@ async function processUploadedFile(fileURL) {
     try {
         await FileProcessor.processTarget(fileURL, null, settings.data.scanUploads);
     } catch (e) {
-        console.warning(e);
+        console.warn(e);
     }
 }
 
