@@ -62,8 +62,12 @@
       .list-group-item {
         padding: 10px 20px;
         background: $colorBlack;
+        border-radius: 10px;
         border-bottom: 1px solid $colorGrayFDark;
         color: $colorWhite;
+        opacity: 0;
+        animation: fade-in 800ms forwards;
+        animation-delay: 250ms;
         &:not(:last-of-type) {
           border-bottom: 2px solid $colorGrayFDark;
         }
@@ -85,6 +89,7 @@
       }
 
       thead {
+        animation: fade-in 800ms forwards;
         padding: 0px 20px;
         tr {
           color: $colorWhite;
@@ -111,6 +116,7 @@
       }
 
       tbody {
+
         tr:first-child {
           border-top: 1px solid $colorGrayFDark;
         }
@@ -129,11 +135,26 @@
           width: 120px;
         }
 
+        @keyframes dataFound-color-change {
+          from {background-color: transparent;}
+          to {background-color: $secondaryColor;}
+        }
+
+        @keyframes fade-in {
+          from {opacity: 0;}
+          to {opacity: 100;}
+        }
+
         .dataFound {
           cursor: pointer;
+          border-radius: 10px;
           a{
             color: $colorWhite;
           }
+        }
+
+        .dataFound:hover{
+          animation: dataFound-color-change 500ms forwards;
         }
       }
     }

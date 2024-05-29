@@ -1,12 +1,15 @@
 import React from 'react';
 
-const DLPScanResult = ({ scannedFile, sum_hits, goToHistory, getStatusIcon }) => {
+const DLPScanResult = ({ scannedFile, sum_hits, goToHistory, getStatusIcon, getTitleDlp }) => {
   return (
     <>
       {scannedFile.dlp_info ? (
         scannedFile.dlp_info.verdict ? (
           scannedFile.dlp_info.hits ? (
-            <div className="dataFound">
+            <div 
+              className="dataFound" 
+              title={getTitleDlp(scannedFile?.dlp_info)}
+            >
               <a onClick={goToHistory}>
                 <span
                   dangerouslySetInnerHTML={{

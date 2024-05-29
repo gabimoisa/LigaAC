@@ -63,6 +63,31 @@ const Popup = () => {
     return "icon-help";
   };
 
+  const getTitleDlp = (dlp_info) => {
+    if (dlp_info) {
+      if (dlp_info.verdict == 1) {
+        if (dlp_info?.hits && Object.keys(dlp_info?.hits)) {
+          let message = 'Sensitive Data Found:\n';
+
+          Object.keys(dlp_info.hits).forEach((key) => {
+            message += dlp_info.hits[key].display_name + '\n';
+          });
+          
+          return message;
+        
+        } else {
+          return "Failed to fetch sensitive data."
+        }
+      
+      } else {
+        return "No sensitive data found."
+      }
+
+    } else {
+      return "undefined";
+    }
+  }
+
   const goToHistory = () => {
     handleGaTrack();
     goToTab("history");
@@ -181,6 +206,7 @@ const Popup = () => {
               sum_hits={sum_hits}
               goToHistory={goToHistory}
               getStatusIcon={getStatusIcon}
+              getTitleDlp={getTitleDlp}
             />
           </td>
         </tr>
