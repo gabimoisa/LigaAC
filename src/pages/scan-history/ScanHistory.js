@@ -85,7 +85,8 @@ const ScanHistory = () => {
             useDLP: item?.useDLP,
             sanitizedFileURL: item?.sanitizedFileURL,
             sanitizationSuccessfull: item?.sanitizationSuccessfull,
-            dlp_info: item?.dlp_info
+            dlp_info: item?.dlp_info,
+            sanitized: item?.sanitized
         }));
     }, [files]);
 

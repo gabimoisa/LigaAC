@@ -207,10 +207,11 @@ class FileProcessor {
             if (info?.process_info?.post_processing?.sanitization_details?.description && !Object.prototype.hasOwnProperty.call(file, 'sanitizationSuccessfull')) {
                 const sanitizationSuccessfull = postProcessing?.sanitization_details?.description === 'Sanitized successfully.';
                 file.sanitizationSuccessfull = sanitizationSuccessfull;
-            }
-
-            file.dlp_info = info?.dlp_info;   
+            } 
         }
+
+        file.dlp_info = info?.dlp_info;  
+        file.sanitized = info?.sanitized;
         
         await scanHistory.updateFileById(file.id, file);
         await scanHistory.save();

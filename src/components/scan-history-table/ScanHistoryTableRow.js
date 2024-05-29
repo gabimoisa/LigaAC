@@ -16,6 +16,7 @@ const ScanHistoryTableRow = ({
   useDLP,
   sanitizedFileURL,
   dlpInfo,
+  sanitized
 }) => {
   const [isTrashDisplayed, setIsTrashDisplayed] = useState(false);
   const [isDownloadDisplayed, setIsDownloadDisplayed] = useState(false);
@@ -96,6 +97,7 @@ const ScanHistoryTableRow = ({
           useDLP={useDLP}
           downloadSanitizedFile={downloadSanitizedFile}
           sanitizedFileURL={sanitizedFileURL}
+          sanitized={sanitized}
         />
       </td>
       <td className="p-0">
@@ -125,6 +127,7 @@ ScanHistoryTableRow.propTypes = {
   useDLP: PropTypes.bool,
   sanitizedFileURL: PropTypes.string,
   dlpInfo: PropTypes.object,
+  sanitized: PropTypes.object
 };
 
 export default ScanHistoryTableRow;

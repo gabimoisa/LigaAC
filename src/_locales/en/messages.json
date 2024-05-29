@@ -362,16 +362,19 @@
       "description": ""
     },
     "sanitizedVersionExpired": {
-      "message": "Download link expired."
+      "message": "Download link expired"
+    },
+    "sanitizedError": {
+      "message": "Unexpected error while sanitizing the file"
     },
     "noDLP": {
-      "message": "No DLP used."
+      "message": "No DLP used"
     },
     "scanDLP": {
       "message": "Scan with DLP"
     },
     "dlpOk": {
-      "message": "No sensitive data found."
+      "message": "No sensitive data found"
     },
     "dlpDetections": {
       "message": "Sensitive data detected: "

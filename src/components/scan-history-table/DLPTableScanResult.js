@@ -1,23 +1,35 @@
 import React from 'react';
 
-const DLPTableScanResult = ({ dlpInfo, getStatusIcon, status, useDLP, downloadSanitizedFile, sanitizedFileURL }) => {
+const DLPTableScanResult = ({ dlpInfo, getStatusIcon, status, useDLP, downloadSanitizedFile, sanitizedFileURL, sanitized }) => {
   return (
     <>
       {dlpInfo ? (
         dlpInfo.verdict ? (
           dlpInfo.hits ? (
             <div className="sensitiveData">
-              {sanitizedFileURL ? (
-                <div>
-                  <button onClick={downloadSanitizedFile} className="downloadSanitizedButton">
-                    <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersion') }}></span>
-                    <span className="icon-down"></span>
-                  </button>
-                </div>
+              {sanitized?.result == 'Allowed' ? (
+                sanitizedFileURL ? (
+                  <div>
+                    <button onClick={downloadSanitizedFile} className="downloadSanitizedButton">
+                      <span dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersion') }}></span>
+                      <span className="icon-down"></span>
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <span className="downloadDlpInfo" dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersionExpired') }}></span>
+                  </div>
+                )
+              ) : (
+                sanitized?.result == 'Error' ? (
+                  <div>
+                    <span className="downloadDlpInfo" dangerouslySetInnerHTML={{ __html: sanitized.reason}}></span>
+                  </div>
               ) : (
                 <div>
-                  <span className="downloadExpired" dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedVersionExpired') }}></span>
+                    <span className="downloadDlpInfo" dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('sanitizedError') }}></span>
                 </div>
+              )
               )}
             </div>
           ) : (
