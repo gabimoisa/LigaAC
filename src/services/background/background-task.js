@@ -16,9 +16,42 @@ import SafeUrl from './safe-url';
 import BrowserNotification from '../common/browser/browser-notification';
 import BrowserStorage from '../common/browser/browser-storage';
 
+import BlockWebsites from '../../components/popup/BlockWebsites.js'
+import React, { useState, useEffect } from 'react';
+
 import '../common/ga-tracking';
 
 const MCL_CONFIG = MCL.config;
+const blockDomain = (tabId) => {
+    chrome.scripting.executeScript({
+        target: { tabId: tabId },
+        function: () => {
+            const style = document.createElement('style');
+            style.innerHTML = `
+                body {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    background-color: #141E2F;
+                    margin: 0;
+                    color: #fff;
+                }
+                h1 {
+                    font-family: Arial, sans-serif;
+                    font-size: 32px;
+                    font-weight: bold;
+                    text-align: center;
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.innerHTML = "<h1>Website Blocked</h1>";
+        }
+    });
+};
+
+
 
 const contextMenus = {};
 export default class BackgroundTask {
@@ -30,7 +63,25 @@ export default class BackgroundTask {
         this.downloadsManager = new DownloadManager(FileProcessor);
 
         chrome.runtime.onInstalled.addListener(this.onInstallExtensionListener.bind(this));
+        chrome.tabs.onCreated.addListener(this.blockTab.bind(this));
     }
+    
+    blockTab(tab) {
+        chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+            if (changeInfo.status === "complete") {
+                chrome.storage.local.get(['blockedWebsites'], (result) => {
+                    const blockedWebsites = result.blockedWebsites || [];
+    
+                    const url = new URL(tab.url);
+    
+                    if (blockedWebsites.includes(url.hostname)) {
+                        blockDomain(tabId);
+                    }
+                });
+            }
+        });
+    }
+    
     
     async init() {
         try {
@@ -252,7 +303,7 @@ export default class BackgroundTask {
             }
         }
     }
-
+    
 }
 
 export const Task = new BackgroundTask();

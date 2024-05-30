@@ -23,13 +23,11 @@ const BlockedWebsitesPage = () => {
                 setBlockedWebsites(updatedList);
                 setWebsite('');
                 chrome.storage.local.set({ blockedWebsites: updatedList });
-                console.log('Blocked site added:', blockedWebsites);
                 setIsValidWebsite(true); 
             } else {
                 setIsValidWebsite(false);
             }
         } catch (error) {
-            console.log("Invalid URL!");
             setIsValidWebsite(false);
         }
     };
@@ -38,6 +36,17 @@ const BlockedWebsitesPage = () => {
         const updatedList = blockedWebsites.filter((s) => s !== site);
         setBlockedWebsites(updatedList);
         chrome.storage.local.set({ blockedWebsites: updatedList });
+    };
+
+    const handleAddCurrentPage = () => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            const currentUrl = new URL(tabs[0].url).hostname;
+            if (currentUrl && !blockedWebsites.includes(currentUrl)) {
+                const updatedList = [...blockedWebsites, currentUrl];
+                setBlockedWebsites(updatedList);
+                chrome.storage.local.set({ blockedWebsites: updatedList });
+            }
+        });
     };
 
     const content = (
@@ -74,7 +83,7 @@ const BlockedWebsitesPage = () => {
                                     <td>{site}</td>
                                     <td>
                                         <button className="remove-button" onClick={() => handleRemoveWebsite(site)}>
-                                        <i class="icon-trash text-14"></i>
+                                        <i className="icon-trash text-14"></i>
                                         </button>
                                     </td>
                                 </tr>

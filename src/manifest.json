@@ -38,8 +38,7 @@
     "scripting",
     "storage",
     "activeTab",
-    "tabs",
-    "<all_urls>"
+    "tabs"
   ],
   
   "host_permissions": [

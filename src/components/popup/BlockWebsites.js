@@ -3,16 +3,33 @@ import { Link } from 'react-router-dom';
 
 import './BlockWebsites.scss';
 
-const BlockWebsites = () => {
+function BlockWebsites() {
     const [website, setWebsite] = useState('');
     const [blockedWebsites, setBlockedWebsites] = useState([]);
     const [isValidWebsite, setIsValidWebsite] = useState(true);
 
     useEffect(() => {
         chrome.storage.local.get(['blockedWebsites'], (result) => {
-            setBlockedWebsites(result.blockedWebsites || []);
+            const initialWebsites = result.blockedWebsites || [];
+            setBlockedWebsites(initialWebsites);
         });
-    }, []);
+
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            const tab = tabs[0];
+            if (tab && tab.url && !tab.url.startsWith('chrome://')) {
+                try {
+                    const currentUrl = new URL(tab.url).hostname;
+                    if (blockedWebsites.includes(currentUrl)) {
+                        BlockDomain();
+                    }
+                } catch (error) {
+                }
+            }
+        });
+        
+
+    }, [blockedWebsites]);
+
 
     const handleAddWebsite = () => {
         try {
@@ -23,12 +40,11 @@ const BlockWebsites = () => {
                 setBlockedWebsites(updatedList);
                 setWebsite('');
                 chrome.storage.local.set({ blockedWebsites: updatedList });
-                setIsValidWebsite(true); 
+                setIsValidWebsite(true);
             } else {
                 setIsValidWebsite(false);
             }
         } catch (error) {
-            console.log("Invalid URL!");
             setIsValidWebsite(false);
         }
     };
@@ -48,6 +64,19 @@ const BlockWebsites = () => {
                 chrome.storage.local.set({ blockedWebsites: updatedList });
             }
         });
+    };
+
+    const BlockDomain = () => {
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+            chrome.scripting.executeScript({
+                target: { tabId: tabs[0].id },
+                function: blockContent
+            });
+        });
+
+        function blockContent() {
+            document.body.innerHTML = "<h1>Website Blocked</h1>";
+        }
     };
 
     return (
@@ -75,7 +104,7 @@ const BlockWebsites = () => {
                         <div key={index} className="website-entry">
                             <span>{site}</span>
                             <button onClick={() => handleRemoveWebsite(site)}>
-                                <i class="icon-trash text-14"></i>
+                                <i className="icon-trash text-14"></i>
                             </button>
                         </div>
                     ))
