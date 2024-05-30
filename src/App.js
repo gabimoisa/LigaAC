@@ -4,17 +4,15 @@ import { Route, Routes } from 'react-router-dom';
 
 import { SettingsProvider } from './providers/SettingsProvider';
 import { ScanHistoryProvider } from './providers/ScanHistoryProvider';
+import { DomainHistoryProvider } from './providers/DomainHistoryProvider';
 
 import Popup from './components/popup/Popup';
 import About from './pages/about/About';
 import ScanHistory from './pages/scan-history/ScanHistory';
 import Settings from './pages/settings/Settings';
-import DomainRepupation from './pages/domain-reputation/DomainReputation'
-
+import DomainReputation from './pages/domain-reputation/DomainReputation';
 
 import './App.scss';
-import DomainReputation from './pages/domain-reputation/DomainReputation';
-import { DomainHistoryProvider } from './providers/DomainHistoryProvider';
 
 /**
  * Returns a Switch with defined routes for each component/page. 

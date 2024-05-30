@@ -35,6 +35,10 @@
       "message": "There were no results matching your query",
       "description": "The message displayed when no files match the search criteria"
     },
+    "noDomainsFound": {
+      "message": "There were no results matching your query",
+      "description": "The message displayed when no domains match the search criteria"
+    },
     "menuScanHistory": {
       "message": "Scan History",
       "description": ""
@@ -99,6 +103,10 @@
     },
     "deleteHistoryConfirmation": {
       "message": "Are you sure you want to clear all scan history?\nThis action can not be undone",
+      "description": ""
+    },
+    "deleteDomainHistoryConfirmation": {
+      "message": "Are you sure you want to clear all domains scanned?\nThis action can not be undone",
       "description": ""
     },
     "scanDownloads": {

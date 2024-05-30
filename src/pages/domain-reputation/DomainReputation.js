@@ -8,9 +8,12 @@ import GAContext from '../../providers/GAProvider';
 
 import './DomainReputation.scss';
 import DomainHistoryContext from '../../providers/DomainHistoryProvider';
+import ConfigContext from '../../providers/ConfigProvider';
 
 
 const DomainReputation = () => {
+
+    const config = useContext(ConfigContext);
     const { domains, clearDomainHistory, removeDomainHistoryDomain } = useContext(DomainHistoryContext);
     const [ searchValue, setSearchValue ] = useState('');
     const [ totalAccessedDomains, setTotalAccessedDomains ] = useState(domains.length);
@@ -24,7 +27,7 @@ const DomainReputation = () => {
     }, [domains]);
 
     const clearrDomainHistory = async () => {
-        if (confirm(chrome.i18n.getMessage('deleteHistoryConfirmation'))) {
+        if (confirm(chrome.i18n.getMessage('deleteDomainHistoryConfirmation'))) {
             await clearDomainHistory();
             gaTrackEvent(['_trackEvent', config.gaEventCategory.name, config.gaEventCategory.action.buttonClickd, config.gaEventCategory.label.clearHistoryButton, config.gaEventCategory.value.clearHistoryButton]);
         }

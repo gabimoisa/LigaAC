@@ -74,7 +74,6 @@ const Popup = () => {
         const fetchData = async () => {
             try {
                 const response = await sendDomainToApi();
-                console.log(response);
                 setApiResponse(response);
             } catch (error) {
                 console.error("Error fetching data from API:", error);

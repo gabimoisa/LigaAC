@@ -13,13 +13,13 @@ const DomainHistoryTable = ({ data, filterBy, removeDomain }) => {
         }
 
         return data.filter((item) => {
-            return item.fileName.includes(filterBy);
+            return item.domainName.includes(filterBy);
         });
     }, [data, filterBy]);
 
     const tableDom = useMemo(() => {
         if (!processedData?.length) {
-            return <p className="mt-5 text-center" dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('noFilesFound') }} />;
+            return <p className="mt-5 text-center" dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('noDomainsFound') }} />;
         }
 
         return <Table bordered className="mt-4">
