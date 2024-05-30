@@ -105,7 +105,7 @@ const Stats = () => {
                     backgroundColor: UrlConfig.urlChartColors.visitedUrls.backgroundColor,
                     borderColor: UrlConfig.urlChartColors.visitedUrls.borderColor,
                     borderWidth: UrlConfig.borderWidth,
-                    borderRadius: Number.MAX_VALUE,
+                    borderRadius: 0,
                     borderSkipped: false,
                     barThickness: FileConfig.barThickness
                 },
@@ -115,7 +115,7 @@ const Stats = () => {
                     backgroundColor: UrlConfig.urlChartColors.blockedUrls.backgroundColor,
                     borderColor: UrlConfig.urlChartColors.blockedUrls.borderColor,
                     borderWidth: UrlConfig.borderWidth,
-                    borderRadius: Number.MAX_VALUE,
+                    borderRadius: 0,
                     borderSkipped: false,
                     barThickness: FileConfig.barThickness
                 }

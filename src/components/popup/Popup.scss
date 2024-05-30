@@ -113,8 +113,9 @@
   }
 
   &--body {
-    background-color: $colorGreyLight;
-    border: 4px solid $chrome;
+    background-color: $colorWhite;
+    border: 3px solid $chrome;
+    border-radius: 5%;
 
     @media (prefers-color-scheme: dark) {
       background-color: $colorBlack;
@@ -148,7 +149,7 @@
           width: 50%;
           padding: 0px 5% 0px 3%;
           display: block;
-          text-align-last: center;
+          text-align-last: left;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -157,7 +158,7 @@
         td:nth-child(2) {
           width: 25%;
           display: block;
-          text-align-last: center;
+          text-align-last: left;
         }
 
         td:nth-child(3) {
@@ -200,7 +201,7 @@
           td:nth-child(2) {
             width: 25%;
             display: block;
-            text-align-last: center;
+            text-align-last: left;
           }
 
           td:nth-child(3) {
@@ -230,7 +231,8 @@
 }
 
 .days-without {
-  border: 1px solid $colorBlack;
+  border: 1px solid $colorGreyDark;
+  border-radius: 0%;
   color: $baclavas;
   background-color: $colorWhite;
 
@@ -280,7 +282,7 @@
 
 .centered-box {
   display: grid;
-  margin: 7%
+  margin: 7% 7% 0px 7%
 }
 
 .todays-stats-container {
@@ -288,6 +290,14 @@
   justify-content: space-between;
   width: 100%;
   padding: 0%;
+  margin-bottom: 3%;
+}
+
+.todays-stats-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0px 5px 0px 0px;
   margin-bottom: 3%;
 }
 
@@ -308,7 +318,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  padding: 0%;
+  padding: 10px 0px 0px 0px;
   margin-bottom: 3%;
 }
 

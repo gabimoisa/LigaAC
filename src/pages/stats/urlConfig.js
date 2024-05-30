@@ -1,11 +1,11 @@
 export const urlChartColors = {
     visitedUrls: {
-        backgroundColor: 'rgba(0, 138, 0, 0.5)',  // "fine-pine"
-        borderColor: '#025839'               
+        backgroundColor: 'rgba(21, 79, 186, 0.5)', 
+        borderColor: '#154FBA'               
     },
     blockedUrls: {
-        backgroundColor: 'rgba(153, 2, 0, 0.5)',  // "deep-red"
-        borderColor: '#670000'                    
+        backgroundColor: 'rgba(208, 3, 0, 0.5)',  // "deep-red"
+        borderColor: '#a94442'                    
     }
   };
   export const borderWidth = 1;

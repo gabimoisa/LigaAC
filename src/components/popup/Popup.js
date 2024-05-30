@@ -92,20 +92,6 @@ const Popup = () => {
         window.close();
     };
 
-
-    const handleDragAndDrop = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        console.log(event.type);
-        if (event.type === 'dragover') {
-            setDropOverlayActive(true);
-        } else if (event.type === 'drop') {
-            const file = event.dataTransfer.files[0];
-            setDropOverlayActive(false);
-            console.log(file);
-        }
-    };
-
     useEffect(() => {
         gaTrackEvent(['_trackPageview', '/extension/popup']);
     }, []);
@@ -127,7 +113,6 @@ const Popup = () => {
 
 
         const tableRows = files.slice(0, 3).map((scannedFile, index) => {
-            console.log(scannedFile);
             return (
                 <tr key={index} className="list-group-item d-flex align-items-center justify-content-between">
                     <td>
@@ -178,7 +163,7 @@ const Popup = () => {
 
 
     return (
-        <div className="popup--wrapper" onDrop={handleDragAndDrop} onDragOver={handleDragAndDrop}>
+        <div className="popup--wrapper">
             <div className="popup--header">
                 <div className="popup--header__logo"></div>
                 <div className="popup--header__buttons">
@@ -212,7 +197,7 @@ const Popup = () => {
 
 
                     <div className='centered-box'>
-                        <div className="todays-stats-container">
+                        <div className="todays-stats-row">
                             <div className="today-scans">
                                 <>
                                     Files scanned today: {filesScannedToday}
