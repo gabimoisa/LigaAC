@@ -55,8 +55,6 @@
                 }
             }
             
-            
-            
         }
     }
 
@@ -73,7 +71,8 @@
             width: 100% !important;
             height: 400px !important;
         }
-    
+
+
         &::after {
             content: "";
             display: block;
@@ -84,9 +83,28 @@
         }
     }
 
+    
     p {
         color: $colorGreyDark;
         font-size: 13px;
         text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .stats .chart {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .stats .chart {
+        max-width: 600px;
+    }
+}
+
+@media (min-width: 901px) {
+    .stats .chart {
+        max-width: 800px;
     }
 }

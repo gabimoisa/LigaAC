@@ -15,7 +15,15 @@ export const fileChartColors = {
     }
   };
 
-  export const barThickness = 30;
-
+export const barThickness = () => {
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 400) {
+        return 13;
+    } else if (screenWidth < 800) {
+        return 20;
+    } else {
+        return 30;
+    }
+};
   export const borderWidth = 1;
   

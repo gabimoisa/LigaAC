@@ -125,12 +125,19 @@ const Stats = () => {
 
     const getChartOptions = (showLegend) => ({
         indexAxis: 'x',
+        maintainAspectRatio: false,
+        devicePixelRatio: window.devicePixelRatio * 2,
         plugins: {
             legend: {
                 display: showLegend,
-                position: 'top'
+                position: 'top',
+                labels: {
+                    font: {
+                        size: window.innerWidth < 600 ? 14 : 12
+                    }
+                }
             }
-        }
+        },
     });
 
     const content = (
