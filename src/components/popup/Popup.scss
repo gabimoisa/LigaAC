@@ -86,8 +86,7 @@
         }
 
         .icon-history:before,
-        .icon-cog:before,
-        .icon-server:before {
+        .icon-cog:before{
           background: $blueberry;
 
           @media (prefers-color-scheme: dark) {
@@ -97,8 +96,7 @@
       }
 
       .icon-history:before,
-      .icon-cog:before,
-      .icon-server:before {
+      .icon-cog:before{
         color: $secondaryColor;
         background: $colorWhite;
 
@@ -113,108 +111,118 @@
   }
 
   &--body {
-    background-color: $colorWhite;
-    border: 3px solid $chrome;
-    border-radius: 5%;
+  background-color: $colorWhite;
+  border: 3px solid $chrome;
+  border-radius: 5%;
 
-    @media (prefers-color-scheme: dark) {
-      background-color: $colorBlack;
-      border: 4px solid $colorBlacker;
-    }
+  @media (prefers-color-scheme: dark) {
+    background-color: $colorBlack;
+    border: 3px solid $colorBlacker;
+    border-radius: 0%;
   }
+}
 
-  &--scan__history {
-    .list-group {
-      padding-bottom: 0%;
-      margin: 12% 7% 0% 7%;
+&--scan__history {
+  .list-group {
+    max-width: 100%;
+    padding-bottom: 0%;
+    margin: 12% 7% 0% 7%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
-      .list-group-item {
-        padding: 0px 0px 0px 0px;
+    .list-group-item {
+      padding: 0;
+      background: $colorWhite;
+      border-bottom: 1px solid $colorGreyDark;
+      color: $colorBlack;
+      display: flex;
+      flex-wrap: wrap;
 
-        background: $colorWhite;
-        border-bottom: 1px solid $colorGreyDark;
-        color: $colorBlack;
+      @media (prefers-color-scheme: dark) {
+        background: $colorBlack;
+        border-bottom: 1px solid $colorGrayFDark;
+        color: $colorWhite;
+      }
+
+      a {
+        color: $colorBlueLighter;
+      }
+
+      td:first-child, td:nth-child(2), td:nth-child(3) {
+        flex: 1;
+        padding: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      td:first-child {
+        text-align: left;
+      }
+
+      td:nth-child(2) {
+        text-align: left;
+      }
+
+      td:nth-child(3) {
+        text-align: center;
+      }
+
+      span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: inline-block;
+        white-space: nowrap;
+        max-width: 100%;
+      }
+    }
+
+    thead {
+      padding: 0;
+      margin: 0;
+      max-height: 21.5px;
+
+      tr {
+        color: $colorGreyDark;
+        margin: 0;
+        padding: 0;
 
         @media (prefers-color-scheme: dark) {
-          background: $colorBlack;
-          border-bottom: 1px solid $colorGrayFDark;
           color: $colorWhite;
         }
 
-        a {
-          color: $colorBlueLighter;
+        display: flex;
+        width: 100%;
+        font-weight: 700;
+
+        td:first-child, td:nth-child(2), td:nth-child(3) {
+          flex: 1;
+          text-align: center;
+          padding: 0px 0px 5px 0px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         td:first-child {
-          width: 50%;
-          padding: 0px 5% 0px 3%;
-          display: block;
-          text-align-last: left;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          text-align: left;
         }
 
         td:nth-child(2) {
-          width: 25%;
-          display: block;
-          text-align-last: left;
+          text-align: left;
         }
 
         td:nth-child(3) {
-          width: 25%;
-          display: block;
-          text-align-last: center;
-        }
-
-        span {
-          text-overflow: ellipsis;
-          overflow: hidden;
-          display: inline-block;
-          white-space: nowrap;
-          max-width: 100%;
+          text-align: center;
         }
       }
 
-      thead {
-        padding: 0px;
-        margin: 0%;
-        max-height: 21.5px;
-
-        tr {
-          color: $colorGreyDark;
-
-          @media (prefers-color-scheme: dark) {
-            color: $colorWhite;
-          }
-
-          display: inline-flex;
-          width: 100%;
-          font-weight: 700;
-
-          td:first-child {
-            width: 50%;
-            display: block;
-            text-align-last: center;
-          }
-
-          td:nth-child(2) {
-            width: 25%;
-            display: block;
-            text-align-last: left;
-          }
-
-          td:nth-child(3) {
-            width: 25%;
-            display: block;
-            text-align-last: center;
-          }
-        }
-
-        border-bottom: 2px solid $colorGrayFDark;
-      }
+      border-bottom: 2px solid $colorGrayFDark;
     }
   }
+}
+
 
   &--footer {
     border-top: 1px solid $colorGrey;
@@ -245,7 +253,7 @@
   font-family: Roboto,
   Sans-serif !important;
   display: inline-block;
-  padding: 3% 10% 0% 10%;
+  padding: 3% 10% 3% 10%;
   text-align: center;
 
 }
