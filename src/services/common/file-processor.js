@@ -28,11 +28,16 @@ class FileProcessor {
             return;
         }
 
-        if (linkUrl.match(/^chrome/) || linkUrl.match(/^chrome:\/\/extensions\//) || linkUrl.match(/^https:\/\/chromewebstore\.google\.com\//)) {
+        if (linkUrl.match(/^chrome:\/\/extensions\//)|| linkUrl.match(/^https:\/\/chromewebstore\.google\.com\//)) {
             chrome.i18n.getMessage('unableToScanChromeExtension');
             return;
         }
-        
+
+        if(linkUrl.match(/^chrome/)) {
+            chrome.i18n.getMessage('invalidUrl');
+            return
+        }
+
         const file = new ScanFile();
 
         if (file.isSanitizedFile(linkUrl)) {
