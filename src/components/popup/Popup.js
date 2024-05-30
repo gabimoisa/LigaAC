@@ -211,10 +211,10 @@ const Popup = () => {
 
                         <div className="todays-stats-container">
                             <div className='today-scans'>
-                                URLs scanned today: 6
+                                URLs scanned today: 21
                             </div>
                             <div className='today-blocks'>
-                                URLs blocked today: 9
+                                URLs blocked today: 3
                             </div>
                         </div>
                         <div className='scan-button-container'>
