@@ -84,7 +84,9 @@ const Popup = () => {
       }
 
     } else {
-      return "undefined";
+      console.warn('dlp_info is undefined');
+
+      return "dlp_info is undefined.";
     }
   }
 

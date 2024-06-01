@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DLPTableScanResult = ({ dlpInfo, getStatusIcon, status, useDLP, downloadSanitizedFile, sanitizedFileURL, sanitized }) => {
+const DLPTableScanResult = ({ dlpInfo, getStatusIcon, status, useDLP, downloadSanitizedFile, sanitizedFileURL, sanitized, getDlpInfoErrors }) => {
   return (
     <>
       {dlpInfo ? (
@@ -33,9 +33,9 @@ const DLPTableScanResult = ({ dlpInfo, getStatusIcon, status, useDLP, downloadSa
               )}
             </div>
           ) : (
-            <span className="sensitiveData" dangerouslySetInnerHTML={{
-              __html: chrome.i18n.getMessage("dlpOk"),
-            }}></span>
+            <div className='sensitiveData'>
+              <span className="downloadDlpInfo">{getDlpInfoErrors(dlpInfo)}</span>
+            </div>
           )
         ) : (
           <span className="sensitiveData" dangerouslySetInnerHTML={{

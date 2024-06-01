@@ -46,6 +46,32 @@ const ScanHistoryTableRow = ({
     return sum_hits;
   };
 
+  const getDlpInfoErrors = (dlp_info) => {
+    if (dlp_info) {
+      if (dlp_info.verdict != 0 || dlp_info != 1) {
+        if (dlp_info?.errors && Object.keys(dlp_info?.errors)) {
+          let message = '';
+
+          Object.keys(dlp_info.errors).forEach((key) => {
+            message += dlp_info.errors[key] + '. ';
+          })
+
+          return message;
+
+        } else {
+          return "Failed to get dlp errors.";
+        }
+
+      } else {
+        return "No DLP Errors found.";
+      }
+    } else {
+      console.warn('dlp_info is undefined');
+
+      return "dlp_info is undefined."
+    }
+  }
+
   return (
     <tr
       onMouseEnter={() => {
@@ -98,6 +124,7 @@ const ScanHistoryTableRow = ({
           downloadSanitizedFile={downloadSanitizedFile}
           sanitizedFileURL={sanitizedFileURL}
           sanitized={sanitized}
+          getDlpInfoErrors={getDlpInfoErrors}
         />
       </td>
       <td className="p-0">

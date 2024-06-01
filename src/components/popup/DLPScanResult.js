@@ -1,15 +1,16 @@
 import React from 'react';
 
-const DLPScanResult = ({ scannedFile, sum_hits, goToHistory, getStatusIcon, getTitleDlp }) => {
+const DLPScanResult = ({ scannedFile, sum_hits, goToHistory, getStatusIcon, getTitleDlp}) => {
   return (
     <>
       {scannedFile.dlp_info ? (
         scannedFile.dlp_info.verdict ? (
           scannedFile.dlp_info.hits ? (
-            <div 
-              className="dataFound" 
-              title={getTitleDlp(scannedFile?.dlp_info)}
-            >
+            scannedFile.sanitized?.result == "Allowed" ? (
+              <div 
+                className="dataFound" 
+                title={getTitleDlp(scannedFile?.dlp_info)}
+              >
               <a onClick={goToHistory}>
                 <span
                   dangerouslySetInnerHTML={{
@@ -18,10 +19,20 @@ const DLPScanResult = ({ scannedFile, sum_hits, goToHistory, getStatusIcon, getT
                 ></span> <span>{sum_hits}</span>
               </a>
             </div>
+            ) : (
+              scannedFile.sanitized?.result == "Error" ? (
+                <span
+                  dangerouslySetInnerHTML={{__html: chrome.i18n.getMessage("dlpError")}}
+                ></span>
+              ) : (
+                <span
+                  dangerouslySetInnerHTML={{__html: chrome.i18n.getMessage("sanitizedError")}}
+                ></span>
+              ))
           ) : (
             <span
               dangerouslySetInnerHTML={{
-                __html: chrome.i18n.getMessage("noDLP"),
+                __html: chrome.i18n.getMessage("dlpError")
               }}
             ></span>
           )
