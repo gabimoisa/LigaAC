@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import './ScanHistoryTable.scss';
 
-const ScanHistoryTable = ({ data, filterBy, removeFile, getStatusIcon }) => {
+const ScanHistoryTable = ({ data, filterBy, removeFile, getStatusIcon}) => {
     const processedData = useMemo(() => {
         if (!filterBy) {
             return data;
@@ -27,7 +27,9 @@ const ScanHistoryTable = ({ data, filterBy, removeFile, getStatusIcon }) => {
                 <tr>
                     <th>Filename</th>
                     <th>Scan Time</th>
-                    <th colSpan={3}>Results</th>
+                    <th>Results</th>
+                    <th className="text-center">DLP</th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -44,6 +46,11 @@ const ScanHistoryTable = ({ data, filterBy, removeFile, getStatusIcon }) => {
                         removeFile={(event) => removeFile(event, item.id)}
                         getStatusIcon={getStatusIcon}
                         useCore={item.useCore}
+                        useDLP={item.useDLP}
+                        sanitized={item.sanitized}
+                        sanitizedFileURL={item.sanitizedFileURL}
+                        sanitizationSuccessfull={item.sanitizationSuccessfull}
+                        dlpInfo={item.dlp_info}
                     />
                 ))}
             </tbody>

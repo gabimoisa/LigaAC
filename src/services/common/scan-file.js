@@ -104,15 +104,21 @@ function getFileSize(url, filename) {
         return;
     }
 
-    if (!url.match(/^http/)) {
+    if (!url.match(/^http/) && !url.match(/^blob/)) {
         url = 'http://' + url;
     }
 
-    return fetch(url, { method: 'HEAD' })
+
+    return fetch(url)
         .then(resp => {
             if ([0, 403, 404, 500, 503].indexOf(resp.status) >= 0) {
                 chrome.i18n.getMessage('errorWhileDownloading');
                 return;
+            }
+
+            // if url is blob return blob size
+            if (url.match(/^blob/)) {
+                return resp.blob().size;
             }
 
             if (!filename) {

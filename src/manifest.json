@@ -5,6 +5,15 @@
   "short_name": "__MSG_appShortName__",
   "description": "__MSG_appDescription__",
   "version": "4.0.2",
+  "content_scripts": [
+    {
+      "matches": [   "http://*/",
+      "https://*/",
+      "file://*",
+      "<all_urls>"],
+      "js": ["InputPopup.js"]
+    }
+  ],
 
   "action": {
     "default_popup": "index.html",
@@ -37,7 +46,8 @@
     "notifications",
     "scripting",
     "storage",
-    "tabs"
+    "tabs",
+    "activeTab"
   ],
 
   "host_permissions": [

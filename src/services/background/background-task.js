@@ -1,4 +1,3 @@
-
 import MCL from '../../config/config';
 
 import { settings } from '../common/persistent/settings';
@@ -18,6 +17,28 @@ import BrowserStorage from '../common/browser/browser-storage';
 
 import '../common/ga-tracking';
 
+
+self.addEventListener('message', async (event) => {
+    const message = event.data;
+    if (message.type === 'fileUploaded') {
+        const { fileUrl } = message;
+        await processUploadedFile(fileUrl);
+    }
+});
+
+/**
+ * Process uploaded file 
+ * 
+ * @param downloadItem
+ */
+async function processUploadedFile(fileURL) {
+    try {
+        await FileProcessor.processTarget(fileURL, null, settings.data.scanUploads);
+    } catch (e) {
+        console.warn(e);
+    }
+}
+
 const MCL_CONFIG = MCL.config;
 
 const contextMenus = {};
@@ -30,6 +51,7 @@ export default class BackgroundTask {
         this.downloadsManager = new DownloadManager(FileProcessor);
 
         chrome.runtime.onInstalled.addListener(this.onInstallExtensionListener.bind(this));
+        this.findTabAndRunDropTask();
     }
     
     async init() {
@@ -73,7 +95,8 @@ export default class BackgroundTask {
         chrome.downloads.onCreated.addListener(this.downloadsManager.trackInProgressDownloads.bind(this.downloadsManager));
         chrome.downloads.onChanged.addListener(this.downloadsManager.updateActiveDownloads.bind(this.downloadsManager));
         chrome.downloads.onChanged.addListener(this.downloadsManager.processCompleteDownloads.bind(this.downloadsManager));
-
+        chrome.runtime.onMessage.addListener(this.handleMessage.bind(this));
+    
         BrowserStorage.addListener(this.browserStorageListener.bind(this));
 
         this.setupContextMenu(this.settings.data.saveCleanFiles);
@@ -90,6 +113,144 @@ export default class BackgroundTask {
         getAuthCookie.call(this);
 
         SafeUrl.toggle(this.settings.data.safeUrl);
+    }
+
+    handleMessage(message, sender, sendResponse) {
+        if (message.type === 'fileUploaded') {
+            const { fileUrl } = message;
+
+            processUploadedFile(fileUrl);
+        }
+    }
+
+
+    drop_task() {
+        let mouseX, mouseY;
+
+        document.addEventListener('click', (event) => {
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        });
+
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            try {
+            input.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+
+                    const reader = new FileReader();
+                    
+                    reader.onload = (e) => {
+                        const fileContent = e.target.result;
+
+                        let fileUrl;
+
+                        try {
+                            fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
+            
+                            fileUrl = (fileUrl + '/').concat(file.name);
+                        }
+                        catch (e) {
+                            console.warn(e);
+                        }
+        
+                        chrome.runtime.sendMessage({ 
+                            type: 'fileUploaded', 
+                            fileUrl: fileUrl 
+                        });
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
+            });
+            } catch (error) {
+                console.error('Error processing file inputs normal:', error);
+            }
+        });
+    
+        document.querySelectorAll('iframe').forEach(frame => {
+            try {
+                const frameDocument = frame.contentDocument || frame.contentWindow.document;
+                frameDocument.querySelectorAll('input[type="file"]').forEach(input => {
+                    input.addEventListener('change', function(event) {
+                        const file = event.target.files[0];
+    
+                        const reader = new FileReader();
+
+                        reader.onload = (e) => {
+                            const fileContent = e.target.result;
+                        
+                            let fileUrl;
+                        
+                            try {
+                                fileUrl = URL.createObjectURL(new Blob([fileContent], { type: fileContent.type }));
+        
+                                fileUrl = (fileUrl + '/').concat(file.name);
+                            }
+                            catch (e) {
+                                console.warn(e);
+                            }
+    
+                            chrome.runtime.sendMessage({ 
+                                type: 'fileUploaded', 
+                                fileUrl: fileUrl 
+                            });
+                        };
+                        reader.readAsArrayBuffer(file);
+                    });
+                });
+            } catch (error) {
+                console.error('Error processing file inputs in frame:', error);
+            }
+        });
+    }
+
+
+    /**
+     * Get the tab id and execute script on it 
+     * 
+     * @param tabId
+     */
+    async runDropTaskScript(tabId) {
+        try {
+            const tab = await chrome.tabs.get(tabId);
+            if (tab && (tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://'))) {
+                return;
+            }
+
+            if (this.settings.data.scanUploads) {
+                chrome.scripting.executeScript({
+                    target: { tabId: tabId },
+                    func: this.drop_task,
+                    files: ['InputPopup.js']
+                });
+            }
+        } catch (error) {
+            console.error('Error executing script', error);
+        }
+    }
+
+    async findTabAndRunDropTask() {
+        const tabs = await chrome.tabs.query({ url: '*://*/*' });
+
+        if (tabs.length === 0) {
+            const newTab = await chrome.tabs.create({});
+            await this.runDropTaskScript(newTab.id);
+            return;
+        }
+    
+        for (const { id: tabId } of tabs) {
+            try {
+                await this.runDropTaskScript(tabId); 
+            } catch (error) {
+                console.error('Error executing script:', tabId, error);
+            }
+        }
+    
+        chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+            if (changeInfo.status === 'complete') {
+                await this.runDropTaskScript(tabId);
+            }
+        });
     }
 
     /**
@@ -168,7 +329,7 @@ export default class BackgroundTask {
         }
         
         const target = info.srcUrl || info.linkUrl || info.pageUrl;
-        
+
         await this.processTarget(target);        
     }
 
@@ -252,7 +413,6 @@ export default class BackgroundTask {
             }
         }
     }
-
 }
 
 export const Task = new BackgroundTask();

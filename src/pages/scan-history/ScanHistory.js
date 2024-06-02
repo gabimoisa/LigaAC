@@ -42,25 +42,27 @@ const ScanHistory = () => {
         gaTrackEvent(['_trackEvent', config.gaEventCategory.name, config.gaEventCategory.action.buttonClickd, config.gaEventCategory.label.clearHistoryButton, config.gaEventCategory.value.deleteItemButton]);
     };
 
-    /**  
-     * Get the icon for the file's current status (clean / infected / scanning / unknown)
-     * @param {number} fileStatus (0 / 1 / 2 / 3) <-> (scanning / clean / infected / unknown)
-     * @returns {string} The icon class
-    */
-    const getStatusIcon = (fileStatus) => {
-        if (fileStatus == ScanFile.STATUS.CLEAN) {
-            return 'icon-ok';
+     /**
+   * Get the icon for the file's current status (clean / infected / scanning / unknown)
+   * @param {number} fileStatus (0 / 1 / 2 / 3) <-> (scanning / clean / infected / unknown)
+   * @param {number} verdict DLP (0 / 1) <-> (no sensitive data found / sensitive data found)  
+   * @returns {string} The icon class
+   */
+    const getStatusIcon = (fileStatus, verdict) => {
+        if (fileStatus == ScanFile.STATUS.CLEAN || verdict == 0) {
+            return "icon-ok";
         }
-
-        if (fileStatus == ScanFile.STATUS.INFECTED) {
-            return 'icon-cancel';
+    
+        if (fileStatus == ScanFile.STATUS.INFECTED || verdict == 1) {
+            return "icon-attention";
         }
-
+    
         if (fileStatus == ScanFile.STATUS.SCANNING) {
-            return 'icon-spin animate-spin';
+            return "icon-spin animate-spin";
         }
+        
 
-        return 'icon-help';
+        return "icon-help";
     };
 
     const getScanUrl = (file) => {
@@ -79,7 +81,12 @@ const ScanHistory = () => {
             results: item.statusLabel,
             status: item.status,
             id: item.id, 
-            useCore: item?.useCore
+            useCore: item?.useCore,
+            useDLP: item?.useDLP,
+            sanitizedFileURL: item?.sanitizedFileURL,
+            sanitizationSuccessfull: item?.sanitizationSuccessfull,
+            dlp_info: item?.dlp_info,
+            sanitized: item?.sanitized
         }));
     }, [files]);
 
@@ -120,7 +127,7 @@ const ScanHistory = () => {
                 </Col>
             </Row>
 
-            <ScanHistoryTable data={scanHistoryTableData} filterBy={searchValue} removeFile={removeFile} getStatusIcon={getStatusIcon} />
+            <ScanHistoryTable data={scanHistoryTableData} filterBy={searchValue} removeFile={removeFile} getStatusIcon={getStatusIcon}/>
         </React.Fragment>;
 
     return <SidebarLayout

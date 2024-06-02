@@ -19,14 +19,15 @@ class FileProcessor {
      * 
      * @param {string} linkUrl file url 
      * @param {*} downloadItem https://developer.chrome.com/extensions/downloads#type-DownloadItem
+     * @param {boolean} useDLP scan using DLP
      */
-    async processTarget(linkUrl, downloadItem) {
+    async processTarget(linkUrl, downloadItem, useDLP) {
         await apikeyInfo.load();
         if (!apikeyInfo.data.apikey) {
             BrowserNotification.create(chrome.i18n.getMessage('undefinedApiKey'));
             return;
         }
-        
+
         const file = new ScanFile();
 
         if (file.isSanitizedFile(linkUrl)) {
@@ -39,8 +40,17 @@ class FileProcessor {
         }
 
         else {
-            file.fileName = linkUrl.split('/').pop();
-            file.fileName = file.fileName.split('?')[0];
+            if (linkUrl.includes('blob')) {
+                file.fileName = linkUrl.split('/').pop();
+                
+                // restore linkUrl to original
+                linkUrl = linkUrl.replace(file.fileName, '');
+                linkUrl = linkUrl.slice(0, -1);
+
+            } else {
+                file.fileName = linkUrl.split('/').pop();
+                file.fileName = file.fileName.split('?')[0];
+            }
 
             try {
                 file.size = file.getFileSize(linkUrl, file.fileName);
@@ -53,8 +63,9 @@ class FileProcessor {
             }
         }
 
-        file.extension = file.fileName.split('.').pop();
-        file.canBeSanitized = file.extension && SANITIZATION_FILE_TYPES.indexOf(file.extension.toLowerCase()) > -1;
+            file.extension = file.fileName.split('.').pop();    
+            file.useDLP = useDLP ? useDLP : false;
+            file.canBeSanitized = useDLP || file.extension && SANITIZATION_FILE_TYPES.indexOf(file.extension.toLowerCase()) > -1;
 
         if (file.size === null) {
             BrowserNotification.create(chrome.i18n.getMessage('fileEmpty'));
@@ -180,22 +191,48 @@ class FileProcessor {
                 // verify if the user has access
                 if (await CoreClient.file.checkSanitized(sanitizedFileURL)) {
                     file.sanitizedFileURL = sanitizedFileURL;
+                    file.sanitizationSuccessfull = sanitizationSuccessfull;
                 }
             }
         }
         else {
+            const postProcessing = info.process_info?.post_processing;
+            
             file.scanResults = `${MCL.config.mclDomain}/results/file/${file.dataId}/regular/overview`;
+            
             if (info?.sanitized?.file_path && !Object.prototype.hasOwnProperty.call(file, 'sanitizedFileURL')) {
                 file.sanitizedFileURL = info.sanitized.file_path;
             }
+
+            if (info?.process_info?.post_processing?.sanitization_details?.description && !Object.prototype.hasOwnProperty.call(file, 'sanitizationSuccessfull')) {
+                const sanitizationSuccessfull = postProcessing?.sanitization_details?.description === 'Sanitized successfully.';
+                file.sanitizationSuccessfull = sanitizationSuccessfull;
+            } 
         }
+
+        file.dlp_info = info?.dlp_info;  
+        file.sanitized = info?.sanitized;
         
         await scanHistory.updateFileById(file.id, file);
         await scanHistory.save();
 
+        let DLPNotoficationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
+        
         let notificationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
+        
         notificationMessage += (file.status === ScanFile.STATUS.INFECTED) ? chrome.i18n.getMessage('threatDetected') : chrome.i18n.getMessage('noThreatDetected');
-        await BrowserNotification.create(notificationMessage, file.id, file.status === ScanFile.STATUS.INFECTED);
+        
+        if (!file.useDLP) {
+            await BrowserNotification.create(notificationMessage, file.id, file.status === ScanFile.STATUS.INFECTED);
+        
+        } else if (file.useDLP && file.dlp_info.verdict == 0) {
+            DLPNotoficationMessage += chrome.i18n.getMessage('noSensitiveDataFound');
+             await BrowserNotification.create(DLPNotoficationMessage);
+        
+        } else if (file.useDLP && file.dlp_info.verdict == 1) {
+            DLPNotoficationMessage += chrome.i18n.getMessage('sensitiveDataFound');
+            await BrowserNotification.create(DLPNotoficationMessage);
+        }
 
         this.callOnScanCompleteListeners({
             status: file.status,
@@ -283,7 +320,7 @@ class FileProcessor {
     async scanWithCore(file, fileData) {
         let response = await CoreClient.hash.lookup(file.md5);
 
-        if (response[file.md5] === 'Not Found') {
+        if (response[file.md5] === 'Not Found' || file.useDLP && !response.dlp_info) {
             response = await CoreClient.file.upload({
                 fileData: fileData,
                 fileName: file.fileName,
@@ -305,12 +342,13 @@ class FileProcessor {
         try {
             response = await MetascanClient.setAuth(apikeyInfo.data.apikey).hash.lookup(file.md5);
 
-            if (!response || !response.data_id || response.error) {
+            if (!response || !response.data_id || response.error || file.useDLP && !response.dlp_info) {
                 response = await MetascanClient.setAuth(apikeyInfo.data.apikey).file.upload({
                     fileName: file.fileName,
                     fileData,
                     sampleSharing: settings.data.shareResults,
-                    canBeSanitized: file.canBeSanitized
+                    canBeSanitized: file.canBeSanitized,
+                    useDLP: file.useDLP,
                 });
             }
         } catch (error) {

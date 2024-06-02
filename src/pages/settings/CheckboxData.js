@@ -22,10 +22,15 @@ const CheckboxData = (isPaidUser, isAllowedFileSchemeAccess) => {
                     </a>
 
                 </p>
-                <sub className='warning'>{chrome.i18n.getMessage('scanDownloadsSub')}</sub>
+                <sub className='warning'>{chrome.i18n.getMessage('scanSub')}</sub>
             </>,
             isDisabled: !isAllowedFileSchemeAccess,
             labelFor: 'scanDownloads'
+        },
+        {
+            label: <p className='label' dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('scanUploads') }} />,
+            otherContent: <sub className='warning'>{chrome.i18n.getMessage('scanSub')}</sub>,
+            labelFor: 'scanUploads'
         },
         {
             label: <p className='label' dangerouslySetInnerHTML={{ __html: chrome.i18n.getMessage('shareResults') }} />,
