@@ -86,15 +86,16 @@ const Popup = () => {
                 'sandboxBenign': scannedFile.sandboxVerdict === 'Benign',
                 'sandboxUnknown': scannedFile.sandboxVerdict === 'Unknown'
             });
-            
-            if(scannedFile.sandboxVerdict === 'Informational')
-                scannedFile.sandboxVerdict = 'No Threat';
-
-            let sandboxUrl = scannedFile.scanResults;
 
             if(!scannedFile.sandboxVerdict) {
                 scannedFile.sandboxVerdict = "Scan in progress";
             }
+            
+            if(scannedFile.sandboxVerdict === 'Informational'){
+                scannedFile.sandboxVerdict = 'No Threat';
+            }
+
+            let sandboxUrl = scannedFile.scanResults;
 
             if(scannedFile.sandboxVerdict !== "No dynamic analysis performed") {
                 const lastSlashIndex = sandboxUrl?.lastIndexOf('/');

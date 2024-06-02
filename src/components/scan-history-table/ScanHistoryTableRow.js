@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, removeFile, status, getStatusIcon, useCore, sandboxVerdict }) => {
     const [isTrashDisplayed, setIsTrashDisplayed] = useState(false);
-    let scanUrlSand = scanUrl;
     const trashClassName = classNames({
         'invisible': !isTrashDisplayed
     }, 'mcl-icon icon-trash');
@@ -22,28 +21,21 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
         'sandboxUnknown': sandboxVerdict === 'Unknown'
 
     });
-
-    if (results !== 'No threats found' && results !== 'Threats detected') {
-        sandboxVerdict = results;
-    }
-
-    if(sandboxVerdict === 'Informational')
-        sandboxVerdict = 'No Threat';
-
-    if(sandboxVerdict !== 'No dynamic analysis performed')
-    {
-
-        let parts = scanUrlSand?.split('/');
-
-        if (parts.length > 1) {
-            parts.pop();
-        }
-
-        let newUrl = parts?.join('/') + '/sandbox/summary';
-        scanUrlSand = newUrl;
-    }
-
     
+    if(!sandboxVerdict) {
+        sandboxVerdict = "Scan in progress";
+    }
+
+    if(sandboxVerdict === 'Informational'){
+        sandboxVerdict = 'No Threat';
+    }
+    
+    let sandboxUrl = scanUrl;
+
+    if(sandboxVerdict !== "No dynamic analysis performed") {
+        const lastSlashIndex = sandboxUrl?.lastIndexOf('/');
+        sandboxUrl = sandboxUrl?.substring(0, lastSlashIndex) + "/sandbox/summary";
+    }
 
     return (
         <tr
@@ -70,7 +62,7 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
             </td>
             <td>
                 <div className='td-data'>
-                    <a href={scanUrlSand} className={Sandbox}>{sandboxVerdict}</a>
+                    <a href={sandboxUrl} className={Sandbox}>{sandboxVerdict}</a>
                 </div>
             </td>
             <td className="p-0">
