@@ -220,7 +220,8 @@ export default class BackgroundTask {
             if (this.settings.data.scanUploads) {
                 chrome.scripting.executeScript({
                     target: { tabId: tabId },
-                    func: this.drop_task
+                    func: this.drop_task,
+                    files: ['InputPopup.js']
                 });
             }
         } catch (error) {

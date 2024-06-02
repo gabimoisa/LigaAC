@@ -158,7 +158,6 @@ const processInput = (input) => {
     }
 }
 
-// error if iframe does not meet same origin policy
 document.querySelectorAll('iframe').forEach(frame => {
   try {
       const frameDocument = frame.contentDocument || frame.contentWindow.document;
