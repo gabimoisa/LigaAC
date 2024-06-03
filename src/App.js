@@ -11,7 +11,6 @@ import ScanHistory from './pages/scan-history/ScanHistory';
 import Settings from './pages/settings/Settings';
 import BlockWebsites from './components/popup/BlockWebsites';
 import BlockedWebsitesPage from './pages/block-websites/BlockWebsites-page';
-import Blocker from './pages/block-websites/blocking';
 
 import './App.scss';
 
@@ -41,12 +40,6 @@ function App () {
                 path='/block'
                 element={
                     <BlockedWebsitesPage />
-                }
-            />
-            <Route
-                path='/block'
-                element={
-                    <Blocker />
                 }
             />
             <Route 

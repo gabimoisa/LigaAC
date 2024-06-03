@@ -66,19 +66,6 @@ function BlockWebsites() {
         });
     };
 
-    const BlockDomain = () => {
-        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-            chrome.scripting.executeScript({
-                target: { tabId: tabs[0].id },
-                function: blockContent
-            });
-        });
-
-        function blockContent() {
-            document.body.innerHTML = "<h1>Website Blocked</h1>";
-        }
-    };
-
     return (
         <div className="block-websites">
             <h2>Block Websites</h2>

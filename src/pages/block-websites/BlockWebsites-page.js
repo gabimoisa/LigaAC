@@ -97,7 +97,7 @@ const BlockedWebsitesPage = () => {
     return (
         <SidebarLayout
             className='blocked-websites-page'
-            currentPage='blocked-websites'
+            currentPage='block'
             content={content}
         />
     );
