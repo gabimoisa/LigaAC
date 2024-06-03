@@ -12,6 +12,11 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
         'noThreatsFound': results === 'No threats found'
     });
 
+    if(!results){ 
+        results = 'Not scanned / No scan results';
+        sandboxVerdict = results;
+    }
+
     const Sandbox = classNames({
         'sandboxInformational': sandboxVerdict === 'Informational',
         'sandboxSuspicious': sandboxVerdict === 'Suspicious',
@@ -21,7 +26,7 @@ const ScanHistoryTableRow = ({ fileName, scanUrl, hash, scanTime, results, remov
         'sandboxUnknown': sandboxVerdict === 'Unknown'
 
     });
-    
+
     if(!sandboxVerdict) {
         sandboxVerdict = "Scan in progress";
     }

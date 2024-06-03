@@ -40,7 +40,6 @@ const Popup = () => {
         if (fileStatus == ScanFile.STATUS.SCANNING) {
             return 'icon-spin animate-spin';
         }
-
         return 'icon-help';
     };
 
@@ -78,6 +77,12 @@ const Popup = () => {
         }
 
         return files.slice(0, 3).map((scannedFile, index) => {
+
+
+            if(scannedFile.status == ScanFile.STATUS.UNKNOWN) {
+                scannedFile.sandboxVerdict = "Not scanned / No scan results";
+            }
+
             const Sandbox = classNames({
                 'sandboxInformational': scannedFile.sandboxVerdict === 'No Threat',
                 'sandboxSuspicious': scannedFile.sandboxVerdict === 'Suspicious',
@@ -95,9 +100,10 @@ const Popup = () => {
                 scannedFile.sandboxVerdict = 'No Threat';
             }
 
+
             let sandboxUrl = scannedFile.scanResults;
 
-            if(scannedFile.sandboxVerdict !== "No dynamic analysis performed") {
+            if(scannedFile.sandboxVerdict !== "No dynamic analysis performed" && scannedFile.sandboxVerdict !== "Not scanned / No scan results") {
                 const lastSlashIndex = sandboxUrl?.lastIndexOf('/');
                 sandboxUrl = sandboxUrl?.substring(0, lastSlashIndex) + "/sandbox/summary";
             }
