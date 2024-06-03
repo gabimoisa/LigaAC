@@ -19,14 +19,25 @@ class FileProcessor {
      * 
      * @param {string} linkUrl file url 
      * @param {*} downloadItem https://developer.chrome.com/extensions/downloads#type-DownloadItem
+     * @param {boolean} useSandbox 
      */
-    async processTarget(linkUrl, downloadItem) {
+    async processTarget(linkUrl, downloadItem, useSandbox) {
         await apikeyInfo.load();
         if (!apikeyInfo.data.apikey) {
             BrowserNotification.create(chrome.i18n.getMessage('undefinedApiKey'));
             return;
         }
-        
+
+        if (linkUrl.match(/^chrome:\/\/extensions\//)|| linkUrl.match(/^https:\/\/chromewebstore\.google\.com\//)) {
+            BrowserNotification.create(chrome.i18n.getMessage('unableToScanChromeExtension'));
+            return;
+        }
+
+        if(linkUrl.match(/^chrome/)) {
+            BrowserNotification.create(chrome.i18n.getMessage('invalidUrl'));
+            return
+        }
+
         const file = new ScanFile();
 
         if (file.isSanitizedFile(linkUrl)) {
@@ -98,7 +109,7 @@ class FileProcessor {
 
         await scanHistory.addFile(file);
 
-        await this.scanFile(file, linkUrl, fileData, downloadItem, settings.data.useCore);
+        await this.scanFile(file, linkUrl, fileData, downloadItem, settings.data.useCore, useSandbox);
     }
 
     /**
@@ -188,13 +199,29 @@ class FileProcessor {
             if (info?.sanitized?.file_path && !Object.prototype.hasOwnProperty.call(file, 'sanitizedFileURL')) {
                 file.sanitizedFileURL = info.sanitized.file_path;
             }
+
+            if(info?.additional_info == 'sandbox') {
+                const sha1 = info?.file_info?.sha1;
+                const response = await MetascanClient.setAuth(apikeyInfo.data.apikey).file.poolForSandboxResults(sha1, 3000);
+                const lowercasedVerdict = response.final_verdict?.verdict?.charAt(0) + response.final_verdict?.verdict?.substring(1).toLowerCase();
+                file.sandboxVerdict = lowercasedVerdict;
+            }
+            else{
+                file.sandboxVerdict = "No dynamic analysis performed";
+            }
         }
-        
         await scanHistory.updateFileById(file.id, file);
         await scanHistory.save();
 
-        let notificationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
-        notificationMessage += (file.status === ScanFile.STATUS.INFECTED) ? chrome.i18n.getMessage('threatDetected') : chrome.i18n.getMessage('noThreatDetected');
+        let notificationMessage
+        if (file.sandboxVerdict === 'No dynamic analysis performed') {
+            notificationMessage = file.fileName + chrome.i18n.getMessage('fileScanComplete');
+            notificationMessage += (file.status === ScanFile.STATUS.INFECTED) ? chrome.i18n.getMessage('threatDetected') : chrome.i18n.getMessage('noThreatDetected');
+        } else {
+            notificationMessage = file.fileName + chrome.i18n.getMessage('fileScanCompleteSandbox');
+            notificationMessage += (file.status === ScanFile.STATUS.INFECTED) ? chrome.i18n.getMessage('threatDetected') : chrome.i18n.getMessage('noThreatDetected');
+            notificationMessage += `\n\nSandbox verdict : ${file.sandboxVerdict}`;
+        }
         await BrowserNotification.create(notificationMessage, file.id, file.status === ScanFile.STATUS.INFECTED);
 
         this.callOnScanCompleteListeners({
@@ -245,14 +272,15 @@ class FileProcessor {
      * @param {*} fileData file content
      * @param {*} downloadItem https://developer.chrome.com/extensions/downloads#type-DownloadItem
      * @param {boolean} useCore use core API instead of cloud
+     * @param {boolean} useSandbox
      */
-    async scanFile(file, linkUrl, fileData, downloadItem, useCore) {
+    async scanFile(file, linkUrl, fileData, downloadItem, useCore, useSandbox) {
         try {
             file.useCore = useCore;
 
             const response = useCore
                 ? await this.scanWithCore(file, fileData)
-                : await this.scanWithCloud(file, fileData);
+                : await this.scanWithCloud(file, fileData, useSandbox);
 
             if (!response.data_id) {
                 throw response;
@@ -299,18 +327,20 @@ class FileProcessor {
      * 
      * @param {*} file file information 
      * @param {*} fileData file content
+     * @param {boolean} useSandbox
      */
-    async scanWithCloud(file, fileData) {
+    async scanWithCloud(file, fileData, useSandbox) {
         let response;
         try {
             response = await MetascanClient.setAuth(apikeyInfo.data.apikey).hash.lookup(file.md5);
 
-            if (!response || !response.data_id || response.error) {
+            if (!response || !response.data_id || response.error || (useSandbox && response.sandbox == false)) {
                 response = await MetascanClient.setAuth(apikeyInfo.data.apikey).file.upload({
                     fileName: file.fileName,
                     fileData,
                     sampleSharing: settings.data.shareResults,
-                    canBeSanitized: file.canBeSanitized
+                    canBeSanitized: file.canBeSanitized,
+                    sandbox: useSandbox
                 });
             }
         } catch (error) {

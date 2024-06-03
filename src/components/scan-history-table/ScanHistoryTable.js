@@ -27,7 +27,8 @@ const ScanHistoryTable = ({ data, filterBy, removeFile, getStatusIcon }) => {
                 <tr>
                     <th>Filename</th>
                     <th>Scan Time</th>
-                    <th colSpan={3}>Results</th>
+                    <th colSpan={2}>Scan Results</th>
+                    <th colSpan={2}>Sandbox Verdict</th>
                 </tr>
             </thead>
 
@@ -44,12 +45,12 @@ const ScanHistoryTable = ({ data, filterBy, removeFile, getStatusIcon }) => {
                         removeFile={(event) => removeFile(event, item.id)}
                         getStatusIcon={getStatusIcon}
                         useCore={item.useCore}
+                        sandboxVerdict={item.sandboxVerdict} 
                     />
                 ))}
             </tbody>
         </Table>;
     }, [processedData]);
-
 
     return <>
         {tableDom}
@@ -60,7 +61,8 @@ ScanHistoryTable.propTypes = {
     data: PropTypes.array,
     filterBy: PropTypes.string,
     removeFile: PropTypes.func,
-    getStatusIcon: PropTypes.func
+    getStatusIcon: PropTypes.func,
+    sandboxVerdict: PropTypes.string
 };
 
 export default ScanHistoryTable;

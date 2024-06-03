@@ -185,6 +185,12 @@
     "unsupportedUrl": {
       "message": "URL not supported.\nYou may be able to scan the file by downloading it while 'Scan Downloads' is enabled"
     },
+    "invalidUrl": {
+      "message": "The URL is invalid. This page cannot be scanned."
+    },
+    "unableToScanChromeExtension": {
+      "message": "We are unable to scan chrome extensions"
+    },
     "errorWhileDownloading": {
       "message": "We encountered an error while downloading this file. Please try again",
       "description": ""
@@ -207,7 +213,11 @@
       "description": ""
     },
     "fileScanComplete": {
-      "message": " has been scanned. ",
+      "message": " has been scanned",
+      "description": ""
+    },
+    "fileScanCompleteSandbox": {
+      "message": " has been scanned with Sandbox",
       "description": ""
     },
     "goToExtension": {

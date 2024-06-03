@@ -1,6 +1,6 @@
 'use strict';
 
-import { SANITIZATION, UNARCHIVE } from '../constants/workflow';
+import { SANDBOX, SANITIZATION, UNARCHIVE } from '../constants/workflow';
 import MCL from '../../config/config';
 
 /**
@@ -20,6 +20,7 @@ const MetascanClient = {
     file: {
         upload: fileUpload,
         lookup: fileLookup,
+        poolForSandboxResults: poolForSandboxResults,
         poolForResults: poolForResults
     },
     apikey: {
@@ -134,9 +135,10 @@ function hashLookup(hash) {
  * @param {boolean} sampleSharing
  * @param {string} password
  * @param {boolean} canBeSanitized
+ * @param {boolean} sandbox
  * @returns {Promise}
  */
-function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitized }) {
+function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitized, sandbox }) {
     sampleSharing = (sampleSharing === true) ? 1 : 0;
 
     const restEndpoint = `${MCL.config.metadefenderDomain}/${MCL.config.metadefenderVersion}/file`;
@@ -155,14 +157,18 @@ function fileUpload({ fileName, fileData, sampleSharing, password, canBeSanitize
     if (canBeSanitized) {
         additionalHeaders.rule += ',' + SANITIZATION;
     }
+    
+    if(sandbox) {
+        additionalHeaders['sandbox'] = SANDBOX;
+    }
 
     const options = {
         method: 'POST',
         headers: { ...authHeader, ...additionalHeaders },
         body: fileData
     };
-
-    return fetch(restEndpoint, options).then(response => response.json()).catch(error => {
+    return fetch(restEndpoint, options).then(response => {
+        return response.json()}).catch(error => {
         console.warn(error);
         return { error };
     });
@@ -213,6 +219,62 @@ async function recursiveLookup(dataId, pollingInterval, resolve) {
 
     if (response?.scan_results?.progress_percentage < 100) {
         setTimeout(() => { recursiveLookup(dataId, pollingInterval, resolve); }, pollingInterval);
+    }
+    else {
+        resolve(response);
+    }
+}
+
+
+/**
+ * https://api.metadefender.com/v4/hash/{hash}/sandbox
+ * 
+ * @param {string} sha1
+ * @returns {Promise}
+ */
+async function fileSandboxLookup(sha1) {
+    const restEndpoint = `${MCL.config.metadefenderDomain}/${MCL.config.metadefenderVersion}/hash/${sha1}/sandbox`;
+    const options = {
+        headers: { ...authHeader }
+    };
+
+    const data = await fetch(restEndpoint, options);
+    return await data.json();
+}
+
+/**
+ *
+ * @param {string} sha1
+ * @param {number} pollingInterval
+ * @returns {Promise}
+ */
+async function poolForSandboxResults(sha1, pollingInterval) {
+    return new Promise((resolve, reject) => {
+        try {
+            recursiveSandboxLookup(sha1, pollingInterval, resolve);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+/** 
+ *
+ * @param sha1
+ * @param pollingInterval
+ * @param resolve
+ * @returns {Promise.<void>}
+ */
+async function recursiveSandboxLookup(sha1, pollingInterval, resolve) {
+    const response = await fileSandboxLookup(sha1);
+
+    if (response.error) {
+        throw new Error(response.error);
+    }
+
+    pollingInterval = Math.min(pollingInterval * config.pollingIncrementor, config.pollingMaxInterval);
+
+    if (response?.final_verdict?.verdict == null) {
+        setTimeout(() => { recursiveSandboxLookup(sha1, pollingInterval, resolve); }, pollingInterval);
     }
     else {
         resolve(response);

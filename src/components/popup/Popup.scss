@@ -1,9 +1,10 @@
 @import "../../assets/style/colors.scss";
-
+@import '../../../node_modules/bootstrap/scss/functions';
+@import '../../../node_modules/bootstrap/scss/variables';
 /** rules **/
 .popup {
   &--wrapper {
-    width: 350px;
+    width: 600px;
     padding: $padding;
   }
 
@@ -13,7 +14,7 @@
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-  
+    margin-bottom: 20px;
     &__logo {
       background-image: url('../../assets/images/metadefender-chrome-black.svg');
       position: relative;
@@ -58,5 +59,154 @@
   .header, .footer{
     padding: $padding;
     background-color: $colorWhite;
+  }
+}
+
+.centered-items {
+  text-align: center;
+}
+
+.popup-table {
+  border-color: $colorGrey;
+  width: 100%;
+  margin-bottom: 15px;
+  thead {
+      background-color: $colorGreyLighter;
+  }
+
+  tbody {
+      td {
+          border-bottom: none;
+      }
+  }
+  
+  tr {
+      border-bottom: 1px solid $colorGrey;
+
+      th {
+          border-bottom-width: 1px !important;
+          border-color: $colorGrey !important;
+          border-left: none;
+          border-right: none;
+          text-transform: uppercase;
+          white-space: nowrap;
+          height: 50px;
+
+          &:first-of-type {
+            padding-left: 20px;  
+        }
+      }
+
+      td {
+          vertical-align: middle;
+          
+          &:first-of-type {
+              display: flex;
+              align-items: center;   
+          }
+
+          small {
+              word-break: break-all;
+          }
+
+          .scanNameHash {
+              word-break: break-all;
+          }
+
+          & .noThreatsFound {
+              color: $green;
+
+              a:link,
+              a:visited,
+              a:hover {
+                  word-break: break-word;
+                  &:not(.trash) {
+                      color: $green;
+                  }
+              }
+          }
+
+          & .sandboxInformational {
+              color: $green;
+
+              a:link,
+              a:visited,
+              a:hover {
+                  word-break: break-word;
+                  &:not(.trash) {
+                      color: $green;
+                  }
+              }
+          }
+
+          & .sandboxSuspicious {
+              color: #fdbd0d;
+
+              a:link,
+              a:visited,
+              a:hover {
+                  word-break: break-word;
+                  &:not(.trash) {
+                      color: $red;
+                  }
+              }
+          }
+
+          & .sandboxLikelyMalicious {
+              color: #ed6706;
+
+              a:link,
+              a:visited,
+              a:hover {
+                  word-break: break-word;
+                  &:not(.trash) {
+                      color: $red;
+                  }
+              }
+          }
+
+          & .sandboxMalicious {
+              color: #d00300;
+
+              a:link,
+              a:visited,
+              a:hover {
+                  word-break: break-word;
+                  &:not(.trash) {
+                      color: $red;
+                  }
+              }
+          }
+
+          & .sandboxBenign {
+              color: #1d6bfc;
+
+              a:link,
+              a:visited,
+              a:hover {
+                  word-break: break-word;
+                  &:not(.trash) {
+                      color: $red;
+                  }
+              }
+          }
+
+          & .sandboxUnknown {
+              color: #313c4e;
+
+              a:link,
+              a:visited,
+              a:hover {
+                  word-break: break-word;
+                  &:not(.trash) {
+                      color: $red;
+                  }
+              }
+          }
+      }
+
+      .icon-spin {
+          color: $secondaryColor;
+      }
   }
 }

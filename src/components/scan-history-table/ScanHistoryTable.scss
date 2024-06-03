@@ -6,8 +6,20 @@
 .table {
     border-color: $colorGrey;
 
+@include media-breakpoint-down(md) {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+}
+
     thead {
         background-color: $colorGreyLighter;
+    }
+
+    tbody {
+        td {
+            border-bottom: none;
+        }
     }
     
     tr {
@@ -20,9 +32,53 @@
             border-right: none;
             text-transform: uppercase;
             white-space: nowrap;
+
+            @include media-breakpoint-down(md) {
+                display: none;
+            }
         }
 
         td {
+
+            @include media-breakpoint-down(md) {
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+                border-bottom: 1px solid $colorGrey !important;
+
+                &:nth-of-type(1)::before {
+                    content: "FILENAME";
+                    font-weight: 800;
+                    flex: 0 0 auto;
+                }
+
+                &:nth-of-type(2)::before {
+                    content: "SCAN TIME";
+                    font-weight: 800;
+                    flex: 0 0 auto;
+                }
+
+                &:nth-of-type(3)::before{
+                    content: "SCAN RESULTS";
+                    font-weight: 800;
+                }
+
+                &:nth-of-type(4){
+                    display: none;
+                }
+
+                &:nth-of-type(5)::before {
+                    content: "SANDBOX VERDICT";
+                    font-weight: 800;
+                    flex: 0 0 auto;
+                }
+
+                .td-data {
+                    flex: 1; 
+                    text-align: right; 
+                }
+            }
+
             vertical-align: middle;
             
             &:first-of-type {
@@ -47,6 +103,84 @@
                     word-break: break-word;
                     &:not(.trash) {
                         color: $green;
+                    }
+                }
+            }
+
+            & .sandboxInformational {
+                color: $green;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $green;
+                    }
+                }
+            }
+
+            & .sandboxSuspicious {
+                color: #fdbd0d;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $red;
+                    }
+                }
+            }
+
+            & .sandboxLikelyMalicious {
+                color: #ed6706;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $red;
+                    }
+                }
+            }
+
+            & .sandboxMalicious {
+                color: #d00300;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $red;
+                    }
+                }
+            }
+
+            & .sandboxBenign {
+                color: #1d6bfc;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $red;
+                    }
+                }
+            }
+
+            & .sandboxUnknown {
+                color: #313c4e;
+
+                a:link,
+                a:visited,
+                a:hover {
+                    word-break: break-word;
+                    &:not(.trash) {
+                        color: $red;
                     }
                 }
             }
