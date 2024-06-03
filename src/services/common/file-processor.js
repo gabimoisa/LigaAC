@@ -29,12 +29,12 @@ class FileProcessor {
         }
 
         if (linkUrl.match(/^chrome:\/\/extensions\//)|| linkUrl.match(/^https:\/\/chromewebstore\.google\.com\//)) {
-            chrome.i18n.getMessage('unableToScanChromeExtension');
+            BrowserNotification.create(chrome.i18n.getMessage('unableToScanChromeExtension'));
             return;
         }
 
         if(linkUrl.match(/^chrome/)) {
-            chrome.i18n.getMessage('invalidUrl');
+            BrowserNotification.create(chrome.i18n.getMessage('invalidUrl'));
             return
         }
 
