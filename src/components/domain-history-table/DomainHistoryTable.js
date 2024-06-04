@@ -36,6 +36,7 @@ const DomainHistoryTable = ({ data, filterBy, removeDomain }) => {
                    <DomainHistoryTableRow
                         key={key}
                         domainName={item.domainName}
+                        domainURL={item.domainURL}
                         reputation={item.reputation}
                         scanTime={moment.unix(item.scanTime).fromNow()}
                         removeDomain={(event) => removeDomain(event, item.id)}

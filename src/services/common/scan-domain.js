@@ -6,6 +6,7 @@ function ScanDomain() {
     return {
         id: uniqid(),
         domainName: null,
+        domainURL: null,
         scanTime: moment().unix(),
         reputation: null,
 

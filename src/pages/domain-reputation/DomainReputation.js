@@ -42,6 +42,7 @@ const DomainReputation = () => {
     const domainHistoryTableData = useMemo(() => {
         return domains?.map((item) => ({
             domainName: item.domainName,
+            domainURL: item.domainURL,
             reputation: item.reputation,
             scanTime: item.scanTime,
             id: item.id, 

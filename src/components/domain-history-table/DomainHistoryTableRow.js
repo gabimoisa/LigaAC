@@ -3,13 +3,11 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { getAssessmentStyle } from '../popup/utils/popup_domain'
 
-const DomainHistoryTableRow = ({ domainName, reputation, scanTime, removeDomain}) => {
+const DomainHistoryTableRow = ({ domainName, domainURL, reputation, scanTime, removeDomain}) => {
     const [isTrashDisplayed, setIsTrashDisplayed] = useState(false);
     const trashClassName = classNames({
         'invisible': !isTrashDisplayed
     }, 'mcl-icon icon-trash');
-
-    const domainUrl = `http://${domainName}`;
 
     return <tr
         onMouseEnter={() => setIsTrashDisplayed(true)}
@@ -17,7 +15,7 @@ const DomainHistoryTableRow = ({ domainName, reputation, scanTime, removeDomain}
     >
         <td>
             <div>
-                <a href={domainUrl}>{domainName}</a>
+                <a href={domainURL}>{domainName}</a>
             </div>
         </td>
         <td>{scanTime}</td>
@@ -34,6 +32,7 @@ const DomainHistoryTableRow = ({ domainName, reputation, scanTime, removeDomain}
 
 DomainHistoryTableRow.propTypes = {
     domainName: PropTypes.string,
+    domainURL: PropTypes.string,
     scanTime: PropTypes.string,
     reputation: PropTypes.string,
     removeDomain: PropTypes.func,
