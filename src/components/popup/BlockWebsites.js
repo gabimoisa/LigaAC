@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import './BlockWebsites.scss';
 
 function BlockWebsites() {
+    const navigate = useNavigate();
     const [website, setWebsite] = useState('');
     const [blockedWebsites, setBlockedWebsites] = useState([]);
     const [isValidWebsite, setIsValidWebsite] = useState(true);
     const [currentDomain, setCurrentDomain] = useState('');
 
     useEffect(() => {
-        let isSubscribed = true;  // Control flag for subscription status
+        let isSubscribed = true;
 
         chrome.storage.local.get(['blockedWebsites'], (result) => {
             if (isSubscribed) {
@@ -91,6 +93,10 @@ function BlockWebsites() {
 
     return (
         <div className="block-websites">
+            <button className="back1-btn" onClick={() => navigate(-1)}>
+                <span className="icon-left text-16"></span>
+            </button>
+            
             <h2>Block Websites</h2>
 
             {blockedWebsites.includes(currentDomain) && (

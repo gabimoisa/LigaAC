@@ -60,13 +60,12 @@ const BlockedWebsitesPage = () => {
                     }}  
                 />
                 <button onClick={handleAddWebsite}>Add</button>
-            </div>
-            <div className='website-input'>
-            <input
+                <input
                     type="text"
                     placeholder="Search blocked websites"
                     value={searchValue}
                     onChange={handleSearchChange}
+                    style={{ marginLeft: "auto" }}
                 />
             </div>
             <div className="blocked-count">

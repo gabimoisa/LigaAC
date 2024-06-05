@@ -71,6 +71,12 @@
       "css": "block",
       "code": 59393,
       "src": "fontawesome"
+    },
+    {
+      "uid": "a76545bb6ea4e684505da08d26e58467",
+      "css": "left",
+      "code": 59398,
+      "src": "iconic"
     }
   ]
 }
