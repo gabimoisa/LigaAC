@@ -41,7 +41,7 @@
                 border-bottom: 1px solid $colorGreyDarker !important;
 
                 &:nth-of-type(1)::before {
-                    content: "FILENAME";
+                    content: "DOMAIN NAME";
                     font-weight: 800;
                 }
 
@@ -66,10 +66,7 @@
                         width: 200px;
                     }
                 }
-
-                // &:nth-of-type(4) {
-                //     padding: 18px 20px 17px !important;
-                // }
+                
             }
 
             vertical-align: middle;

@@ -108,7 +108,7 @@ const Popup = () => {
                                 {apiResponse}
                             </span>
                         ) : (
-                            'Loading...'
+                            <span className='icon-spin animate-spin'></span>
                         )}</p>
                     </div>
                 </div>
