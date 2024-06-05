@@ -34,10 +34,14 @@ const blockDomain = (tabId) => {
     font-family: "Roboto", sans-serif;
     margin: 0;
     padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
   }
   .header {
     background-color:  #111f42;
-    min-height: 119px;
+    height: 120px;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -105,9 +109,10 @@ const blockDomain = (tabId) => {
             </div>
             </div>
             <div class='c'>
+              <br>
               <div class='_1'>Access Denied!</div>
               <br>
-              <button class='button button1' onclick="window.location.href='https://www.google.com'">GO BACK</button>    
+              <button class='button button1' onclick="window.history.back()">GO BACK</button>    
             </div>
             `;
         }
@@ -127,6 +132,7 @@ export default class BackgroundTask {
 
         chrome.runtime.onInstalled.addListener(this.onInstallExtensionListener.bind(this));
         chrome.tabs.onCreated.addListener(this.blockTab.bind(this));
+        
     }
     
     blockTab(tab) {
