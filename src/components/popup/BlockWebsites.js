@@ -7,6 +7,7 @@ function BlockWebsites() {
     const [website, setWebsite] = useState('');
     const [blockedWebsites, setBlockedWebsites] = useState([]);
     const [isValidWebsite, setIsValidWebsite] = useState(true);
+    const [currentDomain, setCurrentDomain] = useState('');
 
     useEffect(() => {
         chrome.storage.local.get(['blockedWebsites'], (result) => {
@@ -19,9 +20,7 @@ function BlockWebsites() {
             if (tab && tab.url && !tab.url.startsWith('chrome://')) {
                 try {
                     const currentUrl = new URL(tab.url).hostname;
-                    if (blockedWebsites.includes(currentUrl)) {
-                        BlockDomain();
-                    }
+                    setCurrentDomain(currentUrl);
                 } catch (error) {
                 }
             }
@@ -38,9 +37,10 @@ function BlockWebsites() {
             if (isValidDomain && !blockedWebsites.includes(currentUrl)) {
                 const updatedList = [...blockedWebsites, currentUrl];
                 setBlockedWebsites(updatedList);
-                setWebsite('');
                 chrome.storage.local.set({ blockedWebsites: updatedList });
+                setWebsite('');
                 setIsValidWebsite(true);
+                checkAndReload(currentUrl);
             } else {
                 setIsValidWebsite(false);
             }
@@ -55,6 +55,13 @@ function BlockWebsites() {
         chrome.storage.local.set({ blockedWebsites: updatedList });
     };
 
+    const handleRemoveCurrentDomain = () => {
+        if (currentDomain && blockedWebsites.includes(currentDomain)) {
+            handleRemoveWebsite(currentDomain);
+            checkAndReload(currentDomain);
+        }
+    };
+
     const handleAddCurrentPage = () => {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
             const currentUrl = new URL(tabs[0].url).hostname;
@@ -62,13 +69,29 @@ function BlockWebsites() {
                 const updatedList = [...blockedWebsites, currentUrl];
                 setBlockedWebsites(updatedList);
                 chrome.storage.local.set({ blockedWebsites: updatedList });
+                checkAndReload(currentUrl);
             }
         });
     };
 
+    function checkAndReload(url) {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            const currentTab = tabs[0];
+            if (currentTab.url.includes(url)) {
+                chrome.tabs.reload(currentTab.id);
+            }
+        });
+    }
+
     return (
         <div className="block-websites">
             <h2>Block Websites</h2>
+
+            {blockedWebsites.includes(currentDomain) && (
+            <button className="remove-current-btn" onClick={handleRemoveCurrentDomain}>
+                Remove
+            </button>
+            )}
 
             <div className={`website-input ${!isValidWebsite ? "invalid-input" : ""}`}>
                 <input

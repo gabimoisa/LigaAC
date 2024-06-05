@@ -8,6 +8,7 @@
     border: 1px solid #ddd;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
+    position: relative;
 
     h2 {
         text-align: center;
@@ -89,4 +90,17 @@
             }
         }
     }
+    
+    .remove-current-btn {
+        position: absolute;
+        right: 10px; // Adjust based on your layout
+        top: 10px; // Adjust based on your layout
+        padding: 5px 10px;
+        background-color: #f00; // Red background for visibility, change as needed
+        color: #fff; // White text color
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
 }
