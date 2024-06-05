@@ -1,5 +1,6 @@
 
 .icon-search:before { content: '\e800'; } /* '' */
+.icon-block:before { content: '\e801'; } /* '' */
 .icon-cog:before { content: '\e802'; } /* '' */
 .icon-cloud:before { content: '\e803'; } /* '' */
 .icon-cancel:before { content: '\e804'; } /* '' */
