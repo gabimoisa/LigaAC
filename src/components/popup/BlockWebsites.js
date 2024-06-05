@@ -10,24 +10,30 @@ function BlockWebsites() {
     const [currentDomain, setCurrentDomain] = useState('');
 
     useEffect(() => {
+        let isSubscribed = true;  // Control flag for subscription status
+
         chrome.storage.local.get(['blockedWebsites'], (result) => {
-            const initialWebsites = result.blockedWebsites || [];
-            setBlockedWebsites(initialWebsites);
+            if (isSubscribed) {
+                const initialWebsites = result.blockedWebsites || [];
+                setBlockedWebsites(initialWebsites);
+            }
         });
 
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            const tab = tabs[0];
-            if (tab && tab.url && !tab.url.startsWith('chrome://')) {
+            if (isSubscribed && tabs[0] && tabs[0].url && !tabs[0].url.startsWith('chrome://')) {
                 try {
-                    const currentUrl = new URL(tab.url).hostname;
+                    const currentUrl = new URL(tabs[0].url).hostname;
                     setCurrentDomain(currentUrl);
                 } catch (error) {
+                    console.error("Failed to parse the URL:", error);
                 }
             }
         });
-        
 
-    }, [blockedWebsites]);
+        return () => {
+            isSubscribed = false; 
+        };
+    }, []);
 
 
     const handleAddWebsite = () => {
@@ -89,7 +95,7 @@ function BlockWebsites() {
 
             {blockedWebsites.includes(currentDomain) && (
             <button className="remove-current-btn" onClick={handleRemoveCurrentDomain}>
-                Remove
+                <span className="icon-ok text-14"></span>
             </button>
             )}
 

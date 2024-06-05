@@ -90,16 +90,15 @@
             }
         }
     }
-    
+
     .remove-current-btn {
         position: absolute;
-        right: 10px; // Adjust based on your layout
-        top: 10px; // Adjust based on your layout
+        right: 20px; 
+        top: 20px;
         padding: 5px 10px;
-        background-color: #f00; // Red background for visibility, change as needed
-        color: #fff; // White text color
+        background-color: #00a6f7; 
+        color: #fff; 
         border: none;
-        border-radius: 5px;
         cursor: pointer;
     }
 

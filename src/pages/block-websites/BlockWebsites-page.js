@@ -7,6 +7,7 @@ const BlockedWebsitesPage = () => {
     const [website, setWebsite] = useState('');
     const [blockedWebsites, setBlockedWebsites] = useState([]);
     const [isValidWebsite, setIsValidWebsite] = useState(true);
+    const [searchValue, setSearchValue] = useState('');
 
     useEffect(() => {
         chrome.storage.local.get(['blockedWebsites'], (result) => {
@@ -38,21 +39,17 @@ const BlockedWebsitesPage = () => {
         chrome.storage.local.set({ blockedWebsites: updatedList });
     };
 
-    const handleAddCurrentPage = () => {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            const currentUrl = new URL(tabs[0].url).hostname;
-            if (currentUrl && !blockedWebsites.includes(currentUrl)) {
-                const updatedList = [...blockedWebsites, currentUrl];
-                setBlockedWebsites(updatedList);
-                chrome.storage.local.set({ blockedWebsites: updatedList });
-            }
-        });
+    const handleSearchChange = (e) => {
+        setSearchValue(e.target.value.toLowerCase());
     };
+
+    const filteredWebsites = blockedWebsites.filter(site => site.toLowerCase().includes(searchValue));
 
     const content = (
         <div className="content">
 
             <div className={`website-input ${!isValidWebsite ? "invalid-input" : ""}`}>
+                
                 <input
                     type="text"
                     placeholder="Enter website URL"
@@ -63,6 +60,14 @@ const BlockedWebsitesPage = () => {
                     }}  
                 />
                 <button onClick={handleAddWebsite}>Add</button>
+            </div>
+            <div className='website-input'>
+            <input
+                    type="text"
+                    placeholder="Search blocked websites"
+                    value={searchValue}
+                    onChange={handleSearchChange}
+                />
             </div>
             <div className="blocked-count">
                 <strong className="history--scanned__files">
@@ -78,7 +83,7 @@ const BlockedWebsitesPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {blockedWebsites.map((site, index) => (
+                            {filteredWebsites.map((site, index) => (
                                 <tr key={index}>
                                     <td>{site}</td>
                                     <td>

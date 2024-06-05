@@ -112,7 +112,7 @@ const Popup = () => {
                 </a>
 
                 <Link to="/block-websites" className="popup--header__btn">
-                    <span className="icon-cog text-14" style={{ color: 'grey' }}></span>
+                    <span className="icon-block text-14" style={{ color: 'grey' }}></span>
                 </Link>
                 
             </div>
