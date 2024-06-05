@@ -133,12 +133,25 @@ const Stats = () => {
                 position: 'top',
                 labels: {
                     font: {
-                        size: window.innerWidth < 600 ? 14 : 12
+                        size: 14,
+                        family: "'Roboto', sans-serif",
+                        style: 'normal'
                     }
                 }
             }
         },
+        scales: {
+            x: {
+                ticks: {
+                    font: {
+                        size: 14,
+                        family: "'Roboto', sans-serif"
+                    }
+                }
+            }
+        }
     });
+    
 
     const content = (
         <div className="stats">

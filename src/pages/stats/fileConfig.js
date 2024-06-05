@@ -15,14 +15,22 @@ export const fileChartColors = {
     }
   };
 
-export const barThickness = () => {
+  export const barThickness = () => {
     const screenWidth = window.innerWidth;
     if (screenWidth < 400) {
         return 13;
+    } else if (screenWidth < 600) {
+        return 14;  
     } else if (screenWidth < 800) {
-        return 20;
+        return 15; 
+    } else if (screenWidth < 1000) {
+        return 20; 
+    } else if (screenWidth < 1200) {
+        return 23; 
+    } else if (screenWidth < 1600) {
+        return 26; 
     } else {
-        return 30;
+        return 30; 
     }
 };
   export const borderWidth = 1;
