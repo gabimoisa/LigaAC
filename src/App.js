@@ -9,9 +9,11 @@ import Popup from './components/popup/Popup';
 import About from './pages/about/About';
 import ScanHistory from './pages/scan-history/ScanHistory';
 import Settings from './pages/settings/Settings';
-
+import BlockWebsites from './components/popup/BlockWebsites';
+import BlockedWebsitesPage from './pages/block-websites/BlockWebsites-page';
 
 import './App.scss';
+
 
 /**
  * Returns a Switch with defined routes for each component/page. 
@@ -34,6 +36,12 @@ function App () {
                     <About />
                 }
             />
+            <Route
+                path='/block'
+                element={
+                    <BlockedWebsitesPage />
+                }
+            />
             <Route 
                 path='/history'
                 element={
@@ -41,6 +49,10 @@ function App () {
                         <ScanHistory />
                     </ScanHistoryProvider>
                 }
+            />
+            <Route
+                path='/block-websites'
+                element={<BlockWebsites />}
             />
             <Route 
                 path='/'

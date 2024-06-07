@@ -1,4 +1,3 @@
-
 import classNames from 'classnames';
 import React, { useEffect, useMemo, useContext } from 'react';
 import GAContext from '../../providers/GAProvider';
@@ -6,11 +5,12 @@ import ConfigContext from '../../providers/ConfigProvider';
 import { goToTab } from '../../services/background/navigation';
 import ScanFile from '../../services/common/scan-file';
 import ScanHistoryContext from '../../providers/ScanHistoryProvider';
+import { Link } from 'react-router-dom';
 
 import './Popup.scss';
 
 const Popup = () => {
-    
+
     const config = useContext(ConfigContext);
     const { gaTrackEvent } = useContext(GAContext);
     const { files } = useContext(ScanHistoryContext);
@@ -102,12 +102,23 @@ const Popup = () => {
     }, [files, scanResultsDom]);
 
     return <div className="popup--wrapper">
-        <div className="popup--header">
+        <div className="popup--header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            
             <div className="popup--header__logo"></div>
-            <a href='#' className="popup--header__btn" onClick={goToSettings}>
-                <span className="icon-cog text-14"></span>
-            </a>
+            <div className="popup--header__buttons" style={{ display: 'flex', gap: '10px' }}>
+
+                <a href='#' className="popup--header__btn" onClick={goToSettings}>
+                    <span className="icon-cog text-14"></span>
+                </a>
+
+                <Link to="/block-websites" className="popup--header__btn">
+                    <span className="icon-block text-14" style={{ color: 'grey' }}></span>
+                </Link>
+                
+            </div>
         </div>
+
+
 
         <div className="popup--scan__history">
             {scanResults}
@@ -121,5 +132,6 @@ const Popup = () => {
         </div>
     </div>;
 };
+
 
 export default Popup;

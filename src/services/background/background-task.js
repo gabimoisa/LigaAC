@@ -12,13 +12,109 @@ import cookieManager from './cookie-manager';
 import DownloadManager from './download-manager';
 import { goToTab } from './navigation';
 import SafeUrl from './safe-url';
-
+import { generateHTML,generateSTYLES } from '../../pages/block-websites/BlockWebsites-styles.js';
 import BrowserNotification from '../common/browser/browser-notification';
 import BrowserStorage from '../common/browser/browser-storage';
+import BlockWebsites from '../../components/popup/BlockWebsites.js'
+import React, { useState, useEffect } from 'react';
 
 import '../common/ga-tracking';
 
 const MCL_CONFIG = MCL.config;
+const blockDomain = (tabId) => {
+    chrome.scripting.executeScript({
+        target: { tabId: tabId },
+        function: () => {
+            document.head.innerHTML = '';
+
+            document.body.style = '';
+
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @import url(https://fonts.googleapis.com/css?family=Roboto:500);
+                body {
+                    background: #ffffff;
+                    color: #000a12;
+                    font-family: "Roboto", sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    height: 100vh;
+                    width: 100vw;
+                    overflow: hidden;
+                }
+                .header {
+                    background-color: #111f42;
+                    height: 120px;
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0 35px;
+                }
+                .header .logo img {
+                    display: block;
+                    width: 170px;
+                    height: 110px;
+                    margin-top: -5px;
+                }
+                .c {
+                    text-align: center;
+                    display: block;
+                    position: relative;
+                    width: 80%;
+                    margin: 100px auto;
+                }
+                ._1 {
+                    font-size: 36px;
+                    position: relative;
+                    display: inline-block;
+                    z-index: 2;
+                    height: 100px;
+                    letter-spacing: 2px;
+                    margin-top: 50px;
+                }
+                .button {
+                    border: none;
+                    color: #ffffff;
+                    padding: 16px 32px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    transition-duration: 0.4s;
+                    cursor: pointer;
+                }
+                .button1 {
+                    background-color: #007bff;
+                    color: white;
+                    border: 2px solid #007bff;
+                }
+                .button1:hover {
+                    background-color: #0069d9;
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.innerHTML = `
+                <div class='header'>
+                    <div class='logo'>
+                        <img src="https://lh3.googleusercontent.com/kgmeZcO0chRzB9sQ_CL4613e_C3OkwalErXoQEZngmpoflY7DUa7cKJXWSnZdbzUyG4pUd_C9auq5DJazmcbhWp91c8" alt='OPSWAT Logo'>
+                    </div>
+                </div>
+                <div class='c'>
+                    <br>
+                    <div class='_1'>Access Denied!</div>
+                    <br>
+                    <button class='button button1' onclick="window.history.back()">GO BACK</button>
+                </div>
+            `;
+        }
+    });
+};
+
+
+
 
 const contextMenus = {};
 export default class BackgroundTask {
@@ -30,7 +126,26 @@ export default class BackgroundTask {
         this.downloadsManager = new DownloadManager(FileProcessor);
 
         chrome.runtime.onInstalled.addListener(this.onInstallExtensionListener.bind(this));
+        chrome.tabs.onCreated.addListener(this.blockTab.bind(this));
+        
     }
+    
+    blockTab(tab) {
+        chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+            if (changeInfo.status === "complete") {
+                chrome.storage.local.get(['blockedWebsites'], (result) => {
+                    const blockedWebsites = result.blockedWebsites || [];
+    
+                    const url = new URL(tab.url);
+    
+                    if (blockedWebsites.includes(url.hostname)) {
+                        blockDomain(tabId);
+                    }
+                });
+            }
+        });
+    }
+    
     
     async init() {
         try {
@@ -252,7 +367,7 @@ export default class BackgroundTask {
             }
         }
     }
-
+    
 }
 
 export const Task = new BackgroundTask();

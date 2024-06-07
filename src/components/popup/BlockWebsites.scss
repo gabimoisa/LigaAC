@@ -1,0 +1,116 @@
+@import "../../assets/style/colors.scss";
+
+.block-websites {
+    width: 380px;
+    max-height: 300px;
+    overflow: auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    position: relative;
+
+    h2 {
+        text-align: center;
+        color: #313C4E;
+        margin-bottom: 20px;
+    }
+
+    .website-input {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 10px;
+    
+        input {
+            border: 1px solid #ccc;
+            padding: 7px;
+            width: calc(60% - 2px);
+        }
+    
+        button {
+            border: none;
+            background-color: #141E2F;
+            color: white;
+            padding: 8px 15px;
+            cursor: pointer;
+    
+            &:nth-child(3) { 
+                background-color: #154FBA;
+                width: 40%;
+            }
+        }
+    
+        &.invalid-input input {
+            border-color: #d40400;
+            border-width: 2px;  
+            border-radius: 3px;
+            padding: 6px;
+            width: calc(60% - 2px);
+        }
+    }
+    
+
+    .icon-trash.text-14 {
+        color: #7a879a; 
+        background-color: white;
+        font-size: 18px; 
+      }
+
+    .website-list {
+        width: 100%;
+
+        p {
+            text-align: center;
+            color: #888;
+        }
+
+        .website-entry {
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+            span {
+                color: #333;
+                max-width: 80%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            button {
+                border: none;
+                background-color: transparent;
+                color: transparent;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .remove-current-btn {
+        position: absolute;
+        right: 20px; 
+        top: 20px;
+        padding: 5px 10px;
+        background-color: #00a6f7; 
+        color: #fff; 
+        border: none;
+        cursor: pointer;
+    }
+
+    .back1-btn {
+        position: absolute;
+        left: 10px; 
+        top: 20px;
+        padding: 5px 10px;
+        background-color: #fff; 
+        color: #141E2F; 
+        border: none;
+        cursor: pointer;
+    }
+
+}
