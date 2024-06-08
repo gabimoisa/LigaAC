@@ -8,22 +8,33 @@ import './SidebarLayout.scss';
 
 
 const MENU_ITEMS = [
-    {
-        label: chrome.i18n.getMessage('menuScanHistory'),
-        path: 'index.html#/history',
-        page: 'history'
-    },
+    
     {
         label: chrome.i18n.getMessage('menuSettings'),
         path: 'index.html#/settings',
         page: 'settings'
     },
+
     {
         label: chrome.i18n.getMessage('menuAbout'),
         path: 'index.html#/about',
         page: 'about'
+    },
+
+    {
+        label: chrome.i18n.getMessage('menuStats'), // message in messages.json
+        path: 'index.html#/stats',
+        page: 'stats'
+    },
+
+    {
+        label: chrome.i18n.getMessage('menuScanHistory'),
+        path: 'index.html#/history',
+        page: 'history'
     }
+    
 ];
+
 
 const SidebarLayout = ({ className, content, currentPage }) => {
     const navigate = useNavigate();

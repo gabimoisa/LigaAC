@@ -1,0 +1,110 @@
+@import "../../assets/style/colors.scss";
+
+.stats {
+    background-color: $colorWhite;
+    color: $colorBlack;
+    width: 100%;
+
+    h2 {
+        font-family: Roboto, sans-serif !important;
+        font-weight: 400;
+        font-size: 24px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid $colorGrey;
+        margin-bottom: 14px;
+    }
+
+    h3 {
+        font-family: Roboto, sans-serif !important;
+        font-weight: 400;
+        font-size: 20px;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+
+    .timeframe-selector {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+
+        label {
+            margin-right: 10px;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+
+            .timeframe-button {
+                padding: 5px 10px;
+                border: 1px solid $colorGrey;
+                background-color: $colorWhite;
+                cursor: pointer;
+                transition: background-color 0.3s ease, box-shadow 0.3s ease;
+                text-align: center;
+            
+                &:hover {
+                    background-color: darken($colorGreyLighter, 5%);
+                }
+            
+                &.active {
+                    background-color: rgb(17, 31, 66);
+                    color: $colorWhite;
+                    border-color: rgb(17, 31, 66);
+                }
+            }
+            
+        }
+    }
+
+    .chart {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        background-color: $colorGreyLighter;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 20px 0 auto;
+        padding: 20px;
+        
+        canvas {
+            width: 100% !important;
+            height: 400px !important;
+        }
+
+
+        &::after {
+            content: "";
+            display: block;
+            height: 2px;
+            background: linear-gradient(to right, $colorWhite, $colorGreyDark, $colorWhite);
+            width: 80%;
+            margin: 20px auto 0;
+        }
+    }
+
+    
+    p {
+        color: $colorGreyDark;
+        font-size: 13px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .stats .chart {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+    .stats .chart {
+        max-width: 600px;
+    }
+}
+
+@media (min-width: 901px) {
+    .stats .chart {
+        max-width: 800px;
+    }
+}
