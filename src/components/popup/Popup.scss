@@ -1,62 +1,96 @@
 @import "../../assets/style/colors.scss";
 
-/** rules **/
-.popup {
-  &--wrapper {
-    width: 350px;
-    padding: $padding;
+// General Popup Styles
+.popup-wrapper {
+  width: 350px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  background: #111f42;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+
+  &__logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #111f42;
+    background-image: url('../../assets/images/metadefender-chrome.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 117px;
+    height: 53px;
   }
 
-  &--header {
-    min-height: auto;
+  &__btn {
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.popup-section {
+  margin-bottom: 20px;
+
+  &__header {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #111f42;
+  }
+}
+
+.popup-box {
+  border: 1px solid #111f42; 
+  border-radius: 5px;
+  background: #111f42; 
+  color: #111f42;  
+}
+
+// Scan History and Domain Reputation Styles
+.history-list {
+  border: none;
+  background-color: #f4f4f4;
+  padding: 10px; 
+  margin: 0;
+
+  .history-item {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
     justify-content: space-between;
-  
-    &__logo {
-      background-image: url('../../assets/images/metadefender-chrome-black.svg');
-      position: relative;
-      margin-top: 0;
-      background-size: contain;
-      background-repeat: no-repeat;
-      display: block;
-      width: 117px;
-      height: 53px;
-    }
-  
-    &__btn {
-      background: $colorWhite;
-      border: 1px solid $colorGrey;
-      padding: 4px 5px 3px 5px;
-      display: block;
-    }
+    align-items: center;
+    padding: 10px;
+    margin: 10px 0; 
+    border: 1px solid #f4f4f4;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #000;  
+    box-sizing: border-box; 
   }
+}
 
-  &--scan__history {
-    .list-group {
-      border-top: 1px solid $colorGreyLight;
-      border-bottom: 1px solid $colorGreyLight;
-      padding-bottom: 1px;
-      margin: $padding -20px;
+.mcl-icon {
+  font-size: 18px;
+}
 
-      .list-group-item {
-        &:not(:last-of-type) {
-          border-bottom: 2px solid $colorGreyLight;
-        }
-      }
-    }
-  }
+.icon-ok {
+  color: green;
+}
 
-  &--footer {
-    background-color: $colorWhite;
-    border-top: 1px solid $colorGrey;
-    padding: $padding;
-    height: 60px;
-  }
+.icon-cancel {
+  color: red;
+}
 
-  .header, .footer{
-    padding: $padding;
-    background-color: $colorWhite;
-  }
+.icon-spin {
+  color: #666;
+}
+
+.text-right {
+  text-align: right;
 }

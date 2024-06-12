@@ -19,6 +19,7 @@ export default {
             },
             'label': {
                 'scanHistory': '/* @echo gaEventCategory.label.scanHistory */',
+                'domainHistory': '/* @echo gaEventCategory.label.domainHistory */',
                 'metadefender': '/* @echo gaEventCategory.label.metadefender */',
                 'scanDetails': '/* @echo gaEventCategory.label.scanDetails */',
                 'loginButton': '/* @echo gaEventCategory.label.loginButton */',
@@ -34,7 +35,8 @@ export default {
         'storageKey': {
             'settings': '/* @echo storageKey.settings */',
             'scanHistory': '/* @echo storageKey.scanHistory */',
-            'apikey': '/* @echo storageKey.apikey */'
+            'apikey': '/* @echo storageKey.apikey */',
+            'domainHistory': '/* @echo storageKey.domainHistory */'
         },
 
         'contextMenu': {

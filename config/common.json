@@ -33,7 +33,8 @@
   "storageKey": {
     "settings": "settings",
     "scanHistory": "scanHistory",
-    "apikey": "apikey"
+    "apikey": "apikey",
+    "domainHistory": "domainHistory"
   },
 
   "contextMenu": {

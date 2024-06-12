@@ -5,7 +5,7 @@ import MCL from '../../config/config';
 
 /**
  *
- * @type {{configure: configure, setAuth: setAuth, setHost: setHost, setVersion: setVersion, hash: {lookup: hashLookup}, file: {upload: fileUpload, lookup: fileLookup, poolForResults: poolForResults}, apikey: {info: apikeyInfo}}}
+ * @type {{configure: configure, setAuth: setAuth, setHost: setHost, setVersion: setVersion, hash: {lookup: hashLookup}, file: {upload: fileUpload, lookup: fileLookup, poolForResults: poolForResults}, domain: {lookup:domainLookup}, apikey: {info: apikeyInfo}}}
  */
 const MetascanClient = {
     configure: configure,
@@ -21,6 +21,9 @@ const MetascanClient = {
         upload: fileUpload,
         lookup: fileLookup,
         poolForResults: poolForResults
+    },
+    domain: {
+        lookup: domainLookup
     },
     apikey: {
         info: apikeyInfo
@@ -217,4 +220,13 @@ async function recursiveLookup(dataId, pollingInterval, resolve) {
     else {
         resolve(response);
     }
+}
+
+async function domainLookup(currentDomain) {
+    const restEndpoint = `${MCL.config.metadefenderDomain}/${MCL.config.metadefenderVersion}/domain/${currentDomain}`;
+    const options = {
+        headers: authHeader
+    };
+
+    return fetch(restEndpoint, options).then(data => data.json());
 }

@@ -22,14 +22,22 @@
     "contextMenuScanAndDownloadTitle": {
       "message": "Scan and download with OPSWAT",
       "description": ""
-    },
+    }, 
     "noScansNotification": {
       "message": "No files scanned so far.<br />Scan files using the context menu or enable automatic scans from settings page!",
       "description": "The message displayed when no files have been scanned"
     },
+    "noDomainsNotification": {
+      "message": "No domains accessed so far.<br />Access domains in order to see their reputation in the pop-up!",
+      "description": "The message displayed when no domains have been accessed"
+    },
     "noFilesFound": {
       "message": "There were no results matching your query",
       "description": "The message displayed when no files match the search criteria"
+    },
+    "noDomainsFound": {
+      "message": "There were no results matching your query",
+      "description": "The message displayed when no domains match the search criteria"
     },
     "menuScanHistory": {
       "message": "Scan History",
@@ -41,6 +49,10 @@
     },
     "menuAbout": {
       "message": "About",
+      "description": ""
+    },
+    "menuDomain": {
+      "message": "Domain Reputation",
       "description": ""
     },
     "aboutTitle": {
@@ -91,6 +103,10 @@
     },
     "deleteHistoryConfirmation": {
       "message": "Are you sure you want to clear all scan history?\nThis action can not be undone",
+      "description": ""
+    },
+    "deleteDomainHistoryConfirmation": {
+      "message": "Are you sure you want to clear all domains scanned?\nThis action can not be undone",
       "description": ""
     },
     "scanDownloads": {
